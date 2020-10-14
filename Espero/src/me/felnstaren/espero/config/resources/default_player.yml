@@ -1,0 +1,9 @@
+sanity:
+ max-sanity: 100
+ cur-sanity: 100
+ resistance:
+  rift-create: 1.0
+  rift-use: 1.0
+  rift-walk: 1.0
+
+rift-count: 0

@@ -1,0 +1,69 @@
+#HHHHHHHHHHHHHHHHHHHHHHHHHHH
+#          DIVCORE         H
+#   Plugin by Felnstaren   H
+#HHHHHHHHHHHHHHHHHHHHHHHHHHH
+# What messages do you want to see from this plugin? 
+# DEBUG -> INFO -> WARN -> SEVERE
+# You will see all messages above the priority you select as well
+logger-priority: INFO
+
+
+
+# -----------------------------|
+#   CHAT GROUP CONFIGURATION   |
+# -----------------------------|
+chat-groups:
+ default:
+  chat-color: "#AAAA77"
+  chat-format: "%prefix%%name-color%%player%%suffix%   %chat-color%%message%"
+  prefix: ""
+  suffix: ""
+  name-color: "#FFFFAA"
+ admin:
+  chat-color: "#7777AA"
+  chat-format: "%prefix%%name-color%%player%%suffix%   %chat-color%%message%"
+  prefix: "#9999CC\u24B6"
+  suffix: ""
+  name-color: "#AAAAFF"
+
+
+ping-color: "#77FFAA"
+post-appension: false
+
+# -------------------------------------|
+# Player Join/Leave Message Formatting |
+# -------------------------------------|
+join-format: "%prefix%%name-color%%player%%suffix% &7has joined the game"
+leave-format: "%prefix%%name-color%%player%%suffix% &7has left the game"
+
+
+# -------------------------------------|
+# Player List Header/Footer Formatting |
+# -------------------------------------|
+player-list:
+ player-format: "%prefix%%name-color%%player%%suffix%"
+ update-time: 10
+ header:
+  - "&bW&9elcome!"
+  - "&9W&be&9lcome!"
+  - "&9We&bl&9come!"
+  - "&9Wel&bc&9ome!"
+  - "&9Welc&bo&9me!"
+  - "&9Welco&bm&9e!"
+  - "&9Welcom&be&9!"
+  - "&9Welcome&b!"
+ footer:
+  - "#5555FFThere are #22FF22%online-players%#777777/#CC2222%max-players% #5555FFplayers online\n
+     TPS: #22FF22%tps%#777777/#22CC2220.00"
+
+
+# -------------------------------|
+# Control Character Replacements |
+# -------------------------------|
+control-characters:
+ - "=/= : \u2260"
+ - "~~ : \u2248"
+ - "sqrt : \u221A"
+ - "/shrug : \u00AF\\_(\u30C4)_/\u00AF"
+ - "/flip : (\u256F\u00B0\u25A1\u00B0)\u256F\uFE35 \u253B\u2501\u253B"
+ - "/unflip : \u252C\u2500\u252C\u30CE( \u00BA _ \u00BA\u30CE)"

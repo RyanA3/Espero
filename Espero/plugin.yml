@@ -1,0 +1,11 @@
+name: Espero
+main: me.felnstaren.espero.Espero
+version: 1.0.0a
+author: Felnstaren
+description: Core plugin for the Espero Server
+api-version: 1.16
+
+commands:
+ rift:
+  aliases: []
+  description: Creates a rift
