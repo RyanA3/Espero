@@ -1,4 +1,4 @@
-package me.felnstaren.espero.module.nations.system;
+package me.felnstaren.espero.module.nations.claim;
 
 public enum ClaimType {
 

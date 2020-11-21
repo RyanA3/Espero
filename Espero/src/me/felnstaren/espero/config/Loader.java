@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -23,35 +23,42 @@ public class Loader {
 	
 	public static final Plugin PLUGIN = Espero.getPlugin(Espero.class);
 	
-	public static YamlConfiguration loadOrDefault(String name, String defalt) {
-		mkDirs();
-		
+	public static YamlConfiguration readConfig(String name, String defalt) {
 		File file = new File(PLUGIN.getDataFolder(), name);
 		if(file.exists()) return YamlConfiguration.loadConfiguration(file);
 
-		try { 
-			file.createNewFile(); 
-			Logger.log(Level.DEBUG, "Created file; " + file.getPath());
-		} 
-		catch (IOException e) { 
-			e.printStackTrace(); 
-			Logger.log(Level.SEVERE, "A fatal error occured while creating this file; " + file.getPath());
-			return null;
-		}
+		if(!create(file)) return null;
+		if(defalt != null) copy(file, defalt);
 		
-		copy(file, defalt);
 		return YamlConfiguration.loadConfiguration(file);
 	}
 	
-	public static boolean fileExists(String name) {
+	public static String readData(String name, String defalt) {
 		File file = new File(PLUGIN.getDataFolder(), name);
-		return file.exists();
+		if(!file.exists()) {
+			if(!create(file)) return null;
+			copy(file, defalt);
+		}
+		
+		try {
+			InputStream initial_stream = PLUGIN.getResource(PLUGIN.getDataFolder() + "/" + name);
+			byte[] buffer = new byte[initial_stream.available()];
+			initial_stream.read(buffer);
+			initial_stream.close();
+			return new String(buffer, StandardCharsets.US_ASCII);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+	
+	public static File load(String name) {
+		File file = new File(PLUGIN.getDataFolder(), name);
+		if(!file.exists()) create(file);
+		return file;
 	}
 		
-		
-	
-	
-	public static File copy(File copy, String original) {
+	private static File copy(File copy, String original) {
 		try {
 			if(Loader.class.getResourceAsStream("resources/" + original) != null) {
 				InputStream initial_stream = Loader.class.getResourceAsStream("resources/" + original);
@@ -59,7 +66,7 @@ public class Loader {
 				initial_stream.read(buffer);
 				initial_stream.close();
 				
-				OutputStream out_stream = new FileOutputStream(copy);
+				FileOutputStream out_stream = new FileOutputStream(copy);
 				out_stream.write(buffer);
 				out_stream.close();
 				
@@ -74,15 +81,39 @@ public class Loader {
 		return copy;
 	}
 	
-	public static YamlConfiguration load(String path) {
-		mkDirs();
-		Logger.log(Level.DEBUG, "Loading configuration file; " + path);
-		return YamlConfiguration.loadConfiguration(new File(PLUGIN.getDataFolder(), path));
+	
+	
+	private static boolean create(File file) {
+		try { 
+			file.createNewFile(); 
+			Logger.log(Level.DEBUG, "Created file; " + file.getPath());
+			return true;
+		} 
+		catch (IOException e) { 
+			e.printStackTrace(); 
+			Logger.log(Level.SEVERE, "A fatal error occured while creating this file; " + file.getPath());
+			return false;
+		}
+	}
+	
+	
+	
+	public static void save(String data, String name) {
+		save(data, new File(PLUGIN.getDataFolder(), name));
 	}
 	
 	public static void save(YamlConfiguration config, String name) {
-		File file = new File(PLUGIN.getDataFolder(), name);
-		save(config, file);
+		save(config, new File(PLUGIN.getDataFolder(), name));
+	}
+	
+	public static void save(String data, File file) {
+		try {
+			FileOutputStream out_stream = new FileOutputStream(file);
+			out_stream.write(data.getBytes());
+			out_stream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void save(YamlConfiguration config, File file) {
@@ -98,13 +129,17 @@ public class Loader {
 	
 	
 	
-	private static void mkDirs() {
+	public static void mkDirs() {
 		Logger.log(Level.DEBUG, "Marking non-existant directories");
 		
 		File data_folder = PLUGIN.getDataFolder();
 		File player_folder = new File(data_folder.getPath().concat("/playerdata/"));
+		File chunk_folder = new File(data_folder.getPath().concat("/chunkdata/"));
+		File nation_folder = new File(data_folder.getPath().concat("/nationdata/"));
 		if (!data_folder.exists()) data_folder.mkdirs(); 
 		if (!player_folder.exists()) player_folder.mkdirs();
+		if(!chunk_folder.exists()) chunk_folder.mkdirs();
+		if(!nation_folder.exists()) nation_folder.mkdirs();
 	}
 	
 }

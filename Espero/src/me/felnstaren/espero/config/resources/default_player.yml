@@ -7,3 +7,6 @@ sanity:
   rift-walk: 1.0
 
 rift-count: 0
+
+nation:
+nation-rank: recruit

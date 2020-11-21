@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import me.felnstaren.espero.config.DataPlayer;
+import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.util.WorldUtil;
 
 public class Rift {
@@ -71,7 +71,7 @@ public class Rift {
 	
 	public void destroy() {
 		this.destroy = true;
-		if(owner != null) new DataPlayer(owner).delRift();
+		if(owner != null) new EsperoPlayer(owner).delRift();
 	}
 	
 	
@@ -79,7 +79,7 @@ public class Rift {
 	public static void cast(Player owner, int time) {
 		if(!owner.getWorld().getName().equals("world")) return;
 		
-		DataPlayer dp = new DataPlayer(owner.getUniqueId());
+		EsperoPlayer dp = new EsperoPlayer(owner.getUniqueId());
 		if(dp.getData().getInt("sanity.max-sanity") < 40) return;
 		
 		Location loc1 = owner.getLocation();

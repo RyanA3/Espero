@@ -11,7 +11,7 @@ import me.felnstaren.espero.util.logger.Logger;
 
 public class NationPlayerRank {
 
-	private String name;
+	private String label;
 	private String display_name;
 	private String[] permissions;
 	private String inheretance_name;
@@ -19,7 +19,7 @@ public class NationPlayerRank {
 	private ConfigurationSection data;
 	
 	public NationPlayerRank(ConfigurationSection data) {
-		this.name = data.getName();
+		this.label = data.getName();
 		this.display_name = data.getString("display_name");
 		this.permissions = (String[]) data.getStringList("permissions").toArray();
 		
@@ -43,8 +43,13 @@ public class NationPlayerRank {
 	}
 	
 	
+	
 	public String getName() {
-		return name;
+		return label;
+	}
+	
+	public String getLabel() {
+		return label;
 	}
 	
 	public String getDisplayName() {

@@ -1,0 +1,23 @@
+display_name: "Default Nation"
+towns:
+ 0:
+  display_name: "Capital"
+
+ranks:
+ recruit:
+  display_name: "Recruit"
+  permissions:
+   - container
+ leader:
+  display_name: "Leader"
+  inherits: "recruit"
+  permissions:
+   - build
+   - button
+   - lever
+   - door
+   - claim
+   - coffers
+   - recruit
+   - promote
+   - kick

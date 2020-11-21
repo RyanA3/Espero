@@ -1,24 +1,28 @@
 package me.felnstaren.espero.config;
 
+import java.io.File;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.module.nations.nation.Nation;
+import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
+import me.felnstaren.espero.module.nations.system.Nations;
 import me.felnstaren.espero.util.logger.Level;
 import me.felnstaren.espero.util.logger.Logger;
 
-public class DataPlayer {
+public class EsperoPlayer {
 
 	private YamlConfiguration data;
 	private String path;
 	private UUID uuid;
 	
-	public DataPlayer(UUID uuid) {
+	public EsperoPlayer(UUID uuid) {
 		init(uuid);
 	}
 	
-	public DataPlayer(Player player) {
+	public EsperoPlayer(Player player) {
 		init(player.getUniqueId());
 	}
 	
@@ -26,15 +30,8 @@ public class DataPlayer {
 		this.uuid = uuid;
 		Logger.log(Level.DEBUG, "Loading player with name " + uuid);
 		this.path = "playerdata/" + uuid + ".yml";
-		load(Loader.loadOrDefault(path, "default_player.yml"));
-
-		
-		
+		this.data = Loader.readConfig(path, "default_player.yml");
 		save();
-	}
-	
-	private void load(YamlConfiguration data) {
-		this.data = data;
 	}
 	
 	public void save() {
@@ -46,7 +43,6 @@ public class DataPlayer {
 	}
 	
 	
-	
 	public YamlConfiguration getData() {
 		return data;
 	}
@@ -54,6 +50,26 @@ public class DataPlayer {
 	public UUID getUUID() {
 		return uuid;
 	}
+	
+	
+	
+	public Nation getNation() {
+		String nation_id = data.getString("nation");
+		if(nation_id == null) return null;
+		Nation nation = Nations.getInstance().getNation(UUID.fromString(nation_id));
+		if(nation.isMember(uuid)) return nation;
+		data.set("nation", "");
+		return null;
+	}
+	
+	public NationPlayerRank getNationRank() {
+		Nation nation = getNation();
+		if(nation == null) return null;
+		String nation_rank = data.getString("nation-rank", "recruit");
+		return nation.getRank(nation_rank);
+	}
+	
+	
 	
 	public void addRift() {
 		int rifts = data.getInt("rift-count");
@@ -83,7 +99,7 @@ public class DataPlayer {
 	
 	
 	public static boolean hasGenerated(UUID uuid) {
-		return Loader.fileExists("playerdata/" + uuid + ".yml");
+		return new File(Loader.PLUGIN.getDataFolder(), "playerdata/" + uuid + ".yml").exists();
 	}
 	
 }

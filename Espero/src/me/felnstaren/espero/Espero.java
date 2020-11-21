@@ -4,17 +4,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.felnstaren.espero.config.Loader;
 import me.felnstaren.espero.module.magic.MagicModule;
 import me.felnstaren.espero.module.magic.rift.Rift;
 import me.felnstaren.espero.module.magic.rift.RiftManager;
 import me.felnstaren.espero.module.magic.rift.RiftPortal;
 import me.felnstaren.espero.module.magic.rift.TemporaryRift;
 import me.felnstaren.espero.module.nations.NationsModule;
+import me.felnstaren.espero.module.nations.system.Board;
 import me.felnstaren.espero.util.logger.Logger;
 
 public class Espero extends JavaPlugin {
 
 	public void onEnable() {
+		Loader.mkDirs();
 		Logger.init(this);
 		
 		MagicModule magic_module = new MagicModule();
@@ -30,7 +33,8 @@ public class Espero extends JavaPlugin {
 	}
 	
 	public void onDisable() {
-		
+		Board.getInstance().save();
+		Board.getInstance().clear();
 	}
 	
 }

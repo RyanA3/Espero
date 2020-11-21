@@ -25,7 +25,7 @@ public class Nation {
 		try {
 			this.id = id;
 			this.path = "nationdata/" + id + ".yml";
-			this.data = Loader.loadOrDefault(path, "default_nation.yml");
+			this.data = Loader.readConfig(path, "default_nation.yml");
 			
 			this.display_name = data.getString("display_name");
 			
@@ -60,8 +60,24 @@ public class Nation {
 		return false;
 	}
 	
+	public NationPlayerRank getRank(String label) {
+		for(NationPlayerRank rank : ranks)
+			if(rank.getLabel().equals(label)) return rank;
+		return null;
+	}
+	
 	public void save() {
 		Loader.save(data, path);
+	}
+	
+	
+	
+	public UUID id() {
+		return id;
+	}
+	
+	public String getDisplayName() {
+		return display_name;
 	}
 	
 }
