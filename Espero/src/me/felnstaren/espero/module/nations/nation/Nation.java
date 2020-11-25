@@ -1,10 +1,12 @@
 package me.felnstaren.espero.module.nations.nation;
 
+import java.io.File;
 import java.util.UUID;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.config.Loader;
 import me.felnstaren.espero.util.logger.Level;
 import me.felnstaren.espero.util.logger.Logger;
@@ -52,6 +54,31 @@ public class Nation {
 		}
 	}
 	
+	public Nation(String name, Town capital, EsperoPlayer owner) {
+		this.id = UUID.randomUUID();
+		this.path = "nationdata/" + id + ".yml";
+		this.data = Loader.readConfig(path, "default_nation.yml");
+		this.display_name = name;
+		
+		towns = new Town[1];
+		towns[0] = capital;
+		
+		ConfigurationSection rank_section = data.getConfigurationSection("ranks");
+		String[] rank_paths = (String[]) rank_section.getKeys(false).toArray();
+		ranks = new NationPlayerRank[rank_paths.length];
+		for(int i = 0; i < ranks.length; i++)
+			ranks[i] = new NationPlayerRank(rank_section.getConfigurationSection(rank_paths[i]));
+		
+		members = new UUID[1];
+		members[0] = owner.getUUID();
+		
+		owner.set("nation", id);
+		owner.set("nation-rank", "leader");
+		owner.save();
+		
+		
+	}
+	
 	
 	
 	public boolean isMember(UUID player) {
@@ -67,6 +94,18 @@ public class Nation {
 	}
 	
 	public void save() {
+		data.set("display_name", display_name);
+		
+		
+		String[] smembers = new String[members.length];
+		for(int i = 0; i < members.length; i++)
+			smembers[i] = members[i].toString();
+		data.set("members", smembers);
+		
+		File file = Loader.load(path);
+		for(int i = 0; i < ranks.length; i++)
+			ranks[i].save(data, file);
+		
 		Loader.save(data, path);
 	}
 	
