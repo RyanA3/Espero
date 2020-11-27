@@ -114,7 +114,7 @@ public class Messenger {
 				colors[i] = expanded;
 			}
 			
-			jsonmsg.addComponent(new TextComponent(component).setColor(colors[i]));
+			jsonmsg.addComponent(new TextComponent(component).setColor("#" + colors[i]));
 		}
 		
 		return jsonmsg;

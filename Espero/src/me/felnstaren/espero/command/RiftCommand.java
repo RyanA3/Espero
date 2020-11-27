@@ -22,6 +22,11 @@ public class RiftCommand implements CommandExecutor {
 			return true;
 		}
 		
+		if(!sender.hasPermission("espero.alpha.rift")) {
+			sender.sendMessage(Messenger.color("&cYou do not have access to this alpha command!"));
+			return true;
+		}
+		
 		if(args.length == 0) {
 			Rift.cast((Player) sender, 60);
 			Messenger.send((Player) sender, "#44FF44You casted a rift");

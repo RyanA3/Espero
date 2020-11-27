@@ -14,12 +14,6 @@ import me.felnstaren.espero.util.logger.Level;
 import me.felnstaren.espero.util.logger.Logger;
 
 public class Loader {
-
-	/*
-	 * TODO: Refactor
-	 * This needs to be refactored so bad and made into an object?... Maybe
-	 * Anyways I really don't fucking feel like it right now, it works for now
-	 */
 	
 	public static final Plugin PLUGIN = Espero.getPlugin(Espero.class);
 	
@@ -59,6 +53,8 @@ public class Loader {
 	}
 		
 	private static File copy(File copy, String original) {
+		if(original == null) return copy;
+		
 		try {
 			if(Loader.class.getResourceAsStream("resources/" + original) != null) {
 				InputStream initial_stream = Loader.class.getResourceAsStream("resources/" + original);

@@ -27,30 +27,19 @@ public class ClaimRegion {
 	
 	
 	
-	public NationRegionClaims getClaims(UUID nation) {
-		return claims.get(nation);
-	}
-	
-	public UUID getWhoClaimed(int x, int z) {
-		x %= 32; z %= 32;
-		for(UUID nation : claims.keySet())
-			if(claims.get(nation).isClaimed(x, z)) 
-				return nation;
-		return null;
-	}
-	
 	public ClaimChunkData getClaim(int x, int z) {
 		x %= 32; z %= 32;
-		for(UUID nation : claims.keySet())
-			if(claims.get(nation).isClaimed(x, z)) 
-				return claims.get(nation).getClaim(x, z).data(nation);
+		for(UUID nation : claims.keySet()) {
+			ClaimChunk claim = claims.get(nation).getClaim(x, z);
+			if(claim != null) return claim.data(nation);
+		}
 		return null;
 	}
 	
-	public void claim(UUID nation, ClaimChunk claim) {
+	public void claim(UUID nation, int x, int z, int id) {
 		x %= 32; z %= 32;
 		if(!claims.containsKey(nation)) claims.put(nation, new NationRegionClaims());
-		claims.get(nation).claim(claim);
+		claims.get(nation).claim(x, z, id);
 	}
 	
 	public void unclaim(int x, int z) {
@@ -58,6 +47,8 @@ public class ClaimRegion {
 		for(UUID nation : claims.keySet())
 			claims.get(nation).unclaim(x, z);
 	}
+	
+	
 	
 	public int getX() {
 		return x;
@@ -67,12 +58,11 @@ public class ClaimRegion {
 		return z;
 	}
 	
-	
 	public String path() {
 		return path;
 	}
 	
-	public String data() {
+	private String data() {
 		String data = "";
 		for(UUID nation : claims.keySet()) {
 			data += nation.toString();
@@ -83,8 +73,7 @@ public class ClaimRegion {
 		
 		return data;
 	}
-	
-	//EZ Dub
+
 	public void save() {
 		File file = Loader.load(path);
 		Loader.save(data(), file);

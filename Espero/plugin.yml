@@ -9,3 +9,6 @@ commands:
  rift:
   aliases: []
   description: Creates a rift
+ test:
+  aliases: []
+  description: Development test command

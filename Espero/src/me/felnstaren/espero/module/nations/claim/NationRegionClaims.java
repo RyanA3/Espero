@@ -16,9 +16,18 @@ public class NationRegionClaims {
 		for(int i = 1; i < chunks.length; i++) 
 			claims.add(new ClaimChunk(chunks[i]));
 	}
+
+	
 	
 	public ArrayList<ClaimChunk> getClaims() {
 		return claims;
+	}
+	
+	public boolean isClaimed(int x, int z) {
+		x %= 32; z %= 32;
+		for(ClaimChunk claim : claims)
+			if(claim.getX() == x && claim.getZ() == z) return true;
+		return false;
 	}
 	
 	public ClaimChunk getClaim(int x, int z) {
@@ -28,10 +37,10 @@ public class NationRegionClaims {
 		return null;
 	}
 	
-	public void claim(ClaimChunk claim) {
+	public void claim(int x, int z, int id) {
 		for(ClaimChunk check : claims)
-			if(check.getX() == claim.getX() && check.getZ() == claim.getZ()) { check.setId(claim.getId()); return; }
-		claims.add(claim);
+			if(check.getX() == x && check.getZ() == z) { check.setId(id); return; }
+		claims.add(new ClaimChunk(x, z, id));
 	}
 	
 	public void unclaim(int x, int z) {
@@ -41,11 +50,6 @@ public class NationRegionClaims {
 		if(remove > -1) claims.remove(remove);
 	}
 	
-	public boolean isClaimed(int x, int z) {
-		x %= 32; z %= 32;
-		for(ClaimChunk claim : claims)
-			if(claim.getX() == x && claim.getZ() == z) return true;
-		return false;
-	}
+	
 	
 }

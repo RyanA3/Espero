@@ -7,14 +7,14 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class RiftManager {
 
-	public static RiftManager manager;
+	public static RiftManager INSTANCE;
 	
 	public static RiftManager getInstance() {
-		return manager;
+		return INSTANCE;
 	}
 	
 	public static void init(Plugin plugin) {
-		manager = new RiftManager(plugin);
+		INSTANCE = new RiftManager(plugin);
 	}
 	
 	

@@ -29,17 +29,16 @@ public class ClaimChunk {
 		return z;
 	}
 	
-	public ClaimType getType() {
-		return id == 0 ? ClaimType.TERRITORY : ClaimType.TOWN;
+	public int getId() {
+		return id;
 	}
+	
 	
 	public void setId(int id) {
 		this.id = id;
 	}
 	
-	public int getId() {
-		return id;
-	}
+
 	
 	public String data() {
 		return x + "." + z + "." + id;
