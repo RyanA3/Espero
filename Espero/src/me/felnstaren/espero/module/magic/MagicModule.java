@@ -2,7 +2,7 @@ package me.felnstaren.espero.module.magic;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.felnstaren.espero.command.RiftCommand;
+import me.felnstaren.espero.command.standalone.RiftCommand;
 import me.felnstaren.espero.module.IModule;
 import me.felnstaren.espero.module.magic.rift.RiftManager;
 

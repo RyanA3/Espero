@@ -1,4 +1,4 @@
-package me.felnstaren.espero.command;
+package me.felnstaren.espero.command.standalone;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

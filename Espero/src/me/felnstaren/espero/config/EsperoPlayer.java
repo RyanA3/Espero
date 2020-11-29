@@ -69,6 +69,35 @@ public class EsperoPlayer {
 		return nation.getRank(nation_rank);
 	}
 	
+	/**
+	 * Set the player's nation
+	 * @param nation
+	 */
+	public void setNation(Nation nation) {
+		if(nation == null) data.set("nation", "");
+		else nation.setMember(uuid, "recruit");
+	}
+	 
+	/**
+	 * Set the player's nation rank
+	 * @param rank
+	 */
+	public void setRank(String rank) {
+		data.set("nation-rank", rank);
+	}
+	
+	/**
+	 * Check if a player has permission to do something within a nation's borders
+	 * @param nation_permission
+	 * @param nation
+	 * @return
+	 */
+	public boolean hasPermission(String nation_permission, Nation nation) {
+		NationPlayerRank rank = getNationRank();
+		if(rank == null) return false;
+		return rank.isPermitted(nation_permission) && getNation().id().equals(nation.id());
+	}
+	
 	
 	
 	public void addRift() {

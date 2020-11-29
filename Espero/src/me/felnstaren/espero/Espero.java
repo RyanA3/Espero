@@ -2,7 +2,7 @@ package me.felnstaren.espero;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.felnstaren.espero.command.TestCommand;
+import me.felnstaren.espero.command.standalone.TestCommand;
 import me.felnstaren.espero.config.Loader;
 import me.felnstaren.espero.module.magic.MagicModule;
 import me.felnstaren.espero.module.nations.NationsModule;

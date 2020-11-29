@@ -91,8 +91,9 @@ public class Nation {
 			members.add(player);
 		
 		EsperoPlayer esp = new EsperoPlayer(player);
-		esp.set("nation", id);
+		esp.set("nation", id.toString());
 		esp.set("nation-rank", rank);
+		esp.save();
 	}
 	
 	public NationPlayerRank getRank(String label) {
