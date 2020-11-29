@@ -24,7 +24,7 @@ public class Town {
 	}
 	
 	public String data() {
-		String data = id + ": \n"
+		String data = ""
 				+ "name: " + name + " \n"
 				+ "cx: " + center.x + " \n"
 				+ "cy: " + center.y + " \n";

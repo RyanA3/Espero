@@ -17,8 +17,8 @@ public class Espero extends JavaPlugin {
 		Logger.init(this);
 		Loader.mkDirs();
 		
-		magic_module = new MagicModule();
-		magic_module.onEnable(this);
+		//magic_module = new MagicModule();
+		//magic_module.onEnable(this);
 		
 		nations_module = new NationsModule();
 		nations_module.onEnable(this);
@@ -27,7 +27,7 @@ public class Espero extends JavaPlugin {
 	}
 	
 	public void onDisable() {
-		magic_module.onDisable(this);
+		//magic_module.onDisable(this);
 		nations_module.onDisable(this);
 	}
 	

@@ -8,18 +8,27 @@ ranks:
   display_name: "Recruit"
   permissions:
    - container
- leader:
-  display_name: "Leader"
-  inherits: "recruit"
-  permissions:
-   - build
    - button
    - lever
    - door
-   - claim
-   - coffers
+ member:
+  display_name: "Member"
+  inherits: "recruit"
+  permissions:
+   - build
    - recruit
+ officer:
+  display_name: "Officer"
+  inherits: "member"
+  permissions:
+   - demote
    - promote
+   - claim
+ leader:
+  display_name: "Leader"
+  inherits: "officer"
+  permissions:
+   - coffers
    - kick
 
 members:
