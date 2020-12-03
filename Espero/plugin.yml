@@ -12,3 +12,6 @@ commands:
  test:
   aliases: []
   description: Development test command
+ nation:
+  aliases: [n]
+  description: Default nation command

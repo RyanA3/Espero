@@ -2,6 +2,7 @@ package me.felnstaren.espero.util.message;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.util.ArrayUtil;
@@ -164,6 +165,16 @@ public class Messenger {
 	
 	public static int send(Player player, Message message) {
 		return sendChatPacket(player, message.build());
+	}
+	
+	public static void broadcast(String message) {
+		for(Player p : Bukkit.getOnlinePlayers())
+			send(p, message);
+	}
+	
+	public static void broadcast(Message message) {
+		for(Player p : Bukkit.getOnlinePlayers())
+			send(p, message);
 	}
 	
 	/**

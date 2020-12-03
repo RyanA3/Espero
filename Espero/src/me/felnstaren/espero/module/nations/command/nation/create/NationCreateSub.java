@@ -13,7 +13,9 @@ public class NationCreateSub extends SubCommand {
 	public NationCreateSub() {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
-				Messenger.send((Player) sender, "#F55Usage: #F77/nation create <name>");
+				Messenger.send((Player) sender, "#F55Usage: #F77/nation create <name>"
+						+ "\n#999Creates a nation with a town where you're standing"
+						+ "\ntowns cannot be moved, choose wisely");
 				return true;
 			}
 		}, "create");

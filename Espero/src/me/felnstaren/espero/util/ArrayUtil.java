@@ -57,4 +57,13 @@ public class ArrayUtil {
 		return aindexes;
 	}
 	
+	
+	
+	public static String[] stringver(Object[] objs) {
+		String[] strs = new String[objs.length];
+		for(int i = 0; i < objs.length; i++)
+			strs[i] = (String) objs[i];
+		return strs;
+	}
+	
 }

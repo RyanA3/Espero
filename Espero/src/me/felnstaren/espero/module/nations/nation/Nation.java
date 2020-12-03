@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.config.Loader;
+import me.felnstaren.espero.util.ArrayUtil;
 import me.felnstaren.espero.util.logger.Level;
 import me.felnstaren.espero.util.logger.Logger;
 
@@ -17,6 +18,7 @@ public class Nation {
 	private ArrayList<Town> towns;
 	private NationPlayerRank[] ranks;
 	private ArrayList<UUID> members;
+	private ArrayList<UUID> invites;
 	
 	private UUID id;
 	private String display_name;
@@ -33,21 +35,28 @@ public class Nation {
 			this.display_name = data.getString("display_name");
 			
 			ConfigurationSection town_section = data.getConfigurationSection("towns");
-			String[] town_paths = (String[]) town_section.getKeys(false).toArray();
+			String[] town_paths = ArrayUtil.stringver(town_section.getKeys(false).toArray());
 			towns = new ArrayList<Town>();
-			for(int i = 0; i < town_paths.length; i++)
+			for(int i = 0; i < town_paths.length; i++) {
+				Logger.log(Level.DEBUG, "Loading town " + town_paths[i]);
 				towns.add(new Town(town_section.getConfigurationSection(town_paths[i])));
+			}
 			
 			ConfigurationSection rank_section = data.getConfigurationSection("ranks");
-			String[] rank_paths = (String[]) rank_section.getKeys(false).toArray();
+			String[] rank_paths = ArrayUtil.stringver(rank_section.getKeys(false).toArray());
 			ranks = new NationPlayerRank[rank_paths.length];
 			for(int i = 0; i < ranks.length; i++)
 				ranks[i] = new NationPlayerRank(rank_section.getConfigurationSection(rank_paths[i]));
 			
-			String[] str_members = (String[]) data.getStringList("members").toArray();
+			String[] str_members = ArrayUtil.stringver(data.getStringList("members").toArray());
 			this.members = new ArrayList<UUID>();
 			for(int i = 0; i < str_members.length; i++)
 				members.add(UUID.fromString(str_members[i]));
+			
+			String[] str_invites = ArrayUtil.stringver(data.getStringList("invites").toArray());
+			this.invites = new ArrayList<UUID>();
+			for(int i = 0; i < str_members.length; i++)
+				invites.add(UUID.fromString(str_invites[i]));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,7 +74,8 @@ public class Nation {
 		towns.add(capital);
 		
 		ConfigurationSection rank_section = data.getConfigurationSection("ranks");
-		String[] rank_paths = (String[]) rank_section.getKeys(false).toArray();
+		String[] rank_paths = ArrayUtil.stringver(rank_section.getKeys(false).toArray());
+		
 		ranks = new NationPlayerRank[rank_paths.length];
 		for(int i = 0; i < ranks.length; i++)
 			ranks[i] = new NationPlayerRank(rank_section.getConfigurationSection(rank_paths[i]));
@@ -73,7 +83,9 @@ public class Nation {
 		members = new ArrayList<UUID>();
 		members.add(owner.getUUID());
 		
-		owner.set("nation", id);
+		invites = new ArrayList<UUID>();
+		
+		owner.set("nation", id.toString());
 		owner.set("nation-rank", "leader");
 		owner.save();
 		
@@ -82,18 +94,12 @@ public class Nation {
 	
 	
 	
-	public boolean isMember(UUID player) {
-		return members.contains(player);
+	public ArrayList<UUID> getMembers() {
+		return members;
 	}
 	
-	public void setMember(UUID player, String rank) {
-		if(!isMember(player))
-			members.add(player);
-		
-		EsperoPlayer esp = new EsperoPlayer(player);
-		esp.set("nation", id.toString());
-		esp.set("nation-rank", rank);
-		esp.save();
+	public ArrayList<UUID> getInvites() {
+		return invites;
 	}
 	
 	public NationPlayerRank getRank(String label) {
@@ -105,19 +111,29 @@ public class Nation {
 	public void save() {
 		data.set("display_name", display_name);
 		
-		for(Town t : towns)
-			data.set("towns." + t.getID(), t.data());
-		
 		String[] smembers = new String[members.size()];
 		for(int i = 0; i < smembers.length; i++)
 			smembers[i] = members.get(i).toString();
 		data.set("members", smembers);
 		
+		String[] sinvites = new String[invites.size()];
+		for(int i = 0; i < smembers.length; i++)
+			smembers[i] = members.get(i).toString();
+		data.set("invites", sinvites);
+		
 		File file = Loader.load(path);
 		for(NationPlayerRank rank : ranks)
 			rank.save(data, file);
 		
+		for(Town town : towns)
+			town.save(data, file);
+		
 		Loader.save(data, path);
+	}
+	
+	public void delete() {
+		File file = Loader.load(path);
+		file.delete();
 	}
 	
 	

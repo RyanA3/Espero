@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import me.felnstaren.espero.util.ArrayUtil;
 import me.felnstaren.espero.util.logger.Level;
 import me.felnstaren.espero.util.logger.Logger;
 
@@ -21,7 +22,7 @@ public class NationPlayerRank {
 	public NationPlayerRank(ConfigurationSection data) {
 		this.label = data.getName();
 		this.display_name = data.getString("display_name");
-		this.permissions = (String[]) data.getStringList("permissions").toArray();
+		this.permissions = ArrayUtil.stringver(data.getStringList("permissions").toArray());
 		
 		if(data.getString("inherits") != null) this.inheretance_name = data.getString("inherits");
 		

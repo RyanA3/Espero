@@ -55,9 +55,9 @@ public class EsperoPlayer {
 	
 	public Nation getNation() {
 		String nation_id = data.getString("nation");
-		if(nation_id == null) return null;
+		if(nation_id.equals("")) return null;
 		Nation nation = Nations.getInstance().getNation(UUID.fromString(nation_id));
-		if(nation.isMember(uuid)) return nation;
+		if(nation.getMembers().contains(uuid)) return nation;
 		data.set("nation", "");
 		return null;
 	}
@@ -74,10 +74,18 @@ public class EsperoPlayer {
 	 * @param nation
 	 */
 	public void setNation(Nation nation) {
-		if(nation == null) data.set("nation", "");
-		else nation.setMember(uuid, "recruit");
+		if(nation == null) {
+			getNation().getMembers().remove(uuid);
+			data.set("nation", "");
+		}
+		else {
+			nation.getMembers().add(uuid);
+			nation.getInvites().remove(uuid);
+			data.set("nation", nation.id().toString());
+			setRank("recruit");
+		}
 	}
-	 
+	
 	/**
 	 * Set the player's nation rank
 	 * @param rank

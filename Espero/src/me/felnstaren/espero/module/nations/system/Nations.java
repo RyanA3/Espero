@@ -26,8 +26,12 @@ public class Nations {
 		File folder = Loader.load(path);
 		File[] datas = folder.listFiles();
 		
+		nations = new ArrayList<Nation>();
+		nations_names = new ArrayList<String>();
+		nations_ids = new ArrayList<UUID>();
+		
 		for(File data : datas) {
-			Nation nation = new Nation(UUID.fromString(data.getName().replace(".txt", "")));
+			Nation nation = new Nation(UUID.fromString(data.getName().replace(".yml", "")));
 			nations.add(nation);
 			nations_names.add(nation.getDisplayName());
 			nations_ids.add(nation.id());
@@ -47,6 +51,20 @@ public class Nations {
 		nations.add(nation);
 		nations_names.add(nation.getDisplayName());
 		nations_ids.add(nation.id());
+	}
+	
+	public void unregister(UUID nation_id) {
+		int to_remove = -1;
+		for(int i = 0; i < nations.size(); i++) if(nations.get(i).id().equals(nation_id)) to_remove = i;
+		if(to_remove < 0) return;
+		nations.remove(to_remove);
+		nations_names.remove(to_remove);
+		nations_ids.remove(to_remove);
+	}
+	
+	public void save() {
+		for(Nation nation : nations)
+			nation.save();
 	}
 	
 }
