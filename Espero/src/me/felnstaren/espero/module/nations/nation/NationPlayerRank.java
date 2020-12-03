@@ -1,14 +1,9 @@
 package me.felnstaren.espero.module.nations.nation;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.felnstaren.espero.util.ArrayUtil;
-import me.felnstaren.espero.util.logger.Level;
-import me.felnstaren.espero.util.logger.Logger;
 
 public class NationPlayerRank {
 
@@ -69,14 +64,8 @@ public class NationPlayerRank {
 		return data;
 	}
 	
-	public void save(YamlConfiguration config, File file) {
+	public void save(YamlConfiguration config) {
 		config.set(data.getCurrentPath(), data);
-		try {
-			config.save(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-			Logger.log(Level.WARNING, "Oh fuc, Oh shit");
-		}
 	}
 	
 	

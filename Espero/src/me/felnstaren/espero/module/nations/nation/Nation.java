@@ -121,15 +121,16 @@ public class Nation {
 			smembers[i] = members.get(i).toString();
 		data.set("invites", sinvites);
 		
-		File file = Loader.load(path);
 		for(NationPlayerRank rank : ranks)
-			rank.save(data, file);
+			rank.save(data);
 		
 		for(Town town : towns)
-			town.save(data, file);
+			town.save(data);
 		
 		Loader.save(data, path);
 	}
+	
+	
 	
 	public void delete() {
 		File file = Loader.load(path);

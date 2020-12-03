@@ -1,8 +1,5 @@
 package me.felnstaren.espero.module.nations.nation;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -37,16 +34,10 @@ public class Town {
 		return id;
 	}
 	
-	public void save(YamlConfiguration config, File file) {
+	public void save(YamlConfiguration config) {
 		config.set("towns." + id + ".cx", x);
 		config.set("towns." + id + ".cz", z);
 		config.set("towns." + id + ".display_name", name);
-		try {
-			config.save(file);
-		} catch (IOException e) {
-			Logger.log(Level.WARNING, "Error Saving Town " + id);
-			e.printStackTrace();
-		}
 	}
 
 }
