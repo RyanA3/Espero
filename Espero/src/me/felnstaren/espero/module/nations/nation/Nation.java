@@ -97,13 +97,25 @@ public class Nation {
 	}
 	
 	public NationPlayerRank getNextHighestRank(NationPlayerRank rank) {
-		int target_low = rank.getWeight();
+		int floor = rank.getWeight();
 		NationPlayerRank closest_high = null;
 		for(NationPlayerRank test : ranks) {
-			if(closest_high == null && test.getWeight() > target_low) closest_high = test;
-			else if(test.getWeight() > target_low && test.getWeight() < closest_high.getWeight()) closest_high = test;
+			if(test.getWeight() <= floor) continue;
+			if(closest_high == null) closest_high = test;
+			else if(test.getWeight() < closest_high.getWeight()) closest_high = test;
 		}
 		return closest_high;
+	}
+	
+	public NationPlayerRank getNextLowestRank(NationPlayerRank rank) {
+		int cieling = rank.getWeight();
+		NationPlayerRank closest_low = null;
+		for(NationPlayerRank test : ranks) {
+			if(test.getWeight() >= cieling) continue;
+			if(closest_low == null) closest_low = test;
+			else if(test.getWeight() > closest_low.getWeight()) closest_low = test;
+		}
+		return closest_low;
 	}
 	
 	
