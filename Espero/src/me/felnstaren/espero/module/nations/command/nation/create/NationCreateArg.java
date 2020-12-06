@@ -1,4 +1,4 @@
-package me.felnstaren.espero.module.nations.command.nation.create.name;
+package me.felnstaren.espero.module.nations.command.nation.create;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,22 +11,26 @@ import me.felnstaren.espero.module.nations.nation.Town;
 import me.felnstaren.espero.module.nations.system.Nations;
 import me.felnstaren.espero.util.message.Messenger;
 
-public class NationCreateNameArgument extends SubArgument {
+public class NationCreateArg extends SubArgument {
 
-	public NationCreateNameArgument() {
+	public NationCreateArg() {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
-				
-				if(!(sender instanceof Player)) {
-					sender.sendMessage(Messenger.color("&cYou must be a player to use this command!"));
-					return true;
-				}
-				
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = new EsperoPlayer(player);
 				
 				if(eplayer.getNation() != null) {
 					Messenger.send(player, "#F55You have to leave your current nation to create your own!");
+					return true;
+				}
+				
+				if(Nations.getInstance().getNation(args[current]) != null) {
+					Messenger.send(player, "#F55A nation with this name already exists!");
+					return true;
+				}
+				
+				if(args[current].length() > 16) {
+					Messenger.send(player, "#F55You nation name may not be more than 16 characters long!");
 					return true;
 				}
 				

@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.command.CommandStub;
 import me.felnstaren.espero.command.SubCommand;
-import me.felnstaren.espero.module.nations.command.nation.create.name.NationCreateNameArgument;
 import me.felnstaren.espero.util.message.Messenger;
 
 public class NationCreateSub extends SubCommand {
@@ -20,7 +19,7 @@ public class NationCreateSub extends SubCommand {
 			}
 		}, "create");
 		
-		arguments.add(new NationCreateNameArgument());
+		arguments.add(new NationCreateArg());
 	}
 
 }

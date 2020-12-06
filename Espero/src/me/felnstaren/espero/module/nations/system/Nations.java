@@ -34,7 +34,7 @@ public class Nations {
 			Nation nation = new Nation(UUID.fromString(data.getName().replace(".yml", "")));
 			nations.add(nation);
 			nations_names.add(nation.getDisplayName());
-			nations_ids.add(nation.id());
+			nations_ids.add(nation.getID());
 		}
 	}
 	
@@ -44,18 +44,23 @@ public class Nations {
 	}
 	
 	public Nation getNation(String name) {
-		return nations.get(nations_names.indexOf(name));
+		try { return nations.get(nations_names.indexOf(name)); }
+		catch (Exception e) { return null; } 
+	}
+	
+	public ArrayList<String> getNationNames() {
+		return nations_names;
 	}
 	
 	public void registerNewNation(Nation nation) {
 		nations.add(nation);
 		nations_names.add(nation.getDisplayName());
-		nations_ids.add(nation.id());
+		nations_ids.add(nation.getID());
 	}
 	
 	public void unregister(UUID nation_id) {
 		int to_remove = -1;
-		for(int i = 0; i < nations.size(); i++) if(nations.get(i).id().equals(nation_id)) to_remove = i;
+		for(int i = 0; i < nations.size(); i++) if(nations.get(i).getID().equals(nation_id)) to_remove = i;
 		if(to_remove < 0) return;
 		nations.remove(to_remove);
 		nations_names.remove(to_remove);

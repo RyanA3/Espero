@@ -4,14 +4,17 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.config.Loader;
 import me.felnstaren.espero.util.ArrayUtil;
 import me.felnstaren.espero.util.logger.Level;
 import me.felnstaren.espero.util.logger.Logger;
+import me.felnstaren.espero.util.message.Messenger;
 
 public class Nation {
 
@@ -33,31 +36,10 @@ public class Nation {
 			this.data = Loader.readConfig(path, "default_nation.yml");
 			
 			this.display_name = data.getString("display_name");
-			
-			ConfigurationSection town_section = data.getConfigurationSection("towns");
-			String[] town_paths = ArrayUtil.stringver(town_section.getKeys(false).toArray());
-			towns = new ArrayList<Town>();
-			for(int i = 0; i < town_paths.length; i++) {
-				Logger.log(Level.DEBUG, "Loading town " + town_paths[i]);
-				towns.add(new Town(town_section.getConfigurationSection(town_paths[i])));
-			}
-			
-			ConfigurationSection rank_section = data.getConfigurationSection("ranks");
-			String[] rank_paths = ArrayUtil.stringver(rank_section.getKeys(false).toArray());
-			ranks = new NationPlayerRank[rank_paths.length];
-			for(int i = 0; i < ranks.length; i++)
-				ranks[i] = new NationPlayerRank(rank_section.getConfigurationSection(rank_paths[i]));
-			
-			String[] str_members = ArrayUtil.stringver(data.getStringList("members").toArray());
-			this.members = new ArrayList<UUID>();
-			for(int i = 0; i < str_members.length; i++)
-				members.add(UUID.fromString(str_members[i]));
-			
-			String[] str_invites = ArrayUtil.stringver(data.getStringList("invites").toArray());
-			this.invites = new ArrayList<UUID>();
-			for(int i = 0; i < str_members.length; i++)
-				invites.add(UUID.fromString(str_invites[i]));
-			
+
+			loadTowns();
+			loadRanks();
+			loadUsers();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Logger.log(Level.SEVERE, "Corruption presence at unsafe levels");
@@ -73,12 +55,7 @@ public class Nation {
 		towns = new ArrayList<Town>();
 		towns.add(capital);
 		
-		ConfigurationSection rank_section = data.getConfigurationSection("ranks");
-		String[] rank_paths = ArrayUtil.stringver(rank_section.getKeys(false).toArray());
-		
-		ranks = new NationPlayerRank[rank_paths.length];
-		for(int i = 0; i < ranks.length; i++)
-			ranks[i] = new NationPlayerRank(rank_section.getConfigurationSection(rank_paths[i]));
+		loadRanks();
 		
 		members = new ArrayList<UUID>();
 		members.add(owner.getUUID());
@@ -98,6 +75,17 @@ public class Nation {
 		return members;
 	}
 	
+	public ArrayList<Player> getOnlineMembers() {
+		ArrayList<Player> players = new ArrayList<Player>();
+		
+		for(UUID id : members) {
+			Player player = Bukkit.getPlayer(id);
+			if(player != null && player.isOnline()) players.add(player);
+		}
+		
+		return players;
+	}
+	
 	public ArrayList<UUID> getInvites() {
 		return invites;
 	}
@@ -108,6 +96,67 @@ public class Nation {
 		return null;
 	}
 	
+	public NationPlayerRank getNextHighestRank(NationPlayerRank rank) {
+		int target_low = rank.getWeight();
+		NationPlayerRank closest_high = null;
+		for(NationPlayerRank test : ranks) {
+			if(closest_high == null && test.getWeight() > target_low) closest_high = test;
+			else if(test.getWeight() > target_low && test.getWeight() < closest_high.getWeight()) closest_high = test;
+		}
+		return closest_high;
+	}
+	
+	
+	
+	public UUID getID() {
+		return id;
+	}
+	
+	public String getDisplayName() {
+		return display_name;
+	}
+	
+	
+	
+	private void loadTowns() {
+		ConfigurationSection town_section = data.getConfigurationSection("towns");
+		String[] town_paths = ArrayUtil.stringver(town_section.getKeys(false).toArray());
+		towns = new ArrayList<Town>();
+		for(int i = 0; i < town_paths.length; i++) {
+			Logger.log(Level.DEBUG, "Loading town " + town_paths[i]);
+			towns.add(new Town(town_section.getConfigurationSection(town_paths[i])));
+		}
+	}
+	
+	private void loadRanks() {
+		ConfigurationSection rank_section = data.getConfigurationSection("ranks");
+		String[] rank_paths = ArrayUtil.stringver(rank_section.getKeys(false).toArray());
+		ranks = new NationPlayerRank[rank_paths.length];
+		for(int i = 0; i < ranks.length; i++) 
+			ranks[i] = new NationPlayerRank(rank_section.getConfigurationSection(rank_paths[i]));
+		
+		//Init rank inheretances
+		for(NationPlayerRank rank : ranks) 
+			if(rank.getInheretanceName() != null)
+				rank.setInheretance(getRank(rank.getInheretanceName()));
+	}
+	
+	private void loadUsers() {
+		//Load members
+		String[] str_members = ArrayUtil.stringver(data.getStringList("members").toArray());
+		this.members = new ArrayList<UUID>();
+		for(int i = 0; i < str_members.length; i++)
+			members.add(UUID.fromString(str_members[i]));
+		
+		//Load invites
+		String[] str_invites = ArrayUtil.stringver(data.getStringList("invites").toArray());
+		this.invites = new ArrayList<UUID>();
+		for(int i = 0; i < str_invites.length; i++)
+			invites.add(UUID.fromString(str_invites[i]));
+	}
+	
+	
+	
 	public void save() {
 		data.set("display_name", display_name);
 		
@@ -117,8 +166,8 @@ public class Nation {
 		data.set("members", smembers);
 		
 		String[] sinvites = new String[invites.size()];
-		for(int i = 0; i < smembers.length; i++)
-			smembers[i] = members.get(i).toString();
+		for(int i = 0; i < sinvites.length; i++)
+			sinvites[i] = invites.get(i).toString();
 		data.set("invites", sinvites);
 		
 		for(NationPlayerRank rank : ranks)
@@ -130,21 +179,22 @@ public class Nation {
 		Loader.save(data, path);
 	}
 	
-	
-	
-	public void delete() {
+	public void disband() {
+		for(UUID member : members) {
+			EsperoPlayer emember = new EsperoPlayer(member);
+			emember.setNation(null);
+			emember.setRank("recruit");
+			emember.save();
+		}
+		
 		File file = Loader.load(path);
 		file.delete();
 	}
-	
-	
-	
-	public UUID id() {
-		return id;
-	}
-	
-	public String getDisplayName() {
-		return display_name;
+
+	public void broadcast(String message) {
+		ArrayList<Player> players = getOnlineMembers();
+		for(Player player : players) 
+			Messenger.send(player, message);
 	}
 	
 }

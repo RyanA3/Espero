@@ -66,4 +66,10 @@ public class ArrayUtil {
 		return strs;
 	}
 	
+	public static int stringind(String[] strs, String check) {
+		for(int i = 0; i < strs.length; i++)
+			if(strs[i].equals(check)) return i;
+		return -1;
+	}
+	
 }

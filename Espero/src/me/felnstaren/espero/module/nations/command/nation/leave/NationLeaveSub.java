@@ -7,6 +7,7 @@ import me.felnstaren.espero.command.CommandStub;
 import me.felnstaren.espero.command.SubCommand;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
+import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.system.Nations;
 import me.felnstaren.espero.util.message.Messenger;
 
@@ -25,7 +26,13 @@ public class NationLeaveSub extends SubCommand {
 				Nation nation = eplayer.getNation();
 				
 				if(nation == null) {
-					Messenger.send(player, "#F55You aren't in a nation");
+					Messenger.send(player, "#F55You aren't in a nation!");
+					return true;
+				}
+				
+				NationPlayerRank rank = eplayer.getNationRank();
+				if(rank.getLabel().equals("leader") && nation.getMembers().size() > 1) {
+					Messenger.send(player, "#F55You must delegate a new leader before you leave!");
 					return true;
 				}
 				
@@ -34,11 +41,12 @@ public class NationLeaveSub extends SubCommand {
 				
 				if(nation.getMembers().size() == 0) {
 					Messenger.broadcast("#F22" + nation.getDisplayName() + " #F55has been disbanded!");
-					Nations.getInstance().unregister(nation.id());
-					nation.delete();
+					Nations.getInstance().unregister(nation.getID());
+					nation.disband();
 				}
 				
-				Messenger.send(player, "#F55You've left the nation of #F22" + nation.getDisplayName() + " #F55behind, good luck on your travels");
+				nation.broadcast("#5F5" + player.getDisplayName() + " has left the nation!");
+				Messenger.send(player, "#5F5You've left the nation of #F22" + nation.getDisplayName() + " #5F5behind, good luck on your travels");
 				
 				return true;
 			}

@@ -12,12 +12,14 @@ public class NationPlayerRank {
 	private String[] permissions;
 	private String inheretance_name;
 	private NationPlayerRank inheretance;
+	private int weight;
 	private ConfigurationSection data;
 	
 	public NationPlayerRank(ConfigurationSection data) {
 		this.label = data.getName();
 		this.display_name = data.getString("display_name");
 		this.permissions = ArrayUtil.stringver(data.getStringList("permissions").toArray());
+		this.weight = data.getInt("weight", 0);
 		
 		if(data.getString("inherits") != null) this.inheretance_name = data.getString("inherits");
 		
@@ -40,8 +42,8 @@ public class NationPlayerRank {
 	
 	
 	
-	public String getName() {
-		return label;
+	public int getWeight() {
+		return weight;
 	}
 	
 	public String getLabel() {
@@ -60,6 +62,7 @@ public class NationPlayerRank {
 	public ConfigurationSection getData() {
 		data.set("display_name", display_name);
 		data.set("permissions", permissions);
+		data.set("weight", weight);
 		if(inheretance_name != null) data.set("inheretance_name", inheretance_name);
 		return data;
 	}

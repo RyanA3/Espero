@@ -1,5 +1,7 @@
 package me.felnstaren.espero.module.nations.command.nation.invite;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,14 +14,12 @@ import me.felnstaren.espero.util.message.Messenger;
 
 public class NationInviteArg extends SubArgument {
 
+	//Poggers for Programming
+	//LoveArrow was here
+	
 	public NationInviteArg() {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
-				if(!(sender instanceof Player)) {
-					sender.sendMessage(Messenger.color("&cOnly players can use this command!"));
-					return true;
-				}
-				
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = new EsperoPlayer(player);
 				Nation nation = eplayer.getNation();
@@ -40,11 +40,17 @@ public class NationInviteArg extends SubArgument {
 					return true;
 				}
 				
+				UUID iid = invitee.getUniqueId();
+				if(nation.getInvites().contains(iid) || nation.getMembers().contains(iid)) {
+					Messenger.send(player, "#F55" + args[current] + " is already invited or a member of this nation!");
+					return true;
+				}
+				
 				nation.getInvites().add(invitee.getUniqueId());
 				nation.save();
 				
-				Messenger.send(player, "#5F5Successfully invited " + invitee.getDisplayName() + " #5F5to your nation!");
-				Messenger.send(invitee, "#F5FYou've been invited to join " + nation.getDisplayName());
+				nation.broadcast("#5F5" + player.getDisplayName() + " has invited " + invitee.getDisplayName() + " to the nation!");
+				Messenger.send(invitee, "#5F5You've been invited to join " + nation.getDisplayName());
 				
 				return true;
 			}

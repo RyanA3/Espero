@@ -10,6 +10,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
+import me.felnstaren.espero.module.nations.system.Nations;
 import me.felnstaren.espero.util.message.Messenger;
 
 public abstract class MasterCommand extends CommandContinuator implements CommandExecutor, TabCompleter {
@@ -51,16 +52,25 @@ public abstract class MasterCommand extends CommandContinuator implements Comman
 	public ArrayList<String> tab(CommandSender sender, String[] args, int current) {
 		ArrayList<String> tabs = forwardTab(sender, args, current);
 		if(tabs.contains("<player>")) {
-			ArrayList<String> remove = new ArrayList<String>();
-			for(String str : tabs) if(str.equals("<player>")) remove.add(str);
-			tabs.removeAll(remove);
-			
-			for(Player player : Bukkit.getOnlinePlayers()) tabs.add(player.getName());
+			ArrayList<String> players = new ArrayList<String>();
+			for(Player player : Bukkit.getOnlinePlayers()) players.add(player.getName());
+			tabReplace(tabs, "<player>", players);
 		}
+		
+		if(tabs.contains("<nation>"))
+			tabReplace(tabs, "<nation>", Nations.getInstance().getNationNames());
 		
 		ArrayList<String> done = new ArrayList<String>();
 		StringUtil.copyPartialMatches(args[args.length - 1], tabs, done);
 		return done;
+	}
+	
+	
+	private void tabReplace(ArrayList<String> tabs, String replace, ArrayList<String> values) {
+		ArrayList<String> remove = new ArrayList<String>();
+		for(String str : tabs) if(str.equals(replace)) remove.add(str);
+		tabs.removeAll(remove);
+		tabs.addAll(values);
 	}
 	
 }

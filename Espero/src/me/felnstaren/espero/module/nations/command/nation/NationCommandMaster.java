@@ -6,8 +6,11 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.command.CommandStub;
 import me.felnstaren.espero.command.MasterCommand;
 import me.felnstaren.espero.module.nations.command.nation.create.NationCreateSub;
+import me.felnstaren.espero.module.nations.command.nation.invite.NationInviteSub;
 import me.felnstaren.espero.module.nations.command.nation.join.NationJoinSub;
+import me.felnstaren.espero.module.nations.command.nation.leader.NationLeaderSub;
 import me.felnstaren.espero.module.nations.command.nation.leave.NationLeaveSub;
+import me.felnstaren.espero.module.nations.command.nation.promote.NationPromoteSub;
 import me.felnstaren.espero.util.message.Messenger;
 import me.felnstaren.espero.util.message.json.Message;
 import me.felnstaren.espero.util.message.json.TextComponent;
@@ -33,6 +36,9 @@ public class NationCommandMaster extends MasterCommand {
 		commands.add(new NationCreateSub());
 		commands.add(new NationLeaveSub());
 		commands.add(new NationJoinSub());
+		commands.add(new NationInviteSub());
+		commands.add(new NationLeaderSub());
+		commands.add(new NationPromoteSub());
 	}
 	
 }

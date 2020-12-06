@@ -6,6 +6,7 @@ towns:
 ranks:
  recruit:
   display_name: "Recruit"
+  weight: 0
   permissions:
    - container
    - button
@@ -14,12 +15,14 @@ ranks:
  member:
   display_name: "Member"
   inherits: "recruit"
+  weight: 10
   permissions:
    - build
    - recruit
  officer:
   display_name: "Officer"
   inherits: "member"
+  weight: 20
   permissions:
    - demote
    - promote
@@ -27,6 +30,7 @@ ranks:
  leader:
   display_name: "Leader"
   inherits: "officer"
+  weight: 30
   permissions:
    - coffers
    - kick

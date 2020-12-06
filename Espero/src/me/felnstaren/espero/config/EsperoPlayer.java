@@ -31,7 +31,6 @@ public class EsperoPlayer {
 		Logger.log(Level.DEBUG, "Loading player with name " + uuid);
 		this.path = "playerdata/" + uuid + ".yml";
 		this.data = Loader.readConfig(path, "default_player.yml");
-		save();
 	}
 	
 	public void save() {
@@ -54,7 +53,7 @@ public class EsperoPlayer {
 	
 	
 	public Nation getNation() {
-		String nation_id = data.getString("nation");
+		String nation_id = data.getString("nation", "");
 		if(nation_id.equals("")) return null;
 		Nation nation = Nations.getInstance().getNation(UUID.fromString(nation_id));
 		if(nation.getMembers().contains(uuid)) return nation;
@@ -81,7 +80,7 @@ public class EsperoPlayer {
 		else {
 			nation.getMembers().add(uuid);
 			nation.getInvites().remove(uuid);
-			data.set("nation", nation.id().toString());
+			data.set("nation", nation.getID().toString());
 			setRank("recruit");
 		}
 	}
@@ -103,7 +102,7 @@ public class EsperoPlayer {
 	public boolean hasPermission(String nation_permission, Nation nation) {
 		NationPlayerRank rank = getNationRank();
 		if(rank == null) return false;
-		return rank.isPermitted(nation_permission) && getNation().id().equals(nation.id());
+		return rank.isPermitted(nation_permission) && getNation().getID().equals(nation.getID());
 	}
 	
 	

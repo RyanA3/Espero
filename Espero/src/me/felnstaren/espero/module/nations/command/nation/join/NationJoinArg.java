@@ -15,11 +15,6 @@ public class NationJoinArg extends SubArgument {
 	public NationJoinArg() {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
-				if(!(sender instanceof Player)) {
-					sender.sendMessage(Messenger.color("&cOnly players can use this command!"));
-					return true;
-				}
-				
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = new EsperoPlayer(player);
 				
@@ -43,7 +38,7 @@ public class NationJoinArg extends SubArgument {
 				eplayer.save();
 				to_join.save();
 				
-				Messenger.send(player, "#5F5You've joined " + to_join.getDisplayName());
+				to_join.broadcast("5F5" + to_join.getDisplayName() + " has joined the nation!");
 				return true;
 			}
 		}, "<nation>");
