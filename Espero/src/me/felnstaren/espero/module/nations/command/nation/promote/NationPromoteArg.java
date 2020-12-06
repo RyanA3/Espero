@@ -48,6 +48,11 @@ public class NationPromoteArg extends SubArgument {
 				}
 				
 				NationPlayerRank promotion = nation.getNextHighestRank(eother.getNationRank());
+				if(promotion == null) {
+					Messenger.send(player, "#F55This player already has the highest rank possible!");
+					return true;
+				}
+				
 				if(promotion.getWeight() >= eplayer.getNationRank().getWeight()) {
 					Messenger.send(player, "#F55You can't promote this player above your own rank!");
 					return true;

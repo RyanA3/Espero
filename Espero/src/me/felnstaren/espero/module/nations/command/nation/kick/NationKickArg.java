@@ -1,4 +1,4 @@
-package me.felnstaren.espero.module.nations.command.nation.demote;
+package me.felnstaren.espero.module.nations.command.nation.kick;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -8,12 +8,11 @@ import me.felnstaren.espero.command.CommandStub;
 import me.felnstaren.espero.command.SubArgument;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.util.message.Messenger;
 
-public class NationDemoteArg extends SubArgument {
-	
-	public NationDemoteArg() {
+public class NationKickArg extends SubArgument {
+
+	public NationKickArg() {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
@@ -25,7 +24,7 @@ public class NationDemoteArg extends SubArgument {
 					return true;
 				}
 				
-				if(!eplayer.getNationRank().isPermitted("demote")) {
+				if(!eplayer.getNationRank().isPermitted("kick")) {
 					Messenger.send(player, "#F55You do not have permission to do this in your nation!");
 					return true;
 				}
@@ -43,22 +42,19 @@ public class NationDemoteArg extends SubArgument {
 				}
 				
 				if(eother.getNationRank().getWeight() >= eplayer.getNationRank().getWeight()) {
-					Messenger.send(player, "#F55You can't demote this player!");
+					Messenger.send(player, "#F55You can't kick this player!");
 					return true;
 				}
 				
-				NationPlayerRank demotion = nation.getNextLowestRank(eother.getNationRank());
-				if(demotion == null) {
-					Messenger.send(player, "#F55This player is already at the lowest rank possible!");
-					return true;
-				}
+				nation.broadcast("#5F5" + player.getDisplayName() + " #5F5has kicked " + other.getDisplayName() + " #5F5from the nation!");
+				eother.setNation(null);
+				eother.setRank("recruit");
+				eother.save();
 				
-				eother.setRank(demotion.getLabel());
-				nation.broadcast("#F5F" + other.getDisplayName() + "#5F5has been demoted to the rank of #999" + demotion.getDisplayName() + " #5f5by " + player.getDisplayName());
 				
 				return true;
 			}
 		}, "<player>");
 	}
-
+	
 }

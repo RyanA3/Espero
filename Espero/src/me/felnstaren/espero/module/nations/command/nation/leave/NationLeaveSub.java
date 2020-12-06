@@ -37,6 +37,7 @@ public class NationLeaveSub extends SubCommand {
 				}
 				
 				eplayer.setNation(null);
+				eplayer.setRank("recruit");
 				eplayer.save();
 				
 				if(nation.getMembers().size() == 0) {

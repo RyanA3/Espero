@@ -9,6 +9,7 @@ import me.felnstaren.espero.module.nations.command.nation.create.NationCreateSub
 import me.felnstaren.espero.module.nations.command.nation.demote.NationDemoteSub;
 import me.felnstaren.espero.module.nations.command.nation.invite.NationInviteSub;
 import me.felnstaren.espero.module.nations.command.nation.join.NationJoinSub;
+import me.felnstaren.espero.module.nations.command.nation.kick.NationKickSub;
 import me.felnstaren.espero.module.nations.command.nation.leader.NationLeaderSub;
 import me.felnstaren.espero.module.nations.command.nation.leave.NationLeaveSub;
 import me.felnstaren.espero.module.nations.command.nation.promote.NationPromoteSub;
@@ -41,6 +42,7 @@ public class NationCommandMaster extends MasterCommand {
 		commands.add(new NationLeaderSub());
 		commands.add(new NationPromoteSub());
 		commands.add(new NationDemoteSub());
+		commands.add(new NationKickSub());
 	}
 	
 }
