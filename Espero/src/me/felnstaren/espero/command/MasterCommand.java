@@ -33,18 +33,18 @@ public abstract class MasterCommand extends CommandContinuator implements Comman
 
 	
 	public boolean handle(CommandSender sender, String[] args, int current) {
-		if(!sender.hasPermission(this.permission) && !sender.isOp()) {
-			Messenger.send((Player) sender, "#F55You do #F00not #F55have permission to #FAA" + permission);
-			return true;
-		}
-		
 		if(!(sender instanceof Player)) {
 			sender.sendMessage(Messenger.color("&cYou must be a player to use this command!"));
 			return true;
 		}
 		
+		if(!sender.hasPermission(this.permission) && !sender.isOp()) {
+			Messenger.send((Player) sender, "#F55You do #F00not #F55have permission to #FAA" + permission);
+			return true;
+		}
+		
 		if(!forward(sender, args, current)) 
-			sender.sendMessage(Messenger.color("&cAn error occured performing this command"));
+			Messenger.send((Player) sender, "#F55An unexpected error occured while handling this command.");
 
 		return true;
 	}

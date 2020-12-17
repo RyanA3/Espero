@@ -49,10 +49,10 @@ public class NationCommandMaster extends MasterCommand {
 						message.addComponent(new TextComponent("\n         promote <player>").setColor("#AAAAAA"));
 					if(rank.isPermitted("demote"))
 						message.addComponent(new TextComponent("\n         demote <player>").setColor("#AAAAAA"));
-					if(rank.isPermitted("claim"))
-						message.addComponent(new TextComponent("\n         claim").setColor("#AAAAAA"));
 					if(nation.getNextHighestRank(rank) == null)
 						message.addComponent(new TextComponent("\n         leader <player>").setColor("#AAAAAA"));
+					if(rank.isPermitted("claim"))
+						message.addComponent(new TextComponent("\n         claim").setColor("#AAAAAA"));
 				}
 				
 				Messenger.send(player, message);

@@ -16,11 +16,6 @@ public class NationLeaveSub extends SubCommand {
 	public NationLeaveSub() {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
-				if(!(sender instanceof Player)) {
-					sender.sendMessage(Messenger.color("&cOnly players can use this command!"));
-					return true;
-				}
-				
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = new EsperoPlayer(player);
 				Nation nation = eplayer.getNation();
