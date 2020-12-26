@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.config.Loader;
 import me.felnstaren.rilib.chat.Messenger;
 import me.felnstaren.rilib.logger.Level;
 import me.felnstaren.rilib.util.ArrayUtil;
@@ -33,7 +32,7 @@ public class Nation {
 		try {
 			this.id = id;
 			this.path = "nationdata/" + id + ".yml";
-			this.data = Loader.readConfig(path, "default_nation.yml");
+			this.data = Espero.LOADER.readConfig(path, "default_nation.yml");
 			
 			this.display_name = data.getString("display_name");
 
@@ -50,7 +49,7 @@ public class Nation {
 		try {
 			this.id = UUID.randomUUID();
 			this.path = "nationdata/" + id + ".yml";
-			this.data = Loader.readConfig(path, "default_nation.yml");
+			this.data = Espero.LOADER.readConfig(path, "default_nation.yml");
 			this.display_name = name;
 		
 			loadRanks();
@@ -70,7 +69,7 @@ public class Nation {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Espero.LOGGER.log(Level.SEVERE, "Error creating nation");
-			Loader.delete(path);
+			Espero.LOADER.delete(path);
 		}
 	}
 	
@@ -195,7 +194,7 @@ public class Nation {
 		for(Town town : towns)
 			town.save(data);
 		
-		Loader.save(data, path);
+		Espero.LOADER.save(data, path);
 	}
 	
 	public void disband() {
@@ -206,7 +205,7 @@ public class Nation {
 			emember.save();
 		}
 		
-		File file = Loader.load(path);
+		File file = Espero.LOADER.load(path);
 		file.delete();
 	}
 

@@ -1,6 +1,5 @@
 package me.felnstaren.espero.config;
 
-import java.io.File;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,11 +29,11 @@ public class EsperoPlayer {
 		this.uuid = uuid;
 		Espero.LOGGER.log(Level.DEBUG, "Loading player with name " + uuid);
 		this.path = "playerdata/" + uuid + ".yml";
-		this.data = Loader.readConfig(path, "default_player.yml");
+		this.data = Espero.LOADER.readConfig(path, "default_player.yml");
 	}
 	
 	public void save() {
-		Loader.save(data, path);
+		Espero.LOADER.save(data, path);
 	}
 	
 	public void set(String key, Object value) {
@@ -136,7 +135,7 @@ public class EsperoPlayer {
 	
 	
 	public static boolean hasGenerated(UUID uuid) {
-		return new File(Loader.PLUGIN.getDataFolder(), "playerdata/" + uuid + ".yml").exists();
+		return Espero.LOADER.exists("playerdata/" + uuid + ".yml");
 	}
 	
 }

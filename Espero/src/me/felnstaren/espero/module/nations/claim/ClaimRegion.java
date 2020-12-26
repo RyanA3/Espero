@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
 
-import me.felnstaren.espero.config.Loader;
+import me.felnstaren.espero.Espero;
 
 public class ClaimRegion {
 
@@ -17,7 +17,7 @@ public class ClaimRegion {
 		claims = new HashMap<UUID, NationRegionClaims>();
 		path = "/chunkdata/" + x + "x" + z + "z.txt";
 		
-		String data = Loader.readData(path, null);
+		String data = Espero.LOADER.readData(path, null);
 		String[] nations = data.split("\n");
 		for(int i = 0; i < nations.length; i++) {
 			UUID nation = UUID.fromString(data.split(",")[0]);
@@ -75,8 +75,8 @@ public class ClaimRegion {
 	}
 
 	public void save() {
-		File file = Loader.load(path);
-		Loader.save(data(), file);
+		File file = Espero.LOADER.load(path);
+		Espero.LOADER.save(data(), file);
 	}
 	
 }

@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import me.felnstaren.espero.config.Loader;
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.nations.nation.Nation;
 
 public class Nations {
@@ -23,7 +23,7 @@ public class Nations {
 	
 	public Nations() {
 		String path = "/nationdata/";
-		File folder = Loader.load(path);
+		File folder = Espero.LOADER.load(path);
 		File[] datas = folder.listFiles();
 		
 		nations = new ArrayList<Nation>();

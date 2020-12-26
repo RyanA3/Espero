@@ -3,9 +3,9 @@ package me.felnstaren.espero;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.felnstaren.espero.command.standalone.TestCommand;
-import me.felnstaren.espero.config.Loader;
 import me.felnstaren.espero.module.magic.MagicModule;
 import me.felnstaren.espero.module.nations.NationsModule;
+import me.felnstaren.rilib.config.Loader;
 import me.felnstaren.rilib.logger.Logger;
 
 public class Espero extends JavaPlugin {
@@ -13,10 +13,12 @@ public class Espero extends JavaPlugin {
 	private MagicModule magic_module;
 	private NationsModule nations_module;
 	public static Logger LOGGER;
+	public static Loader LOADER;
 	
 	public void onEnable() {
 		LOGGER = new Logger(this.getServer().getConsoleSender(), this.getName());
-		Loader.mkDirs();
+		LOADER = new Loader(this, LOGGER);
+		LOADER.mkDirs("/nationdata/", "/playerdata/", "/chunkdata/");
 		
 		//magic_module = new MagicModule();
 		//magic_module.onEnable(this);
