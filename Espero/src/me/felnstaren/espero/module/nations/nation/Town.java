@@ -3,8 +3,8 @@ package me.felnstaren.espero.module.nations.nation;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.felnstaren.espero.util.logger.Level;
-import me.felnstaren.espero.util.logger.Logger;
+import me.felnstaren.espero.Espero;
+import me.felnstaren.rilib.logger.Level;
 
 public class Town {
 
@@ -14,7 +14,7 @@ public class Town {
 	public String name;
 	
 	public Town(ConfigurationSection data) {
-		if(data == null) Logger.log(Level.WARNING, "Loaded town configuration section is null!");
+		if(data == null) Espero.LOGGER.log(Level.WARNING, "Loaded town configuration section is null!");
 		this.id = Integer.parseInt(data.getName());
 		this.name = data.getString("display_name");
 		this.x = data.getInt("cx");

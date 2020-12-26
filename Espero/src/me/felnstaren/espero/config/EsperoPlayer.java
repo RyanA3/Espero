@@ -6,11 +6,11 @@ import java.util.UUID;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.system.Nations;
-import me.felnstaren.espero.util.logger.Level;
-import me.felnstaren.espero.util.logger.Logger;
+import me.felnstaren.rilib.logger.Level;
 
 public class EsperoPlayer {
 
@@ -28,7 +28,7 @@ public class EsperoPlayer {
 	
 	private void init(UUID uuid) {
 		this.uuid = uuid;
-		Logger.log(Level.DEBUG, "Loading player with name " + uuid);
+		Espero.LOGGER.log(Level.DEBUG, "Loading player with name " + uuid);
 		this.path = "playerdata/" + uuid + ".yml";
 		this.data = Loader.readConfig(path, "default_player.yml");
 	}
@@ -56,6 +56,7 @@ public class EsperoPlayer {
 		String nation_id = data.getString("nation", "");
 		if(nation_id.equals("")) return null;
 		Nation nation = Nations.getInstance().getNation(UUID.fromString(nation_id));
+		if(nation == null) return null;
 		if(nation.getMembers().contains(uuid)) return nation;
 		data.set("nation", "");
 		return null;

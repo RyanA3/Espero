@@ -4,11 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.felnstaren.espero.command.CommandStub;
-import me.felnstaren.espero.command.SubArgument;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.util.message.Messenger;
+import me.felnstaren.rilib.chat.Messenger;
+import me.felnstaren.rilib.command.CommandStub;
+import me.felnstaren.rilib.command.SubArgument;
 
 public class NationKickArg extends SubArgument {
 

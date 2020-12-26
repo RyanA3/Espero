@@ -9,12 +9,12 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.config.Loader;
-import me.felnstaren.espero.util.ArrayUtil;
-import me.felnstaren.espero.util.logger.Level;
-import me.felnstaren.espero.util.logger.Logger;
-import me.felnstaren.espero.util.message.Messenger;
+import me.felnstaren.rilib.chat.Messenger;
+import me.felnstaren.rilib.logger.Level;
+import me.felnstaren.rilib.util.ArrayUtil;
 
 public class Nation {
 
@@ -42,31 +42,36 @@ public class Nation {
 			loadUsers();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Logger.log(Level.SEVERE, "Corruption presence at unsafe levels");
+			Espero.LOGGER.log(Level.SEVERE, "Corruption presence at unsafe levels");
 		}
 	}
 	
 	public Nation(String name, Town capital, EsperoPlayer owner) {
-		this.id = UUID.randomUUID();
-		this.path = "nationdata/" + id + ".yml";
-		this.data = Loader.readConfig(path, "default_nation.yml");
-		this.display_name = name;
+		try {
+			this.id = UUID.randomUUID();
+			this.path = "nationdata/" + id + ".yml";
+			this.data = Loader.readConfig(path, "default_nation.yml");
+			this.display_name = name;
 		
-		towns = new ArrayList<Town>();
-		towns.add(capital);
+			loadRanks();
 		
-		loadRanks();
+			towns = new ArrayList<Town>();
+			towns.add(capital);
+
+			members = new ArrayList<UUID>();
+			members.add(owner.getUUID());
 		
-		members = new ArrayList<UUID>();
-		members.add(owner.getUUID());
+			invites = new ArrayList<UUID>();
 		
-		invites = new ArrayList<UUID>();
-		
-		owner.set("nation", id.toString());
-		owner.set("nation-rank", "leader");
-		owner.save();
-		
-		save();
+			owner.set("nation", id.toString());
+			owner.set("nation-rank", "leader");
+			owner.save();
+			save();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Espero.LOGGER.log(Level.SEVERE, "Error creating nation");
+			Loader.delete(path);
+		}
 	}
 	
 	
@@ -135,13 +140,15 @@ public class Nation {
 		String[] town_paths = ArrayUtil.stringver(town_section.getKeys(false).toArray());
 		towns = new ArrayList<Town>();
 		for(int i = 0; i < town_paths.length; i++) {
-			Logger.log(Level.DEBUG, "Loading town " + town_paths[i]);
+			Espero.LOGGER.log(Level.DEBUG, "Loading town " + town_paths[i]);
 			towns.add(new Town(town_section.getConfigurationSection(town_paths[i])));
 		}
 	}
 	
 	private void loadRanks() {
+		Espero.LOGGER.log(Level.DEBUG, "Loading ranks, data:" + (data.toString()));
 		ConfigurationSection rank_section = data.getConfigurationSection("ranks");
+		Espero.LOGGER.log(Level.DEBUG, "From rank section: " + rank_section);
 		String[] rank_paths = ArrayUtil.stringver(rank_section.getKeys(false).toArray());
 		ranks = new NationPlayerRank[rank_paths.length];
 		for(int i = 0; i < ranks.length; i++) 

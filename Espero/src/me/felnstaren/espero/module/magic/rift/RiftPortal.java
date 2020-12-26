@@ -5,8 +5,8 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import me.felnstaren.espero.util.logger.Level;
-import me.felnstaren.espero.util.logger.Logger;
+import me.felnstaren.espero.Espero;
+import me.felnstaren.rilib.logger.Level;
 
 public class RiftPortal {
 
@@ -24,7 +24,7 @@ public class RiftPortal {
 		if(!location.getWorld().isChunkLoaded(location.getBlockX() >> 4, location.getBlockZ() >> 4)) { loaded = false; return; }
 		loaded = true;
 		if(traveller != null) return;
-		Logger.log(Level.INFO, "updated");
+		Espero.LOGGER.log(Level.INFO, "updated");
 		Entity[] entities = location.getChunk().getEntities();
 		for(int i = 0; i < entities.length; i++) {
 			if(!(entities[i] instanceof Player)) continue;
@@ -36,7 +36,7 @@ public class RiftPortal {
 	
 	public void display() {
 		if(!loaded) return;
-		Logger.log(Level.INFO, "displayed");
+		Espero.LOGGER.log(Level.INFO, "displayed");
 		location.getWorld().spawnParticle(Particle.SQUID_INK, location, 25, 0.15, 0.5, 0.15, 0);
 	}
 	

@@ -3,7 +3,7 @@ package me.felnstaren.espero.module.nations.nation;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.felnstaren.espero.util.ArrayUtil;
+import me.felnstaren.rilib.util.ArrayUtil;
 
 public class NationPlayerRank {
 

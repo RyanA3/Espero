@@ -40,7 +40,8 @@ public class Nations {
 	
 	
 	public Nation getNation(UUID id) {
-		return nations.get(nations_ids.indexOf(id));
+		try { return nations.get(nations_ids.indexOf(id)); }
+		catch (Exception e) { return null; }
 	}
 	
 	public Nation getNation(String name) {

@@ -11,7 +11,7 @@ import me.felnstaren.espero.module.magic.rift.Rift;
 import me.felnstaren.espero.module.magic.rift.RiftManager;
 import me.felnstaren.espero.module.magic.rift.RiftPortal;
 import me.felnstaren.espero.module.magic.rift.TemporaryRift;
-import me.felnstaren.espero.util.message.Messenger;
+import me.felnstaren.rilib.chat.Messenger;
 
 public class RiftCommand implements CommandExecutor {
 

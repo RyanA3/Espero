@@ -4,12 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.felnstaren.espero.command.CommandStub;
-import me.felnstaren.espero.command.SubArgument;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
-import me.felnstaren.espero.util.message.Messenger;
+import me.felnstaren.rilib.chat.Messenger;
+import me.felnstaren.rilib.command.CommandStub;
+import me.felnstaren.rilib.command.SubArgument;
 
 public class NationPromoteArg extends SubArgument {
 
@@ -54,12 +54,13 @@ public class NationPromoteArg extends SubArgument {
 				}
 				
 				if(promotion.getWeight() >= eplayer.getNationRank().getWeight()) {
-					Messenger.send(player, "#F55You can't promote this player above your own rank!");
+					Messenger.send(player, "#F55You can't promote this player above or to your own rank!");
 					return true;
 				}
 				
 				eother.setRank(promotion.getLabel());
-				nation.broadcast("#F5F" + other.getDisplayName() + "#5F5has been promoted to the rank of #999" + promotion.getDisplayName() + " #5f5by " + player.getDisplayName());
+				eother.save();
+				nation.broadcast("#F5F" + other.getDisplayName() + " #5F5has been promoted to the rank of #999" + promotion.getDisplayName() + " #5F5by " + player.getDisplayName());
 				
 				return true;
 			}

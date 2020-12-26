@@ -1,6 +1,7 @@
 package me.felnstaren.espero.config;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,8 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import me.felnstaren.espero.Espero;
-import me.felnstaren.espero.util.logger.Level;
-import me.felnstaren.espero.util.logger.Logger;
+import me.felnstaren.rilib.logger.Level;
 
 public class Loader {
 	
@@ -35,7 +35,7 @@ public class Loader {
 		}
 		
 		try {
-			InputStream initial_stream = PLUGIN.getResource(PLUGIN.getDataFolder() + "/" + name);
+			InputStream initial_stream = new FileInputStream(file);
 			byte[] buffer = new byte[initial_stream.available()];
 			initial_stream.read(buffer);
 			initial_stream.close();
@@ -54,23 +54,21 @@ public class Loader {
 		
 	private static File copy(File copy, String original) {
 		if(original == null) return copy;
-		
+
 		try {
-			if(Loader.class.getResourceAsStream("resources/" + original) != null) {
-				InputStream initial_stream = Loader.class.getResourceAsStream("resources/" + original);
-				byte[] buffer = new byte[initial_stream.available()];
-				initial_stream.read(buffer);
-				initial_stream.close();
+			InputStream initial_stream = Loader.class.getResourceAsStream("resources/" + original);
+			byte[] buffer = new byte[initial_stream.available()];
+			initial_stream.read(buffer);
+			initial_stream.close();
 				
-				FileOutputStream out_stream = new FileOutputStream(copy);
-				out_stream.write(buffer);
-				out_stream.close();
+			FileOutputStream out_stream = new FileOutputStream(copy);
+			out_stream.write(buffer);
+			out_stream.close();
 				
-				Logger.log(Level.DEBUG, "Copied file; " + copy.getPath() + " from plugin resource file; " + original);
-			}
+			Espero.LOGGER.log(Level.DEBUG, "Copied file; " + copy.getPath() + " from plugin resource file; " + original);
 		} catch (Exception e) { 
 			e.printStackTrace(); 
-			Logger.log(Level.SEVERE, "An error occured while copying to this file; " + copy.getPath());
+			Espero.LOGGER.log(Level.SEVERE, "An error occured while copying to this file; " + copy.getPath());
 			return null;
 		}
 		
@@ -79,15 +77,27 @@ public class Loader {
 	
 	
 	
-	private static boolean create(File file) {
+	public static boolean create(File file) {
 		try { 
 			file.createNewFile(); 
-			Logger.log(Level.DEBUG, "Created file; " + file.getPath());
+			Espero.LOGGER.log(Level.DEBUG, "Created file; " + file.getPath());
 			return true;
 		} 
 		catch (IOException e) { 
 			e.printStackTrace(); 
-			Logger.log(Level.SEVERE, "A fatal error occured while creating this file; " + file.getPath());
+			Espero.LOGGER.log(Level.SEVERE, "A fatal error occured while creating this file; " + file.getPath());
+			return false;
+		}
+	}
+	
+	public static boolean delete(String path) {
+		try {
+			File file = new File(PLUGIN.getDataFolder(), path);
+			file.delete();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			Espero.LOGGER.log(Level.SEVERE, "A fatal error occured while deleting this file; " + path);
 			return false;
 		}
 	}
@@ -115,18 +125,18 @@ public class Loader {
 	public static void save(YamlConfiguration config, File file) {
 		try { 
 			config.save(file); 
-			Logger.log(Level.DEBUG, "Saved file; " + file.getPath());
+			Espero.LOGGER.log(Level.DEBUG, "Saved file; " + file.getPath());
 		} 
 		catch (IOException e) { 
 			e.printStackTrace(); 
-			Logger.log(Level.WARNING, "An error occured saving this file; " + file.getPath());
+			Espero.LOGGER.log(Level.WARNING, "An error occured saving this file; " + file.getPath());
 		}
 	}
 	
 	
 	
 	public static void mkDirs() {
-		Logger.log(Level.DEBUG, "Marking non-existant directories");
+		Espero.LOGGER.log(Level.DEBUG, "Marking non-existant directories");
 		
 		File data_folder = PLUGIN.getDataFolder();
 		File player_folder = new File(data_folder.getPath().concat("/playerdata/"));

@@ -1,10 +1,11 @@
 package me.felnstaren.espero.module.nations.command.nation;
 
+import java.util.ArrayList;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.felnstaren.espero.command.CommandStub;
-import me.felnstaren.espero.command.MasterCommand;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.command.nation.create.NationCreateSub;
 import me.felnstaren.espero.module.nations.command.nation.demote.NationDemoteSub;
@@ -16,9 +17,13 @@ import me.felnstaren.espero.module.nations.command.nation.leave.NationLeaveSub;
 import me.felnstaren.espero.module.nations.command.nation.promote.NationPromoteSub;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
-import me.felnstaren.espero.util.message.Messenger;
-import me.felnstaren.espero.util.message.json.Message;
-import me.felnstaren.espero.util.message.json.TextComponent;
+import me.felnstaren.espero.module.nations.system.Nations;
+import me.felnstaren.rilib.chat.Message;
+import me.felnstaren.rilib.chat.Messenger;
+import me.felnstaren.rilib.chat.TextComponent;
+import me.felnstaren.rilib.command.CommandStub;
+import me.felnstaren.rilib.command.MasterCommand;
+import me.felnstaren.rilib.command.TabSuggestor;
 
 public class NationCommandMaster extends MasterCommand {
 
@@ -58,7 +63,19 @@ public class NationCommandMaster extends MasterCommand {
 				Messenger.send(player, message);
 				return true;
 			}
-		}, "nation", "espero.nation");
+		}, "nation", "espero.nation", 
+		new TabSuggestor("<player>") {
+			public ArrayList<String> getSuggestions() {
+				ArrayList<String> players = new ArrayList<String>();
+				for(Player player : Bukkit.getOnlinePlayers()) players.add(player.getName());
+				return players;
+			}
+		},
+		new TabSuggestor("<nation>") {
+			public ArrayList<String> getSuggestions() {
+				return Nations.getInstance().getNationNames();
+			}
+		});
 
 		commands.add(new NationCreateSub());
 		commands.add(new NationLeaveSub());
