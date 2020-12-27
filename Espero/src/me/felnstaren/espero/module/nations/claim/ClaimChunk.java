@@ -2,6 +2,9 @@ package me.felnstaren.espero.module.nations.claim;
 
 import java.util.UUID;
 
+import me.felnstaren.espero.Espero;
+import me.felnstaren.rilib.logger.Level;
+
 public class ClaimChunk {
 
 	private int x;
@@ -15,7 +18,8 @@ public class ClaimChunk {
 	}
 	
 	public ClaimChunk(String data) {
-		String[] values = data.split(".");
+		Espero.LOGGER.log(Level.DEBUG, "Loading chunk from data\n" + data);
+		String[] values = data.split("\\.");
 		this.x = Integer.parseInt(values[0]);
 		this.z = Integer.parseInt(values[1]);
 		this.id = Integer.parseInt(values[2]);

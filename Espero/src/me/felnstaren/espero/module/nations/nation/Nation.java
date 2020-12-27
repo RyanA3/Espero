@@ -79,6 +79,10 @@ public class Nation {
 		return members;
 	}
 	
+	public ArrayList<Town> getTowns() {
+		return towns;
+	}
+	
 	public ArrayList<Player> getOnlineMembers() {
 		ArrayList<Player> players = new ArrayList<Player>();
 		

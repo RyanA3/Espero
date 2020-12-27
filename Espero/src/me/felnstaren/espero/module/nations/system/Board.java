@@ -10,14 +10,21 @@ public class Board {
 	
 	private static Board INSTANCE;
 	
+	public static void init() {
+		INSTANCE = new Board();
+	}
+	
 	public static Board getInstance() {
-		if(INSTANCE == null) INSTANCE = new Board();
 		return INSTANCE;
 	}
 	
 	
 	
 	private ArrayList<ClaimRegion> loaded_regions;
+	
+	private Board() {
+		loaded_regions = new ArrayList<ClaimRegion>();
+	}
 	
 	/**
 	 * Gets the claimed chunk (if any) at the specified chunk coordinates

@@ -35,7 +35,7 @@ public class NationCreateArg extends SubArgument {
 				}
 				
 				
-				Town capital = new Town("Capital", 0, player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
+				Town capital = new Town("Capital", 1, player.getLocation().getChunk().getX(), player.getLocation().getChunk().getZ());
 				Nation nation = new Nation(args[current], capital, eplayer);
 				Nations.getInstance().registerNewNation(nation);
 				

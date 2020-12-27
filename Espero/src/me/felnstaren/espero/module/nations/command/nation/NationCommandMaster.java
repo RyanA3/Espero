@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimSub;
 import me.felnstaren.espero.module.nations.command.nation.create.NationCreateSub;
 import me.felnstaren.espero.module.nations.command.nation.demote.NationDemoteSub;
 import me.felnstaren.espero.module.nations.command.nation.invite.NationInviteSub;
@@ -17,6 +18,7 @@ import me.felnstaren.espero.module.nations.command.nation.leave.NationLeaveSub;
 import me.felnstaren.espero.module.nations.command.nation.promote.NationPromoteSub;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
+import me.felnstaren.espero.module.nations.nation.Town;
 import me.felnstaren.espero.module.nations.system.Nations;
 import me.felnstaren.rilib.chat.Message;
 import me.felnstaren.rilib.chat.Messenger;
@@ -65,15 +67,29 @@ public class NationCommandMaster extends MasterCommand {
 			}
 		}, "nation", "espero.nation", 
 		new TabSuggestor("<player>") {
-			public ArrayList<String> getSuggestions() {
+			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
 				ArrayList<String> players = new ArrayList<String>();
 				for(Player player : Bukkit.getOnlinePlayers()) players.add(player.getName());
 				return players;
 			}
 		},
 		new TabSuggestor("<nation>") {
-			public ArrayList<String> getSuggestions() {
+			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
 				return Nations.getInstance().getNationNames();
+			}
+		},
+		new TabSuggestor("<claimtype>") {
+			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
+				ArrayList<String> claim_types = new ArrayList<String>();
+				EsperoPlayer eplayer = new EsperoPlayer((Player) sender);
+				Nation nation = eplayer.getNation();
+				
+				if(nation == null) return claim_types;
+				claim_types.add("nation");
+				for(Town town : nation.getTowns()) 
+					claim_types.add(town.name);
+				
+				return claim_types;
 			}
 		});
 
@@ -85,6 +101,7 @@ public class NationCommandMaster extends MasterCommand {
 		commands.add(new NationPromoteSub());
 		commands.add(new NationDemoteSub());
 		commands.add(new NationKickSub());
+		commands.add(new NationClaimSub());
 	}
 	
 }

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
+import me.felnstaren.espero.module.nations.system.Nations;
+import me.felnstaren.rilib.logger.Level;
 
 public class ClaimRegion {
 
@@ -18,9 +20,12 @@ public class ClaimRegion {
 		path = "/chunkdata/" + x + "x" + z + "z.txt";
 		
 		String data = Espero.LOADER.readData(path, null);
+		if(data.equals("")) return;
+		
 		String[] nations = data.split("\n");
 		for(int i = 0; i < nations.length; i++) {
 			UUID nation = UUID.fromString(data.split(",")[0]);
+			if(Nations.getInstance().getNation(nation) == null) continue;
 			claims.put(nation, new NationRegionClaims(nations[i]));
 		}
 	}
@@ -30,6 +35,7 @@ public class ClaimRegion {
 	public ClaimChunkData getClaim(int x, int z) {
 		x %= 32; z %= 32;
 		for(UUID nation : claims.keySet()) {
+			if(Nations.getInstance().getNation(nation) == null) continue;
 			ClaimChunk claim = claims.get(nation).getClaim(x, z);
 			if(claim != null) return claim.data(nation);
 		}
