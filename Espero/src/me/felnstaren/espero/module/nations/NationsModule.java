@@ -1,11 +1,13 @@
 package me.felnstaren.espero.module.nations;
 
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.IModule;
 import me.felnstaren.espero.module.nations.command.nation.NationCommandMaster;
+import me.felnstaren.espero.module.nations.listener.ClaimInfoListener;
 import me.felnstaren.espero.module.nations.system.Board;
 import me.felnstaren.espero.module.nations.system.Nations;
 import me.felnstaren.rilib.logger.Level;
@@ -27,6 +29,9 @@ public class NationsModule implements IModule {
 		save_task.runTaskTimer(plugin, 100, 10000);
 		
 		plugin.getCommand("nation").setExecutor(new NationCommandMaster());
+		
+		PluginManager pm = plugin.getServer().getPluginManager();
+		pm.registerEvents(new ClaimInfoListener(), plugin);
 	}
 
 	public void onDisable(JavaPlugin plugin) {

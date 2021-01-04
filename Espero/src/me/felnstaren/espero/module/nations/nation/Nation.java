@@ -104,6 +104,12 @@ public class Nation {
 		return null;
 	}
 	
+	public Town getTown(int id) {
+		for(Town t : towns)
+			if(t.getID() == id) return t;
+		return null;
+	}
+	
 	public NationPlayerRank getNextHighestRank(NationPlayerRank rank) {
 		int floor = rank.getWeight();
 		NationPlayerRank closest_high = null;
