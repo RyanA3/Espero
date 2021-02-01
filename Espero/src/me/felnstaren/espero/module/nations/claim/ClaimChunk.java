@@ -3,7 +3,7 @@ package me.felnstaren.espero.module.nations.claim;
 import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
-import me.felnstaren.rilib.logger.Level;
+import me.felnstaren.felib.logger.Level;
 
 public class ClaimChunk {
 

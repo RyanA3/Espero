@@ -9,7 +9,7 @@ import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.system.Nations;
-import me.felnstaren.rilib.logger.Level;
+import me.felnstaren.felib.logger.Level;
 
 public class EsperoPlayer {
 
@@ -33,7 +33,7 @@ public class EsperoPlayer {
 	}
 	
 	public void save() {
-		Espero.LOADER.save(data, path);
+		Espero.LOADER.save(Espero.LOADER.mark(Espero.LOADER.datafile(path)), data);
 	}
 	
 	public void set(String key, Object value) {
@@ -135,7 +135,7 @@ public class EsperoPlayer {
 	
 	
 	public static boolean hasGenerated(UUID uuid) {
-		return Espero.LOADER.exists("playerdata/" + uuid + ".yml");
+		return Espero.LOADER.datafile("playerdata/" + uuid + ".yml").exists();
 	}
 	
 }

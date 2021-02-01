@@ -7,9 +7,9 @@ import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.system.Nations;
-import me.felnstaren.rilib.chat.Messenger;
-import me.felnstaren.rilib.command.CommandStub;
-import me.felnstaren.rilib.command.SubCommand;
+import me.felnstaren.felib.chat.Messenger;
+import me.felnstaren.felib.command.CommandStub;
+import me.felnstaren.felib.command.SubCommand;
 
 public class NationLeaveSub extends SubCommand {
 

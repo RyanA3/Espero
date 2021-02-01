@@ -6,7 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
-import me.felnstaren.rilib.logger.Level;
+import me.felnstaren.felib.logger.Level;
 
 public class RiftPortal {
 

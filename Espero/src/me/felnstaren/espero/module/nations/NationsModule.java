@@ -10,7 +10,7 @@ import me.felnstaren.espero.module.nations.command.nation.NationCommandMaster;
 import me.felnstaren.espero.module.nations.listener.ClaimInfoListener;
 import me.felnstaren.espero.module.nations.system.Board;
 import me.felnstaren.espero.module.nations.system.Nations;
-import me.felnstaren.rilib.logger.Level;
+import me.felnstaren.felib.logger.Level;
 
 public class NationsModule implements IModule {
 

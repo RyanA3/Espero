@@ -5,7 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.felnstaren.rilib.chat.Messenger;
+import me.felnstaren.felib.chat.Messenger;
 
 public class TestCommand implements CommandExecutor {
 

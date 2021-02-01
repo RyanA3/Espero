@@ -11,7 +11,7 @@ import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Town;
 import me.felnstaren.espero.module.nations.system.Board;
 import me.felnstaren.espero.module.nations.system.Nations;
-import me.felnstaren.rilib.chat.Messenger;
+import me.felnstaren.felib.chat.Messenger;
 
 public class ClaimInfoListener implements Listener {
 

@@ -1,6 +1,5 @@
 package me.felnstaren.espero.module.nations.claim;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -18,7 +17,7 @@ public class ClaimRegion {
 		claims = new HashMap<UUID, NationRegionClaims>();
 		path = "/chunkdata/" + x + "x" + z + "z.txt";
 		
-		String data = Espero.LOADER.readData(path, null);
+		String data = Espero.LOADER.readString(path, null);
 		if(data.equals("")) return;
 		
 		String[] nations = data.split("\n");
@@ -80,8 +79,7 @@ public class ClaimRegion {
 	}
 
 	public void save() {
-		File file = Espero.LOADER.load(path);
-		Espero.LOADER.save(data(), file);
+		Espero.LOADER.save(path, data());
 	}
 	
 }

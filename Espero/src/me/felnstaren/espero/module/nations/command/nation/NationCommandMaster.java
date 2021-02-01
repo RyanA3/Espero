@@ -20,12 +20,12 @@ import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.nation.Town;
 import me.felnstaren.espero.module.nations.system.Nations;
-import me.felnstaren.rilib.chat.Message;
-import me.felnstaren.rilib.chat.Messenger;
-import me.felnstaren.rilib.chat.TextComponent;
-import me.felnstaren.rilib.command.CommandStub;
-import me.felnstaren.rilib.command.MasterCommand;
-import me.felnstaren.rilib.command.TabSuggestor;
+import me.felnstaren.felib.chat.Message;
+import me.felnstaren.felib.chat.Messenger;
+import me.felnstaren.felib.chat.TextComponent;
+import me.felnstaren.felib.command.CommandStub;
+import me.felnstaren.felib.command.MasterCommand;
+import me.felnstaren.felib.command.TabSuggestor;
 
 public class NationCommandMaster extends MasterCommand {
 

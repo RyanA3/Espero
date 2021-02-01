@@ -1,6 +1,5 @@
 package me.felnstaren.espero.module.nations.nation;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -11,9 +10,9 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.rilib.chat.Messenger;
-import me.felnstaren.rilib.logger.Level;
-import me.felnstaren.rilib.util.ArrayUtil;
+import me.felnstaren.felib.chat.Messenger;
+import me.felnstaren.felib.logger.Level;
+import me.felnstaren.felib.util.ArrayUtil;
 
 public class Nation {
 
@@ -25,16 +24,16 @@ public class Nation {
 	private UUID id;
 	private String display_name;
 	
-	private YamlConfiguration data;
+	private YamlConfiguration config;
 	private String path;
 	
 	public Nation(UUID id) {
 		try {
 			this.id = id;
 			this.path = "nationdata/" + id + ".yml";
-			this.data = Espero.LOADER.readConfig(path, "default_nation.yml");
+			this.config = Espero.LOADER.readConfig(path, "default_nation.yml");
 			
-			this.display_name = data.getString("display_name");
+			this.display_name = config.getString("display_name");
 
 			loadTowns();
 			loadRanks();
@@ -49,7 +48,7 @@ public class Nation {
 		try {
 			this.id = UUID.randomUUID();
 			this.path = "nationdata/" + id + ".yml";
-			this.data = Espero.LOADER.readConfig(path, "default_nation.yml");
+			this.config = Espero.LOADER.readConfig(path, "default_nation.yml");
 			this.display_name = name;
 		
 			loadRanks();
@@ -69,7 +68,7 @@ public class Nation {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Espero.LOGGER.log(Level.SEVERE, "Error creating nation");
-			Espero.LOADER.delete(path);
+			Espero.LOADER.delete(Espero.LOADER.datafile(path));
 		}
 	}
 	
@@ -145,7 +144,7 @@ public class Nation {
 	
 	
 	private void loadTowns() {
-		ConfigurationSection town_section = data.getConfigurationSection("towns");
+		ConfigurationSection town_section = config.getConfigurationSection("towns");
 		String[] town_paths = ArrayUtil.stringver(town_section.getKeys(false).toArray());
 		towns = new ArrayList<Town>();
 		for(int i = 0; i < town_paths.length; i++) {
@@ -155,8 +154,8 @@ public class Nation {
 	}
 	
 	private void loadRanks() {
-		Espero.LOGGER.log(Level.DEBUG, "Loading ranks, data:" + (data.toString()));
-		ConfigurationSection rank_section = data.getConfigurationSection("ranks");
+		Espero.LOGGER.log(Level.DEBUG, "Loading ranks, data:" + (config.toString()));
+		ConfigurationSection rank_section = config.getConfigurationSection("ranks");
 		Espero.LOGGER.log(Level.DEBUG, "From rank section: " + rank_section);
 		String[] rank_paths = ArrayUtil.stringver(rank_section.getKeys(false).toArray());
 		ranks = new NationPlayerRank[rank_paths.length];
@@ -171,13 +170,13 @@ public class Nation {
 	
 	private void loadUsers() {
 		//Load members
-		String[] str_members = ArrayUtil.stringver(data.getStringList("members").toArray());
+		String[] str_members = ArrayUtil.stringver(config.getStringList("members").toArray());
 		this.members = new ArrayList<UUID>();
 		for(int i = 0; i < str_members.length; i++)
 			members.add(UUID.fromString(str_members[i]));
 		
 		//Load invites
-		String[] str_invites = ArrayUtil.stringver(data.getStringList("invites").toArray());
+		String[] str_invites = ArrayUtil.stringver(config.getStringList("invites").toArray());
 		this.invites = new ArrayList<UUID>();
 		for(int i = 0; i < str_invites.length; i++)
 			invites.add(UUID.fromString(str_invites[i]));
@@ -186,25 +185,25 @@ public class Nation {
 	
 	
 	public void save() {
-		data.set("display_name", display_name);
+		config.set("display_name", display_name);
 		
 		String[] smembers = new String[members.size()];
 		for(int i = 0; i < smembers.length; i++)
 			smembers[i] = members.get(i).toString();
-		data.set("members", smembers);
+		config.set("members", smembers);
 		
 		String[] sinvites = new String[invites.size()];
 		for(int i = 0; i < sinvites.length; i++)
 			sinvites[i] = invites.get(i).toString();
-		data.set("invites", sinvites);
+		config.set("invites", sinvites);
 		
 		for(NationPlayerRank rank : ranks)
-			rank.save(data);
+			rank.save(config);
 		
 		for(Town town : towns)
-			town.save(data);
+			town.save(config);
 		
-		Espero.LOADER.save(data, path);
+		Espero.LOADER.save(path, config);
 	}
 	
 	public void disband() {
@@ -215,8 +214,7 @@ public class Nation {
 			emember.save();
 		}
 		
-		File file = Espero.LOADER.load(path);
-		file.delete();
+		Espero.LOADER.delete(path);
 	}
 
 	public void broadcast(String message) {

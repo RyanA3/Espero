@@ -5,8 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.felnstaren.espero.command.standalone.TestCommand;
 import me.felnstaren.espero.module.magic.MagicModule;
 import me.felnstaren.espero.module.nations.NationsModule;
-import me.felnstaren.rilib.config.Loader;
-import me.felnstaren.rilib.logger.Logger;
+import me.felnstaren.felib.config.Loader;
+import me.felnstaren.felib.logger.Logger;
 
 public class Espero extends JavaPlugin {
 

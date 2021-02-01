@@ -4,7 +4,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.felnstaren.espero.Espero;
-import me.felnstaren.rilib.logger.Level;
+import me.felnstaren.felib.logger.Level;
 
 public class Town {
 
