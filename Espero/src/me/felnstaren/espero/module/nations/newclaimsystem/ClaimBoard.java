@@ -30,7 +30,9 @@ public class ClaimBoard {
 	 * @return
 	 */
 	public ClaimChunk getClaim(int x, int z) {
-		return getRegion(x, z).getClaim(x, z);    
+		ClaimRegion region = getRegion(x, z);
+		ClaimData data = region.getClaim(x, z);
+		return new ClaimChunk(x, z, region.getRelativeNation(data.nation()), data.town()); 
 	}
 	
 	/**
@@ -69,7 +71,7 @@ public class ClaimBoard {
 	}
 	
 	public ClaimRegion getRegion(int x, int z) {
-		x /= ClaimRegion.WIDTH; z /= ClaimRegion.HEIGH;
+		x /= ClaimRegion.WIDTH; z /= ClaimRegion.HEIGH; //Divide to get into Region Coords
 		
 		for(int i = 0; i < loaded_regions.size(); i++) {
 			ClaimRegion check = loaded_regions.get(i);

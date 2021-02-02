@@ -12,7 +12,7 @@ public class ClaimRegion {
 	
 	private int x;
 	private int z;
-	private ArrayList<ClaimChunk> claims;
+	private ArrayList<ClaimData> claims;
 	private ArrayList<UUID> nations;
 	private String path;
 	
@@ -20,7 +20,7 @@ public class ClaimRegion {
 		this.x = x;
 		this.z = z;
 		
-		claims = new ArrayList<ClaimChunk>();
+		claims = new ArrayList<ClaimData>();
 		path = "/chunkdata/" + x + "x" + z + "z.txt";
 		
 		String data = Espero.LOADER.readString(path, null);
@@ -34,24 +34,24 @@ public class ClaimRegion {
 		
 		String[] unparsed_chunks = line[1].split(",");
 		for(String unparsed_chunk : unparsed_chunks)
-			claims.add(new ClaimChunk(unparsed_chunk));
+			claims.add(new ClaimData(unparsed_chunk));
 	}
 	
 	
 	
-	public ClaimChunk getClaim(int x, int z) {
-		x %= WIDTH; z %= HEIGH;
+	public ClaimData getClaim(int x, int z) {
+		x %= WIDTH; z %= HEIGH;              //Modulo to get into relative chunk coords
 		return getClaim(z * WIDTH + x);
 	}
 	
-	public ClaimChunk getClaim(int location) {
-		for(ClaimChunk c : claims)
+	public ClaimData getClaim(int location) {
+		for(ClaimData c : claims)
 			if(c.location() == location) return c;
 		return null;
 	}
 	
 	public void claim(int x, int z, UUID nation, int town) {
-		x %= WIDTH; z %= HEIGH;
+		x %= WIDTH; z %= HEIGH;              //Modulo to get into relative chunk coords
 		claim(z * WIDTH + x, nation, town);
 	}
 	
@@ -59,9 +59,9 @@ public class ClaimRegion {
 		if(!nations.contains(nation)) nations.add(nation);
 		int native_nation_id = nations.indexOf(nation);
 		
-		ClaimChunk chunk = getClaim(location);
+		ClaimData chunk = getClaim(location);
 		if(chunk == null) 
-			claims.add(new ClaimChunk(location, native_nation_id, town));
+			claims.add(new ClaimData(location, native_nation_id, town));
 		else {
 			chunk.setNation(nations.indexOf(nation));
 			chunk.setTown(town);
@@ -69,13 +69,13 @@ public class ClaimRegion {
 	}
 	
 	public void unclaim(int x, int z) {
-		x %= WIDTH; z %= HEIGH;
+		x %= WIDTH; z %= HEIGH;              //Modulo to get into relative chunk coords
 		unclaim(z * WIDTH + x);
 	}
 	
 	public void unclaim(int location) {
 		int nation_hits = 0;
-		ClaimChunk chunk = getClaim(location);
+		ClaimData chunk = getClaim(location);
 		
 		for(int i = 0; i < claims.size(); i++) {
 			if(claims.get(i).nation() == chunk.nation()) nation_hits++;
@@ -97,7 +97,7 @@ public class ClaimRegion {
 		data = data.substring(0, data.length() - 2);
 		data += "\n";
 		
-		for(ClaimChunk claim : claims) 
+		for(ClaimData claim : claims) 
 			data += claim.data() + ",";
 		data = data.substring(0, data.length() - 2);
 		return data;
@@ -115,6 +115,10 @@ public class ClaimRegion {
 	
 	public int z() {
 		return z;
+	}
+	
+	protected UUID getRelativeNation(int nation) {
+		return nations.get(nation);
 	}
 
 }
