@@ -130,6 +130,7 @@ public class ClaimRegion {
 	
 	public String map(int px, int pz) {
 		String map = "";
+		px = Math.abs(px); pz = Math.abs(pz);
 		for(int offx = 0; offx < WIDTH; offx++) {
 			for(int offz = 0; offz < HEIGH; offz++) {
 				

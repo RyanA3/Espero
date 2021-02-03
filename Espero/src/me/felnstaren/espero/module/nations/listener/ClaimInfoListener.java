@@ -22,7 +22,7 @@ public class ClaimInfoListener implements Listener {
 		Chunk f = event.getFrom().getChunk();
 		Chunk t = event.getTo().getChunk();
 		if(f.equals(t)) return;
-		player.sendMessage("\n" + ClaimBoard.getInstance().getRegion(t.getX(), t.getZ()).map(t.getX(), t.getZ()));
+		//player.sendMessage("\n" + ClaimBoard.getInstance().getRegion(t.getX(), t.getZ()).map(t.getX(), t.getZ()));
 		
 		ClaimChunk from = ClaimBoard.getInstance().getClaim(f.getX(), f.getZ());
 		ClaimChunk to = ClaimBoard.getInstance().getClaim(t.getX(), t.getZ());
