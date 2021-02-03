@@ -5,9 +5,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.module.nations.claim.ClaimChunkData;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Town;
+import me.felnstaren.espero.module.nations.newclaimsystem.ClaimBoard;
+import me.felnstaren.espero.module.nations.newclaimsystem.ClaimChunk;
 import me.felnstaren.espero.module.nations.system.Board;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.CommandStub;
@@ -33,7 +34,7 @@ public class NationClaimArg extends SubArgument {
 				}
 				
 				Chunk loc = player.getLocation().getChunk();
-				ClaimChunkData claim = Board.getInstance().getClaim(loc.getX(), loc.getZ());
+				ClaimChunk claim = ClaimBoard.getInstance().getClaim(loc.getX(), loc.getZ());
 				
 				int claim_type = 0;
 				for(Town town : nation.getTowns()) {
@@ -41,7 +42,7 @@ public class NationClaimArg extends SubArgument {
 						claim_type = town.getID(); break; } }
 				
 				if(claim == null) {
-					Board.getInstance().claim(nation.getID(), loc.getX(), loc.getZ(), 0);
+					ClaimBoard.getInstance().claim(loc.getX(), loc.getZ(), nation.getID(), 0);
 					nation.broadcast("#5F5" + player.getDisplayName() + " #5F5claimed chunk at (" + (loc.getX() * 16) + "," + (loc.getZ() * 16) + ") for nation");
 					return true;
 				}
@@ -51,17 +52,17 @@ public class NationClaimArg extends SubArgument {
 					return true;
 				}
 				
-				if(claim.id == 0) {
+				if(claim.town == 0) {
 					if(claim_type == 0) {
 						Messenger.send(player, "#F55This chunk is already claimed for your nation!");
 						return true;
 					}
 					
-					Board.getInstance().claim(nation.getID(), loc.getX(), loc.getZ(), claim_type);
+					ClaimBoard.getInstance().claim(loc.getX(), loc.getZ(), nation.getID(), claim_type);
 					nation.broadcast("#5F5" + player.getDisplayName() + " #5F5modified chunk at (" + (loc.getX() * 16) + "," + (loc.getZ() * 16) + ") from nation to " + args[current]);
 				} else {
 					if(claim_type == 0) {
-						Board.getInstance().claim(nation.getID(), loc.getX(), loc.getZ(), claim_type);
+						ClaimBoard.getInstance().claim(loc.getX(), loc.getZ(), nation.getID(), claim_type);
 						nation.broadcast("#5F5" + player.getDisplayName() + " #5F5modified chunk at (" + (loc.getX() * 16) + "," + (loc.getZ() * 16) + ") from town to nation");
 						return true;
 					}

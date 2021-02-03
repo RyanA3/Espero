@@ -40,7 +40,7 @@ public class ClaimRegion {
 	
 	
 	public ClaimData getClaim(int x, int z) {
-		x %= WIDTH; z %= HEIGH;              //Modulo to get into relative chunk coords
+		x = Math.abs(x) % WIDTH; z = Math.abs(z) % HEIGH;  //Modulo to get into relative chunk coords
 		return getClaim(z * WIDTH + x);
 	}
 	
@@ -51,7 +51,7 @@ public class ClaimRegion {
 	}
 	
 	public void claim(int x, int z, UUID nation, int town) {
-		x %= WIDTH; z %= HEIGH;              //Modulo to get into relative chunk coords
+		x = Math.abs(x) % WIDTH; z = Math.abs(z) % HEIGH;  //Modulo to get into relative chunk coords
 		claim(z * WIDTH + x, nation, town);
 	}
 	
@@ -69,7 +69,7 @@ public class ClaimRegion {
 	}
 	
 	public void unclaim(int x, int z) {
-		x %= WIDTH; z %= HEIGH;              //Modulo to get into relative chunk coords
+		x = Math.abs(x) % WIDTH; z = Math.abs(z) % HEIGH;  //Modulo to get into relative chunk coords
 		unclaim(z * WIDTH + x);
 	}
 	
