@@ -48,7 +48,7 @@ public class Nation {
 		try {
 			this.id = UUID.randomUUID();
 			this.path = "nationdata/" + id + ".yml";
-			this.config = Espero.LOADER.readConfig(path, "default_nation.yml");
+			this.config = Espero.LOADER.readConfig(path, "resources/default_nation.yml");
 			this.display_name = name;
 		
 			loadRanks();

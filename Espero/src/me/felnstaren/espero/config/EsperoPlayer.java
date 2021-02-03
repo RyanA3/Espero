@@ -29,7 +29,7 @@ public class EsperoPlayer {
 		this.uuid = uuid;
 		Espero.LOGGER.log(Level.DEBUG, "Loading player with name " + uuid);
 		this.path = "playerdata/" + uuid + ".yml";
-		this.data = Espero.LOADER.readConfig(path, "default_player.yml");
+		this.data = Espero.LOADER.readConfig(path, "resources/default_player.yml");
 	}
 	
 	public void save() {
