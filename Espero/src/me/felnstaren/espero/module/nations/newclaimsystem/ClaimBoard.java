@@ -32,6 +32,7 @@ public class ClaimBoard {
 	public ClaimChunk getClaim(int x, int z) {
 		ClaimRegion region = getRegion(x, z);
 		ClaimData data = region.getClaim(x, z);
+		if(data == null) return null;
 		return new ClaimChunk(x, z, region.getRelativeNation(data.nation()), data.town()); 
 	}
 	
@@ -71,6 +72,7 @@ public class ClaimBoard {
 	}
 	
 	public ClaimRegion getRegion(int x, int z) {
+		if(x < 0) x -= 31; if(z < 0) z -= 31;           //Offset by 31 if it's negative, so for example, chunk (-5, -5) will be region -1, -1. Otherwise it'd be considered region 0, 0 because -5 / 32 = 0
 		x /= ClaimRegion.WIDTH; z /= ClaimRegion.HEIGH; //Divide to get into Region Coords
 		
 		for(int i = 0; i < loaded_regions.size(); i++) {

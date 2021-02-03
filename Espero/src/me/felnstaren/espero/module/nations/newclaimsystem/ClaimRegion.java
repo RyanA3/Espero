@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
+import me.felnstaren.felib.logger.Level;
 
 public class ClaimRegion {
 	
@@ -21,12 +22,14 @@ public class ClaimRegion {
 		this.z = z;
 		
 		claims = new ArrayList<ClaimData>();
+		nations = new ArrayList<UUID>();
 		path = "/chunkdata/" + x + "x" + z + "z.txt";
 		
 		String data = Espero.LOADER.readString(path, null);
 		if(data.equals("")) return;
 		
 		String[] line = data.split("\\n");
+		if(line.length < 2) return;
 		
 		String[] unparsed_nations = line[0].split(",");
 		for(String unparsed_nation : unparsed_nations)
@@ -40,8 +43,9 @@ public class ClaimRegion {
 	
 	
 	public ClaimData getClaim(int x, int z) {
-		x = Math.abs(x) % WIDTH; z = Math.abs(z) % HEIGH;  //Modulo to get into relative chunk coords
-		return getClaim(z * WIDTH + x);
+		int offx = Math.abs(x) % WIDTH; int offz = Math.abs(z) % HEIGH;  //Modulo to get into relative chunk coords
+		Espero.LOGGER.log(Level.DEBUG, "Chunk(" + x + "," + z + ") -> (" + offx + "," + offz + ") -> " + (offz * WIDTH + offx));
+		return getClaim(offz * WIDTH + offx);
 	}
 	
 	public ClaimData getClaim(int location) {
@@ -92,14 +96,17 @@ public class ClaimRegion {
 	
 	private String data() {
 		String data = "";
-		for(UUID nation : nations)
-			data += nation.toString() + ",";
-		data = data.substring(0, data.length() - 2);
+		for(int i = 0; i < nations.size(); i++) {
+			if(i > 0) data += ",";
+			data += nations.get(i).toString();
+		}
 		data += "\n";
 		
-		for(ClaimData claim : claims) 
-			data += claim.data() + ",";
-		data = data.substring(0, data.length() - 2);
+		for(int i = 0; i < claims.size(); i++) {
+			if(i > 0) data += ",";
+			data += claims.get(i).data();
+		}
+
 		return data;
 	}
 	
@@ -119,6 +126,23 @@ public class ClaimRegion {
 	
 	protected UUID getRelativeNation(int nation) {
 		return nations.get(nation);
+	}
+	
+	public String map(int px, int pz) {
+		String map = "";
+		for(int offx = 0; offx < WIDTH; offx++) {
+			for(int offz = 0; offz < HEIGH; offz++) {
+				
+				ClaimData data = getClaim(offx, offz);
+				if(offx == px && offz == pz) map += "+";
+				else if(data == null) map += "-";
+				else map += "#";
+				Espero.LOGGER.log(Level.DEBUG, "Chunk at (" + (offx + (x * WIDTH)) + "," + (offz + (z * HEIGH)) + "): " + data == null ? data.nation() + "" : "none");
+			}
+			map += "\n";
+		}
+		map += "\n region(" + x + "," + z + ")"; 
+		return map;
 	}
 
 }

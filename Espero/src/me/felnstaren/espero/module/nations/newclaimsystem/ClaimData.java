@@ -26,7 +26,7 @@ public class ClaimData {
 	}
 	
 	public String data() {
-		return location + "." + town;
+		return location + "." + town + "." + nation;
 	}
 	
 	

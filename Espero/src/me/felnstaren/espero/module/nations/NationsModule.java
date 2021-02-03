@@ -8,6 +8,7 @@ import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.IModule;
 import me.felnstaren.espero.module.nations.command.nation.NationCommandMaster;
 import me.felnstaren.espero.module.nations.listener.ClaimInfoListener;
+import me.felnstaren.espero.module.nations.newclaimsystem.ClaimBoard;
 import me.felnstaren.espero.module.nations.system.Board;
 import me.felnstaren.espero.module.nations.system.Nations;
 import me.felnstaren.felib.logger.Level;
@@ -18,6 +19,7 @@ public class NationsModule implements IModule {
 		public void run() {
 			Nations.getInstance().save();
 			Board.getInstance().save();
+			ClaimBoard.getInstance().save();
 			Espero.LOGGER.log(Level.INFO, "Saved nations and claims");
 		}
 	};
@@ -25,6 +27,7 @@ public class NationsModule implements IModule {
 	public void onEnable(JavaPlugin plugin) {
 		Nations.getInstance();
 		Board.init();
+		ClaimBoard.init();
 		
 		save_task.runTaskTimer(plugin, 100, 10000);
 		
@@ -38,6 +41,7 @@ public class NationsModule implements IModule {
 		save_task.cancel();
 		Nations.getInstance().save();
 		Board.getInstance().save();
+		ClaimBoard.getInstance().save();
 	}
 
 }

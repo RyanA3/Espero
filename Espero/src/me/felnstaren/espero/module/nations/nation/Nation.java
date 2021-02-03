@@ -31,7 +31,7 @@ public class Nation {
 		try {
 			this.id = id;
 			this.path = "nationdata/" + id + ".yml";
-			this.config = Espero.LOADER.readConfig(path, "default_nation.yml");
+			this.config = Espero.LOADER.readConfig(path, "resources/default_nation.yml");
 			
 			this.display_name = config.getString("display_name");
 
