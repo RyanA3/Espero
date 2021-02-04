@@ -57,7 +57,7 @@ public class Nation {
 			towns.add(capital);
 
 			members = new ArrayList<UUID>();
-			members.add(owner.getUUID());
+			members.add(owner.getUniqueId());
 		
 			invites = new ArrayList<UUID>();
 		

@@ -9,47 +9,33 @@ import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.system.Nations;
-import me.felnstaren.felib.logger.Level;
+import me.felnstaren.felib.config.DataPlayer;
 
-public class EsperoPlayer {
+public class EsperoPlayer extends DataPlayer {
 
 	private YamlConfiguration data;
 	private String path;
 	private UUID uuid;
 	
 	public EsperoPlayer(UUID uuid) {
-		init(uuid);
+		super(uuid);
 	}
 	
 	public EsperoPlayer(Player player) {
-		init(player.getUniqueId());
+		super(player);
 	}
 	
-	private void init(UUID uuid) {
-		this.uuid = uuid;
-		Espero.LOGGER.log(Level.DEBUG, "Loading player with name " + uuid);
-		this.path = "playerdata/" + uuid + ".yml";
-		this.data = Espero.LOADER.readConfig(path, "resources/default_player.yml");
-	}
+
 	
 	public void save() {
 		Espero.LOADER.save(Espero.LOADER.mark(Espero.LOADER.datafile(path)), data);
 	}
 	
-	public void set(String key, Object value) {
-		data.set(key, value);
+	protected void load() {
+		this.data = Espero.LOADER.readConfig(path, "resources/default_player.yml");
 	}
 	
-	
-	public YamlConfiguration getData() {
-		return data;
-	}
-	
-	public UUID getUUID() {
-		return uuid;
-	}
-	
-	
+
 	
 	public Nation getNation() {
 		String nation_id = data.getString("nation", "");
