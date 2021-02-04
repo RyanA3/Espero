@@ -10,6 +10,7 @@ import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.system.Nations;
 import me.felnstaren.felib.config.DataPlayer;
+import me.felnstaren.felib.logger.Level;
 
 public class EsperoPlayer extends DataPlayer {
 
@@ -19,10 +20,12 @@ public class EsperoPlayer extends DataPlayer {
 	
 	public EsperoPlayer(UUID uuid) {
 		super(uuid);
+		Espero.LOGGER.log(Level.DEBUG, "Loading player " + uuid.toString());
 	}
 	
 	public EsperoPlayer(Player player) {
 		super(player);
+		Espero.LOGGER.log(Level.DEBUG, "Loading player " + player.getName());
 	}
 	
 
@@ -40,9 +43,11 @@ public class EsperoPlayer extends DataPlayer {
 	public Nation getNation() {
 		String nation_id = data.getString("nation", "");
 		if(nation_id.equals("")) return null;
+		
 		Nation nation = Nations.getInstance().getNation(UUID.fromString(nation_id));
 		if(nation == null) return null;
 		if(nation.getMembers().contains(uuid)) return nation;
+		
 		data.set("nation", "");
 		return null;
 	}

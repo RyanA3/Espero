@@ -90,6 +90,8 @@ public class ClaimRegion {
 		
 		if(nation_hits > 1) return;
 		nations.remove(chunk.nation());
+		for(ClaimData shift : claims)
+			if(shift.nation() > chunk.nation()) shift.setNation(shift.nation() - 1);
 	}
 	
 	
