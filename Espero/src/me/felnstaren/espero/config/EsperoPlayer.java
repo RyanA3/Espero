@@ -2,21 +2,16 @@ package me.felnstaren.espero.config;
 
 import java.util.UUID;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
-import me.felnstaren.espero.module.nations.system.Nations;
+import me.felnstaren.espero.module.nations.nation.Nations;
 import me.felnstaren.felib.config.DataPlayer;
 import me.felnstaren.felib.logger.Level;
 
 public class EsperoPlayer extends DataPlayer {
-
-	private YamlConfiguration data;
-	private String path;
-	private UUID uuid;
 	
 	public EsperoPlayer(UUID uuid) {
 		super(uuid);

@@ -5,11 +5,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.module.nations.claim.ClaimBoard;
+import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Town;
-import me.felnstaren.espero.module.nations.newclaimsystem.ClaimBoard;
-import me.felnstaren.espero.module.nations.newclaimsystem.ClaimChunk;
-import me.felnstaren.espero.module.nations.system.Board;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.CommandStub;
 import me.felnstaren.felib.command.SubArgument;
@@ -43,7 +42,7 @@ public class NationClaimArg extends SubArgument {
 				
 				if(claim == null) {
 					ClaimBoard.getInstance().claim(loc.getX(), loc.getZ(), nation.getID(), 0);
-					nation.broadcast("#5F5" + player.getDisplayName() + " #5F5claimed chunk at (" + (loc.getX() * 16) + "," + (loc.getZ() * 16) + ") for nation");
+					nation.broadcast("#5F5" + player.getDisplayName() + " #5F5claimed chunk at (" + loc.getX() + "," + loc.getZ() + ") for nation");
 					return true;
 				}
 				
@@ -59,11 +58,11 @@ public class NationClaimArg extends SubArgument {
 					}
 					
 					ClaimBoard.getInstance().claim(loc.getX(), loc.getZ(), nation.getID(), claim_type);
-					nation.broadcast("#5F5" + player.getDisplayName() + " #5F5modified chunk at (" + (loc.getX() * 16) + "," + (loc.getZ() * 16) + ") from nation to " + args[current]);
+					nation.broadcast("#5F5" + player.getDisplayName() + " #5F5modified chunk at (" + loc.getX() + "," + loc.getZ() + ") from nation to " + args[current]);
 				} else {
 					if(claim_type == 0) {
 						ClaimBoard.getInstance().claim(loc.getX(), loc.getZ(), nation.getID(), claim_type);
-						nation.broadcast("#5F5" + player.getDisplayName() + " #5F5modified chunk at (" + (loc.getX() * 16) + "," + (loc.getZ() * 16) + ") from town to nation");
+						nation.broadcast("#5F5" + player.getDisplayName() + " #5F5modified chunk at (" + loc.getX()+ "," + loc.getZ() + ") from town to nation");
 						return true;
 					}
 					

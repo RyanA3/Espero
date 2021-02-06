@@ -1,4 +1,4 @@
-package me.felnstaren.espero.module.nations.newclaimsystem;
+package me.felnstaren.espero.module.nations.claim;
 
 import java.util.UUID;
 

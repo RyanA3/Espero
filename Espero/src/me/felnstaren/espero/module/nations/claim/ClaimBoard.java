@@ -1,20 +1,19 @@
-package me.felnstaren.espero.module.nations.system;
+package me.felnstaren.espero.module.nations.claim;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-import me.felnstaren.espero.module.nations.claim.ClaimChunkData;
-import me.felnstaren.espero.module.nations.claim.ClaimRegion;
+import me.felnstaren.espero.module.nations.nation.Nations;
 
-public class Board {
-	
-	private static Board INSTANCE;
+public class ClaimBoard {
+
+	private static ClaimBoard INSTANCE;
 	
 	public static void init() {
-		INSTANCE = new Board();
+		INSTANCE = new ClaimBoard();
 	}
 	
-	public static Board getInstance() {
+	public static ClaimBoard getInstance() {
 		return INSTANCE;
 	}
 	
@@ -22,7 +21,7 @@ public class Board {
 	
 	private ArrayList<ClaimRegion> loaded_regions;
 	
-	private Board() {
+	private ClaimBoard() {
 		loaded_regions = new ArrayList<ClaimRegion>();
 	}
 	
@@ -32,8 +31,15 @@ public class Board {
 	 * @param z The z Chunk Coordinate
 	 * @return
 	 */
-	public ClaimChunkData getClaim(int x, int z) {
-		return getRegion(x / 32, z / 32).getClaim(x, z);    //32 chunks in a region
+	public ClaimChunk getClaim(int x, int z) {
+		ClaimRegion region = getRegion(x, z);
+		ClaimData data = region.getClaim(x, z);
+		
+		if(data == null) return null;
+		UUID nation = region.getRelativeNation(data.nation());
+		if(Nations.getInstance().getNation(nation) == null) return null;
+		
+		return new ClaimChunk(x, z, region.getRelativeNation(data.nation()), data.town()); 
 	}
 	
 	/**
@@ -41,11 +47,11 @@ public class Board {
 	 * @param nation Nation to claim for
 	 * @param x The x Chunk Coordinate
 	 * @param z The z Chunk Coordinate
-	 * @param id Type of claim
+	 * @param town Type of claim
 	 */
-	public void claim(UUID nation, int x, int z, int id) {
-		ClaimRegion region = getRegion(x / 32, z / 32);     //32 chunks in a region
-		region.claim(nation, x, z, id);
+	public void claim(int x, int z, UUID nation, int town) {
+		ClaimRegion region = getRegion(x, z);     
+		region.claim(x, z, nation, town);
 	}
 	
 	/**
@@ -54,7 +60,7 @@ public class Board {
 	 * @param z The z Chunk Coordinate
 	 */
 	public void unclaim(int x, int z) {
-		ClaimRegion region = getRegion(x / 32, z / 32);
+		ClaimRegion region = getRegion(x, z);
 		region.unclaim(x, z);
 	}
 	
@@ -71,10 +77,13 @@ public class Board {
 		loaded_regions.clear();
 	}
 	
-	private ClaimRegion getRegion(int x, int z) {
+	public ClaimRegion getRegion(int x, int z) {
+		if(x < 0) x -= 31; if(z < 0) z -= 31;           //Offset by 31 if it's negative, so for example, chunk (-5, -5) will be region -1, -1. Otherwise it'd be considered region 0, 0 because -5 / 32 = 0
+		x /= ClaimRegion.WIDTH; z /= ClaimRegion.HEIGH; //Divide to get into Region Coords
+		
 		for(int i = 0; i < loaded_regions.size(); i++) {
 			ClaimRegion check = loaded_regions.get(i);
-			if(check.getX() == x && check.getZ() == z)
+			if(check.x() == x && check.z() == z)
 				return loaded_regions.get(i);
 		}
 		
@@ -86,5 +95,5 @@ public class Board {
 		loaded_regions.add(region);
 		return region;
 	}
-
+	
 }

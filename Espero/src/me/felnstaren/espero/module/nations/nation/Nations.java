@@ -1,11 +1,10 @@
-package me.felnstaren.espero.module.nations.system;
+package me.felnstaren.espero.module.nations.nation;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
-import me.felnstaren.espero.module.nations.nation.Nation;
 
 public class Nations {
 	

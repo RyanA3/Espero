@@ -15,11 +15,13 @@ import me.felnstaren.espero.module.nations.command.nation.join.NationJoinSub;
 import me.felnstaren.espero.module.nations.command.nation.kick.NationKickSub;
 import me.felnstaren.espero.module.nations.command.nation.leader.NationLeaderSub;
 import me.felnstaren.espero.module.nations.command.nation.leave.NationLeaveSub;
+import me.felnstaren.espero.module.nations.command.nation.map.NationMapSub;
 import me.felnstaren.espero.module.nations.command.nation.promote.NationPromoteSub;
+import me.felnstaren.espero.module.nations.command.nation.unclaim.NationUnclaimSub;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
+import me.felnstaren.espero.module.nations.nation.Nations;
 import me.felnstaren.espero.module.nations.nation.Town;
-import me.felnstaren.espero.module.nations.system.Nations;
 import me.felnstaren.felib.chat.Message;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.chat.TextComponent;
@@ -40,6 +42,7 @@ public class NationCommandMaster extends MasterCommand {
 				message.addComponent(new TextComponent("-= Nations =-").setColor("#0077FF"));
 				message.addComponent(new TextComponent("   by Felns").setColor("#CCCCCC").setItalic(true));
 				message.addComponent(new TextComponent("\n /nation").setColor("#AAAAAA"));
+				message.addComponent(new TextComponent("\n         map").setColor("#AAAAAA"));
 				
 				if(nation == null) {
 					message.addComponent(new TextComponent("\n         create <name>").setColor("#AAAAAA"));
@@ -60,6 +63,8 @@ public class NationCommandMaster extends MasterCommand {
 						message.addComponent(new TextComponent("\n         leader <player>").setColor("#AAAAAA"));
 					if(rank.isPermitted("claim"))
 						message.addComponent(new TextComponent("\n         claim").setColor("#AAAAAA"));
+					if(rank.isPermitted("claim"))
+						message.addComponent(new TextComponent("\n         unclaim").setColor("#AAAAAA"));
 				}
 				
 				Messenger.send(player, message);
@@ -102,6 +107,8 @@ public class NationCommandMaster extends MasterCommand {
 		commands.add(new NationDemoteSub());
 		commands.add(new NationKickSub());
 		commands.add(new NationClaimSub());
+		commands.add(new NationMapSub());
+		commands.add(new NationUnclaimSub());
 	}
 	
 }

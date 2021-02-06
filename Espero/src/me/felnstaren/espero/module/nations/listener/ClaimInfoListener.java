@@ -6,11 +6,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import me.felnstaren.espero.module.nations.claim.ClaimBoard;
+import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.nation.Nation;
+import me.felnstaren.espero.module.nations.nation.Nations;
 import me.felnstaren.espero.module.nations.nation.Town;
-import me.felnstaren.espero.module.nations.newclaimsystem.ClaimBoard;
-import me.felnstaren.espero.module.nations.newclaimsystem.ClaimChunk;
-import me.felnstaren.espero.module.nations.system.Nations;
 import me.felnstaren.felib.chat.Messenger;
 
 public class ClaimInfoListener implements Listener {
@@ -43,7 +43,7 @@ public class ClaimInfoListener implements Listener {
 			message = "#D22Leaving ";
 			nation = Nations.getInstance().getNation(from.nation);
 			if(nation != null) town = nation.getTown(from.town);
-		} 
+		}
 		
 		
 		if(town != null) message = message + "#999the town of " + town.name;
