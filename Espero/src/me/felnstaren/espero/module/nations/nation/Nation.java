@@ -44,7 +44,7 @@ public class Nation {
 		}
 	}
 	
-	public Nation(String name, Town capital, EsperoPlayer owner) {
+	public Nation(String name, EsperoPlayer owner) {
 		try {
 			this.id = UUID.randomUUID();
 			this.path = "nationdata/" + id + ".yml";
@@ -54,11 +54,8 @@ public class Nation {
 			loadRanks();
 		
 			towns = new ArrayList<Town>();
-			towns.add(capital);
-
 			members = new ArrayList<UUID>();
 			members.add(owner.getUniqueId());
-		
 			invites = new ArrayList<UUID>();
 		
 			owner.set("nation", id.toString());

@@ -21,7 +21,10 @@ import me.felnstaren.felib.chat.Messenger;
 public class PlayerClaimInteractHandler implements Listener {
 	
 	private static final ArrayList<Material> CONTAINERS = new ArrayList<Material>();
-	static { CONTAINERS.add(Material.BARREL); CONTAINERS.add(Material.CHEST); CONTAINERS.add(Material.TRAPPED_CHEST); }
+	static { CONTAINERS.add(Material.BARREL); CONTAINERS.add(Material.CHEST); CONTAINERS.add(Material.TRAPPED_CHEST); 
+	CONTAINERS.add(Material.FURNACE); CONTAINERS.add(Material.BLAST_FURNACE); CONTAINERS.add(Material.SMOKER);
+	CONTAINERS.add(Material.DROPPER); CONTAINERS.add(Material.DISPENSER); CONTAINERS.add(Material.BREWING_STAND);
+	CONTAINERS.add(Material.SHULKER_BOX); }
 	
 	
 	
@@ -33,6 +36,11 @@ public class PlayerClaimInteractHandler implements Listener {
 		EsperoPlayer eplayer = new EsperoPlayer(player);
 		Nation nation = claim.getNation();
 		if(nation == null) return true;
+		
+		if(eplayer.getNation() == null || !eplayer.getNation().getID().equals(nation.getID())) {
+			Messenger.send(player, "#F55You do not have permission to " + permission + " in " + nation.getDisplayName() + "!");
+			return false;
+		}
 		
 		if(!eplayer.hasPermission(permission, nation)) {
 			Messenger.send(player, "#F55You do not have permission to " + permission + " in " + nation.getDisplayName() + "!");
@@ -63,6 +71,7 @@ public class PlayerClaimInteractHandler implements Listener {
 		else if(event.getClickedBlock().getType().toString().contains("BUTTON")) what = "button";
 		else if(event.getClickedBlock().getType().toString().contains("DOOR")) what = "door";
 		else if(CONTAINERS.contains(event.getClickedBlock().getType())) what = "container";
+		else if(event.getClickedBlock().getType().toString().contains("BOX")) what = "container";
 		if(what == null) return;
 		
 		if(!candoshit(event.getPlayer(), event.getClickedBlock().getLocation(), what)) event.setCancelled(true);

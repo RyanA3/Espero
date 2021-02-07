@@ -23,9 +23,15 @@ public class NationJoinArg extends SubArgument {
 					return true;
 				}
 				
-				Nation to_join = Nations.getInstance().getNation(args[current]);
+				String name = "";
+				for(int i = 1; i < args.length && i < 4; i++) {
+					if(i > 1) name += " ";
+					name += args[i];
+				}
+				
+				Nation to_join = Nations.getInstance().getNation(name);
 				if(to_join == null) {
-					Messenger.send(player, "#F55Couldn't find a nation called " + args[current]);
+					Messenger.send(player, "#F55Couldn't find a nation called " + name);
 					return true;
 				}
 				
