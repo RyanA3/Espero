@@ -3,9 +3,10 @@ package me.felnstaren.espero.module.nations.nation;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import me.felnstaren.felib.config.ConfigurationSectionObject;
 import me.felnstaren.felib.util.ArrayUtil;
 
-public class NationPlayerRank {
+public class NationPlayerRank implements ConfigurationSectionObject {
 
 	private String label;
 	private String display_name;
@@ -16,14 +17,7 @@ public class NationPlayerRank {
 	private ConfigurationSection data;
 	
 	public NationPlayerRank(ConfigurationSection data) {
-		this.label = data.getName();
-		this.display_name = data.getString("display_name");
-		this.permissions = ArrayUtil.stringver(data.getStringList("permissions").toArray());
-		this.weight = data.getInt("weight", 0);
-		
-		if(data.getString("inherits") != null) this.inheretance_name = data.getString("inherits");
-		
-		this.data = data;
+		load(data);
 	}
 	
 	
@@ -77,6 +71,23 @@ public class NationPlayerRank {
 		for(String check : permissions)
 			if(check.equals(permission)) return true;
 		return inheretance != null && inheretance.isPermitted(permission);
+	}
+
+
+
+	public ConfigurationSectionObject load(ConfigurationSection data) {
+		if(data == null) return this;
+		this.label = data.getName();
+		this.display_name = data.getString("display_name");
+		this.permissions = ArrayUtil.stringver(data.getStringList("permissions").toArray());
+		this.weight = data.getInt("weight", 0);
+		if(data.getString("inherits") != null) this.inheretance_name = data.getString("inherits");
+		this.data = data;
+		return this;
+	}
+	
+	public ConfigurationSectionObject template() {
+		return new NationPlayerRank(null);
 	}
 	
 }

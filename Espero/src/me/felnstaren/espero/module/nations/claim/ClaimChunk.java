@@ -35,5 +35,9 @@ public class ClaimChunk {
 	public Town getTown() {
 		return getNation().getTown(town);
 	}
+	
+	public ClaimChunk getRelative(int offX, int offZ) {
+		return ClaimBoard.getInstance().getClaim(x + offX, z + offZ);
+	}
 
 }

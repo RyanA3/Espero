@@ -11,13 +11,14 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.felib.chat.Messenger;
+import me.felnstaren.felib.config.ConfigReader;
 import me.felnstaren.felib.logger.Level;
 import me.felnstaren.felib.util.ArrayUtil;
 
 public class Nation {
 
 	private ArrayList<Town> towns;
-	private NationPlayerRank[] ranks;
+	private ArrayList<NationPlayerRank> ranks;
 	private ArrayList<UUID> members;
 	private ArrayList<UUID> invites;
 	
@@ -141,24 +142,12 @@ public class Nation {
 	
 	
 	private void loadTowns() {
-		ConfigurationSection town_section = config.getConfigurationSection("towns");
-		String[] town_paths = ArrayUtil.stringver(town_section.getKeys(false).toArray());
-		towns = new ArrayList<Town>();
-		for(int i = 0; i < town_paths.length; i++) {
-			Espero.LOGGER.log(Level.DEBUG, "Loading town " + town_paths[i]);
-			towns.add(new Town(town_section.getConfigurationSection(town_paths[i])));
-		}
+		towns = ConfigReader.readSectionInSectionObjects(config, "towns", Town.class);
 	}
 	
 	private void loadRanks() {
-		Espero.LOGGER.log(Level.DEBUG, "Loading ranks, data:" + (config.toString()));
-		ConfigurationSection rank_section = config.getConfigurationSection("ranks");
-		Espero.LOGGER.log(Level.DEBUG, "From rank section: " + rank_section);
-		String[] rank_paths = ArrayUtil.stringver(rank_section.getKeys(false).toArray());
-		ranks = new NationPlayerRank[rank_paths.length];
-		for(int i = 0; i < ranks.length; i++) 
-			ranks[i] = new NationPlayerRank(rank_section.getConfigurationSection(rank_paths[i]));
-		
+		ranks = ConfigReader.readSectionInSectionObjects(config, "ranks", NationPlayerRank.class);
+
 		//Init rank inheretances
 		for(NationPlayerRank rank : ranks) 
 			if(rank.getInheretanceName() != null)
@@ -166,17 +155,8 @@ public class Nation {
 	}
 	
 	private void loadUsers() {
-		//Load members
-		String[] str_members = ArrayUtil.stringver(config.getStringList("members").toArray());
-		this.members = new ArrayList<UUID>();
-		for(int i = 0; i < str_members.length; i++)
-			members.add(UUID.fromString(str_members[i]));
-		
-		//Load invites
-		String[] str_invites = ArrayUtil.stringver(config.getStringList("invites").toArray());
-		this.invites = new ArrayList<UUID>();
-		for(int i = 0; i < str_invites.length; i++)
-			invites.add(UUID.fromString(str_invites[i]));
+		members = ConfigReader.readUUIDList(config, "members");
+		invites = ConfigReader.readUUIDList(config, "invites");
 	}
 	
 	

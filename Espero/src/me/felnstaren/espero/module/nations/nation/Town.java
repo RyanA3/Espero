@@ -3,10 +3,9 @@ package me.felnstaren.espero.module.nations.nation;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import me.felnstaren.espero.Espero;
-import me.felnstaren.felib.logger.Level;
+import me.felnstaren.felib.config.ConfigurationSectionObject;
 
-public class Town {
+public class Town implements ConfigurationSectionObject {
 
 	private int x;
 	private int z;
@@ -14,11 +13,7 @@ public class Town {
 	public String name;
 	
 	public Town(ConfigurationSection data) {
-		if(data == null) Espero.LOGGER.log(Level.WARNING, "Loaded town configuration section is null!");
-		this.id = Integer.parseInt(data.getName());
-		this.name = data.getString("display_name");
-		this.x = data.getInt("cx");
-		this.z = data.getInt("cz");
+		load(data);
 	}
 	
 	public Town(String name, int id, int x, int z) {
@@ -38,6 +33,21 @@ public class Town {
 		config.set("towns." + id + ".cx", x);
 		config.set("towns." + id + ".cz", z);
 		config.set("towns." + id + ".display_name", name);
+	}
+
+	
+	
+	public ConfigurationSectionObject load(ConfigurationSection data) {
+		if(data == null) return this;
+		this.id = Integer.parseInt(data.getName());
+		this.name = data.getString("display_name");
+		this.x = data.getInt("cx");
+		this.z = data.getInt("cz");
+		return this;
+	}
+	
+	public ConfigurationSectionObject template() {
+		return new Town(null);
 	}
 
 }
