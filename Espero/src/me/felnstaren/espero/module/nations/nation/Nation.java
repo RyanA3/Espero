@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
@@ -13,7 +12,6 @@ import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.config.ConfigReader;
 import me.felnstaren.felib.logger.Level;
-import me.felnstaren.felib.util.ArrayUtil;
 
 public class Nation {
 

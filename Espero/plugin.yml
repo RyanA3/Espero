@@ -4,6 +4,7 @@ version: 1.0.0a
 author: Felnstaren
 description: Core plugin for the Espero Server
 api-version: 1.16
+depend: [FeLib]
 
 commands:
  rift:
@@ -15,3 +16,6 @@ commands:
  nation:
   aliases: [n]
   description: Default nation command
+ morph:
+  aliases: []
+  description: HeHe Packets go Brr
