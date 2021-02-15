@@ -14,7 +14,7 @@ public class MorphModule implements IModule {
 	@Override
 	public void onEnable(JavaPlugin plugin) {
 		mman = new MorphManager();
-		FeLib.INJECTOR.getManager().registerOut(mman);
+		FeLib.INJECTOR.getManager().registerInOut(mman);
 		plugin.getCommand("morph").setExecutor(new MorphCommand(mman));
 		plugin.getServer().getPluginManager().registerEvents(new MorphPlayerListener(mman), plugin);
 	}

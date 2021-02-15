@@ -1,14 +1,21 @@
 package me.felnstaren.espero.module.morph;
 
+import java.util.Optional;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.felib.logger.Level;
-import me.felnstaren.felib.packet.PacketEntityType;
+import me.felnstaren.felib.packet.enums.ByteInfo;
+import me.felnstaren.felib.packet.enums.MetadataValue;
+import me.felnstaren.felib.packet.enums.PacketEntityPose;
+import me.felnstaren.felib.packet.enums.PacketEntityType;
 import me.felnstaren.felib.packet.listener.PacketEvent;
 import me.felnstaren.felib.packet.wrapper.PacketWrapper;
+import me.felnstaren.felib.packet.wrapper.data.DataWatcherWrapper;
+import me.felnstaren.felib.packet.wrapper.meta.EntityMetaPacket;
 import me.felnstaren.felib.reflect.Reflector;
 import me.felnstaren.felib.util.Maths;
 
@@ -36,6 +43,18 @@ public class MorphedPlayer {
 	
 	public int getFakeEntityId() {
 		return entity.getId();
+	}
+	
+	public Object metadataPacket() {
+		DataWatcherWrapper watcher = new DataWatcherWrapper(null, true);
+		watcher.register(MetadataValue.ENTITY_CUSTOM_NAME, Optional.of(Reflector.newInstanceOf("ChatComponentText", "McScuff2.0")));
+		watcher.register(MetadataValue.ENTITY_IS_CUSTOM_NAME_VISIBLE, true);
+		//watcher.register(MetadataValue.ABSTRACT_HORSE_INFO_BYTE, ByteInfo.createWithSet(ByteInfo.ABSTRACT_HORSE_IS_REARING));
+		watcher.register(MetadataValue.HORSE_VARIANT, 1024);
+		//watcher.register(MetadataValue.ENTITY_INFO_BYTE, ByteInfo.createWithSet(ByteInfo.ENTITY_IS_GLOWING));
+		//watcher.register(MetadataValue.LIVING_ENTITY_HEALTH, -0.01f);
+		//watcher.register(MetadataValue.ENTITY_POSE, PacketEntityPose.STANDING.toNMS());
+		return new EntityMetaPacket(entity.getId(), watcher).getPacket();
 	}
 	
 	public Object spawnEntityPacket() {

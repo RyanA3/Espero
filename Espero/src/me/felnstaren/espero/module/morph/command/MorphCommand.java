@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.module.morph.MorphManager;
 import me.felnstaren.felib.chat.Messenger;
-import me.felnstaren.felib.packet.PacketEntityType;
+import me.felnstaren.felib.packet.enums.PacketEntityType;
 
 public class MorphCommand implements CommandExecutor {
 

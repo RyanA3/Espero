@@ -3,7 +3,7 @@ package me.felnstaren.espero.module.morph;
 import java.util.Random;
 import java.util.UUID;
 
-import me.felnstaren.felib.packet.PacketEntityType;
+import me.felnstaren.felib.packet.enums.PacketEntityType;
 
 public class FakeEntity {
 
