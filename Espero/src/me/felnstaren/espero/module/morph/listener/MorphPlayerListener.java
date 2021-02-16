@@ -5,6 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import me.felnstaren.espero.module.morph.MorphManager;
+import me.felnstaren.espero.module.morph.morph.EntityMorph;
 
 public class MorphPlayerListener implements Listener {
 	
@@ -18,7 +19,9 @@ public class MorphPlayerListener implements Listener {
 	
 	@EventHandler
 	public void onDisconnect(PlayerQuitEvent event) {
-		mman.removeMorph(event.getPlayer());
+		EntityMorph morph = mman.getMorphByPlayer(event.getPlayer().getEntityId());
+		if(morph == null) return;
+		mman.unmorph(morph);
 	}
 	
 }
