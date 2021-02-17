@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.util.WorldUtil;
 
@@ -71,7 +72,7 @@ public class Rift {
 	
 	public void destroy() {
 		this.destroy = true;
-		if(owner != null) new EsperoPlayer(owner).delRift();
+		if(owner != null) Espero.PLAYERS.getPlayer(owner).delRift();
 	}
 	
 	
@@ -79,8 +80,8 @@ public class Rift {
 	public static void cast(Player owner, int time) {
 		if(!owner.getWorld().getName().equals("world")) return;
 		
-		EsperoPlayer dp = new EsperoPlayer(owner.getUniqueId());
-		if(dp.getData().getInt("sanity.max-sanity") < 40) return;
+		EsperoPlayer dp = Espero.PLAYERS.getPlayer(owner); //new EsperoPlayer(owner.getUniqueId());
+		if(dp.getConfig().getInt("sanity.max-sanity") < 40) return;
 		
 		Location loc1 = owner.getLocation();
 		Location loc2 = WorldUtil.findHighestBlock(Bukkit.getWorld("world_the_end"), loc1.getBlockX() / 10, loc1.getBlockZ() / 10);

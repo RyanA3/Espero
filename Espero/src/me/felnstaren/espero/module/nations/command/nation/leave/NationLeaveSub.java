@@ -3,6 +3,7 @@ package me.felnstaren.espero.module.nations.command.nation.leave;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
@@ -17,7 +18,7 @@ public class NationLeaveSub extends SubCommand {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
-				EsperoPlayer eplayer = new EsperoPlayer(player);
+				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 				Nation nation = eplayer.getNation();
 				
 				if(nation == null) {
@@ -33,7 +34,7 @@ public class NationLeaveSub extends SubCommand {
 				
 				eplayer.setNation(null);
 				eplayer.setRank("recruit");
-				eplayer.save();
+				//eplayer.save();
 				
 				if(nation.getMembers().size() == 0) {
 					Messenger.broadcast("#F22" + nation.getDisplayName() + " #F55has been disbanded!");

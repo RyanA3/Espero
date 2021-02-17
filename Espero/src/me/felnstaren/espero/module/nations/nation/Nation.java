@@ -59,7 +59,7 @@ public class Nation {
 		
 			owner.set("nation", id.toString());
 			owner.set("nation-rank", "leader");
-			owner.save();
+			//owner.save();
 			save();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,7 +186,7 @@ public class Nation {
 			EsperoPlayer emember = new EsperoPlayer(member);
 			emember.setNation(null);
 			emember.setRank("recruit");
-			emember.save();
+			//emember.save();
 		}
 		
 		Espero.LOADER.delete(path);

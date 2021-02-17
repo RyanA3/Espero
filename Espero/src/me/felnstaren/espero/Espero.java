@@ -3,6 +3,7 @@ package me.felnstaren.espero;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.felnstaren.espero.command.standalone.TestCommand;
+import me.felnstaren.espero.config.EsperoPlayerManager;
 import me.felnstaren.espero.module.magic.MagicModule;
 import me.felnstaren.espero.module.morph.MorphModule;
 import me.felnstaren.espero.module.nations.NationsModule;
@@ -16,11 +17,13 @@ public class Espero extends JavaPlugin {
 	private MorphModule morph_module;
 	public static Logger LOGGER;
 	public static Loader LOADER;
+	public static EsperoPlayerManager PLAYERS;
 	
 	public void onEnable() {
 		LOGGER = new Logger(this.getServer().getConsoleSender(), this.getName());
 		LOADER = new Loader(this, LOGGER);
 		LOADER.mkDirs("/nationdata/", "/playerdata/", "/chunkdata/");
+		PLAYERS = new EsperoPlayerManager(this);
 		
 		//magic_module = new MagicModule();
 		//magic_module.onEnable(this);
@@ -37,6 +40,7 @@ public class Espero extends JavaPlugin {
 		//magic_module.onDisable(this);
 		nations_module.onDisable(this);
 		morph_module.onDisable(this);
+		PLAYERS.saveAll();
 	}
 	
 }

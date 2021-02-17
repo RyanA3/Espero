@@ -4,6 +4,7 @@ import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
@@ -18,7 +19,7 @@ public class NationUnclaimSub extends SubCommand {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
-				EsperoPlayer eplayer = new EsperoPlayer(player);
+				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 				Nation nation = eplayer.getNation();
 				
 				if(nation == null) {

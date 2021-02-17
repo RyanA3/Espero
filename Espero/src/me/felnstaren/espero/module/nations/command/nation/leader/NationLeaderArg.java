@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
@@ -17,7 +18,7 @@ public class NationLeaderArg extends SubArgument {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
-				EsperoPlayer eplayer = new EsperoPlayer(player);
+				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 				Nation nation = eplayer.getNation();
 				
 				if(nation == null) {
@@ -42,16 +43,16 @@ public class NationLeaderArg extends SubArgument {
 					return true;
 				}
 				
-				EsperoPlayer eother = new EsperoPlayer(other);
+				EsperoPlayer eother = Espero.PLAYERS.getPlayer(other); //new EsperoPlayer(other);
 				if(eother.getNation() == null || !eother.getNation().getID().equals(nation.getID())) {
 					Messenger.send(player, "#F55This player is not in your nation!");
 					return true;
 				}
 				
 				eother.setRank("leader");
-				eother.save();
+				//eother.save();
 				eplayer.setRank("officer");
-				eplayer.save();
+				//eplayer.save();
 				
 				nation.broadcast("#5F5" + player.getName() + " has transferred their leadership to " + other.getName());
 				

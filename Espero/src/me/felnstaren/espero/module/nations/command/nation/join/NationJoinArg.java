@@ -3,6 +3,7 @@ package me.felnstaren.espero.module.nations.command.nation.join;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Nations;
@@ -16,7 +17,7 @@ public class NationJoinArg extends SubArgument {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
-				EsperoPlayer eplayer = new EsperoPlayer(player);
+				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 				
 				if(eplayer.getNation() != null) {
 					Messenger.send(player, "#F55You must leave your nation first!");
@@ -41,7 +42,7 @@ public class NationJoinArg extends SubArgument {
 				}
 				
 				eplayer.setNation(to_join);
-				eplayer.save();
+				//eplayer.save();
 				to_join.save();
 				
 				to_join.broadcast("5F5" + to_join.getDisplayName() + " has joined the nation!");

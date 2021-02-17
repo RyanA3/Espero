@@ -12,6 +12,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
@@ -33,7 +34,7 @@ public class PlayerClaimInteractHandler implements Listener {
 		ClaimChunk claim = ClaimBoard.getInstance().getClaim(c.getX(), c.getZ());
 		if(claim == null) return true;
 		
-		EsperoPlayer eplayer = new EsperoPlayer(player);
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 		Nation nation = claim.getNation();
 		if(nation == null) return true;
 		

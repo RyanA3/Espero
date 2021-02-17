@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
@@ -21,7 +22,7 @@ public class NationInviteArg extends SubArgument {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
-				EsperoPlayer eplayer = new EsperoPlayer(player);
+				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 				Nation nation = eplayer.getNation();
 				
 				if(nation == null) {

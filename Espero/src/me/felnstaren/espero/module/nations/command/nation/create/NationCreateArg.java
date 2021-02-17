@@ -3,6 +3,7 @@ package me.felnstaren.espero.module.nations.command.nation.create;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Nations;
@@ -16,7 +17,7 @@ public class NationCreateArg extends SubArgument {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
-				EsperoPlayer eplayer = new EsperoPlayer(player);
+				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 				
 				if(eplayer.getNation() != null) {
 					Messenger.send(player, "#F55You have to leave your current nation to create your own!");

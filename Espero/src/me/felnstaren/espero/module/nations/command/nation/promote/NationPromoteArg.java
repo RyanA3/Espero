@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
@@ -17,7 +18,7 @@ public class NationPromoteArg extends SubArgument {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
-				EsperoPlayer eplayer = new EsperoPlayer(player);
+				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 				Nation nation = eplayer.getNation();
 				
 				if(nation == null) {
@@ -41,7 +42,7 @@ public class NationPromoteArg extends SubArgument {
 					return true;
 				}
 				
-				EsperoPlayer eother = new EsperoPlayer(other);
+				EsperoPlayer eother = Espero.PLAYERS.getPlayer(other); //new EsperoPlayer(other);
 				if(eother.getNation() == null || !eother.getNation().getID().equals(nation.getID())) {
 					Messenger.send(player, "#F55This player is not in your nation!");
 					return true;
@@ -59,7 +60,7 @@ public class NationPromoteArg extends SubArgument {
 				}
 				
 				eother.setRank(promotion.getLabel());
-				eother.save();
+				//eother.save();
 				nation.broadcast("#F5F" + other.getDisplayName() + " #5F5has been promoted to the rank of #999" + promotion.getDisplayName() + " #5F5by " + player.getDisplayName());
 				
 				return true;

@@ -14,43 +14,32 @@ import me.felnstaren.felib.logger.Level;
 public class EsperoPlayer extends DataPlayer {
 	
 	public EsperoPlayer(UUID uuid) {
-		super(uuid);
+		super(uuid, "resources/default_player");
 		Espero.LOGGER.log(Level.DEBUG, "Loading player " + uuid.toString());
 	}
 	
 	public EsperoPlayer(Player player) {
-		super(player);
-		Espero.LOGGER.log(Level.DEBUG, "Loading player " + player.getName());
-	}
-	
-
-	
-	public void save() {
-		Espero.LOADER.save(Espero.LOADER.mark(Espero.LOADER.datafile(path)), data);
-	}
-	
-	protected void load() {
-		this.data = Espero.LOADER.readConfig(path, "resources/default_player.yml");
+		this(player.getUniqueId());
 	}
 	
 
 	
 	public Nation getNation() {
-		String nation_id = data.getString("nation", "");
+		String nation_id = config.getString("nation", "");
 		if(nation_id.equals("")) return null;
 		
 		Nation nation = Nations.getInstance().getNation(UUID.fromString(nation_id));
 		if(nation == null) return null;
 		if(nation.getMembers().contains(uuid)) return nation;
 		
-		data.set("nation", "");
+		config.set("nation", "");
 		return null;
 	}
 	
 	public NationPlayerRank getNationRank() {
 		Nation nation = getNation();
 		if(nation == null) return null;
-		String nation_rank = data.getString("nation-rank", "recruit");
+		String nation_rank = config.getString("nation-rank", "recruit");
 		return nation.getRank(nation_rank);
 	}
 	
@@ -61,12 +50,12 @@ public class EsperoPlayer extends DataPlayer {
 	public void setNation(Nation nation) {
 		if(nation == null) {
 			getNation().getMembers().remove(uuid);
-			data.set("nation", "");
+			config.set("nation", "");
 		}
 		else {
 			nation.getMembers().add(uuid);
 			nation.getInvites().remove(uuid);
-			data.set("nation", nation.getID().toString());
+			config.set("nation", nation.getID().toString());
 			setRank("recruit");
 		}
 	}
@@ -76,7 +65,7 @@ public class EsperoPlayer extends DataPlayer {
 	 * @param rank
 	 */
 	public void setRank(String rank) {
-		data.set("nation-rank", rank);
+		config.set("nation-rank", rank);
 	}
 	
 	/**
@@ -94,13 +83,13 @@ public class EsperoPlayer extends DataPlayer {
 	
 	
 	public void addRift() {
-		int rifts = data.getInt("rift-count");
+		int rifts = config.getInt("rift-count");
 		rifts++;
 		updateRifts(rifts);
 	}
 	
 	public void delRift() {
-		int rifts = data.getInt("rift-count");
+		int rifts = config.getInt("rift-count");
 		rifts--;
 		updateRifts(rifts);
 	}
@@ -108,14 +97,14 @@ public class EsperoPlayer extends DataPlayer {
 	private void updateRifts(int rifts) {
 		int max_sanity = 100 - (20 * rifts);
 		
-		data.set("rift-count", rifts);
-		data.set("sanity.max-sanity", max_sanity);
+		config.set("rift-count", rifts);
+		config.set("sanity.max-sanity", max_sanity);
 		
-		int sanity = data.getInt("sanity.cur-sanity");
+		int sanity = config.getInt("sanity.cur-sanity");
 		if(sanity > max_sanity) sanity = max_sanity;
-		data.set("sanity.cur-sanity", sanity);
+		config.set("sanity.cur-sanity", sanity);
 		
-		save();
+		//save();
 	}
 	
 	

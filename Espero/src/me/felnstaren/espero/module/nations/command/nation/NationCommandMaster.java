@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimSub;
 import me.felnstaren.espero.module.nations.command.nation.create.NationCreateSub;
@@ -35,7 +36,7 @@ public class NationCommandMaster extends MasterCommand {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
-				EsperoPlayer eplayer = new EsperoPlayer(player);
+				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 				Nation nation = eplayer.getNation();
 				
 				Message message = new Message();
@@ -86,7 +87,7 @@ public class NationCommandMaster extends MasterCommand {
 		new TabSuggestor("<claimtype>") {
 			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
 				ArrayList<String> claim_types = new ArrayList<String>();
-				EsperoPlayer eplayer = new EsperoPlayer((Player) sender);
+				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer((Player) sender); //new EsperoPlayer((Player) sender);
 				Nation nation = eplayer.getNation();
 				
 				if(nation == null) return claim_types;
