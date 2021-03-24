@@ -12,6 +12,7 @@ import me.felnstaren.felib.logger.Logger;
 
 public class Espero extends JavaPlugin {
 
+	@SuppressWarnings("unused")
 	private MagicModule magic_module;
 	private NationsModule nations_module;
 	private MorphModule morph_module;

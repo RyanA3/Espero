@@ -9,12 +9,20 @@ import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.nation.Nations;
 import me.felnstaren.felib.config.DataPlayer;
+import me.felnstaren.felib.config.Loader;
 import me.felnstaren.felib.logger.Level;
 
 public class EsperoPlayer extends DataPlayer {
 	
+	private Nation nation;
+	private NationPlayerRank rank;
+	
+	private int rifts;
+	private int sanity;
+	private int max_sanity;
+	
 	public EsperoPlayer(UUID uuid) {
-		super(uuid, "resources/default_player");
+		super(uuid, "resources/default_player.yml");
 		Espero.LOGGER.log(Level.DEBUG, "Loading player " + uuid.toString());
 	}
 	
@@ -22,51 +30,56 @@ public class EsperoPlayer extends DataPlayer {
 		this(player.getUniqueId());
 	}
 	
-
 	
-	public Nation getNation() {
+	
+	private Nation loadNation() {
 		String nation_id = config.getString("nation", "");
-		if(nation_id.equals("")) return null;
+		if(nation_id.length() == 0) return null;
 		
 		Nation nation = Nations.getInstance().getNation(UUID.fromString(nation_id));
 		if(nation == null) return null;
-		if(nation.getMembers().contains(uuid)) return nation;
 		
-		config.set("nation", "");
-		return null;
+		if(nation.getMembers().contains(uuid)) return nation;
+		else return null;
 	}
 	
-	public NationPlayerRank getNationRank() {
-		Nation nation = getNation();
+	public Nation getNation() {
+		return nation;
+	}
+	
+	public void setNation(Nation join) {
+		if(join == null && nation != null) 
+			nation.getMembers().remove(uuid);
+		else {
+			join.getMembers().add(uuid);
+			join.getInvites().remove(uuid);
+			setNationRank(join.getRank("recruit"));
+		}
+		
+		this.nation = join;
+	}
+	
+	
+	
+	private NationPlayerRank loadNationRank() {
 		if(nation == null) return null;
 		String nation_rank = config.getString("nation-rank", "recruit");
 		return nation.getRank(nation_rank);
 	}
 	
-	/**
-	 * Set the player's nation
-	 * @param nation
-	 */
-	public void setNation(Nation nation) {
-		if(nation == null) {
-			getNation().getMembers().remove(uuid);
-			config.set("nation", "");
-		}
-		else {
-			nation.getMembers().add(uuid);
-			nation.getInvites().remove(uuid);
-			config.set("nation", nation.getID().toString());
-			setRank("recruit");
-		}
+	public NationPlayerRank getNationRank() {
+		return rank;
 	}
 	
-	/**
-	 * Set the player's nation rank
-	 * @param rank
-	 */
-	public void setRank(String rank) {
-		config.set("nation-rank", rank);
+	public void setNationRank(NationPlayerRank rank) {
+		this.rank = rank;
 	}
+	
+	public void setNationRank(String rank) {
+		this.rank = nation.getRank(rank);
+	}
+	
+	
 	
 	/**
 	 * Check if a player has permission to do something within a nation's borders
@@ -74,43 +87,56 @@ public class EsperoPlayer extends DataPlayer {
 	 * @param nation
 	 * @return
 	 */
-	public boolean hasPermission(String nation_permission, Nation nation) {
-		NationPlayerRank rank = getNationRank();
+	public boolean hasPermission(String nation_permission, Nation check) {
 		if(rank == null) return false;
-		return rank.isPermitted(nation_permission) && getNation().getID().equals(nation.getID());
+		return this.nation.getID().equals(check.getID()) && rank.isPermitted(nation_permission);
 	}
 	
 	
 	
 	public void addRift() {
-		int rifts = config.getInt("rift-count");
 		rifts++;
 		updateRifts(rifts);
 	}
 	
 	public void delRift() {
-		int rifts = config.getInt("rift-count");
 		rifts--;
 		updateRifts(rifts);
 	}
 	
 	private void updateRifts(int rifts) {
-		int max_sanity = 100 - (20 * rifts);
-		
-		config.set("rift-count", rifts);
-		config.set("sanity.max-sanity", max_sanity);
-		
-		int sanity = config.getInt("sanity.cur-sanity");
+		max_sanity = 100 - (20 * rifts);
 		if(sanity > max_sanity) sanity = max_sanity;
-		config.set("sanity.cur-sanity", sanity);
-		
-		//save();
 	}
 	
 	
 	
 	public static boolean hasGenerated(UUID uuid) {
 		return Espero.LOADER.datafile("playerdata/" + uuid + ".yml").exists();
+	}
+	
+	
+	
+	@Override
+	protected void save(Loader loader) {
+		if(nation != null) this.config.set("nation", nation.getID().toString());
+		if(rank != null)   this.config.set("nation-rank", rank.getLabel());
+		this.config.set("rift-count", rifts);
+		this.config.set("sanity.cur-sanity", sanity);
+		this.config.set("sanity.max-sanity", max_sanity);
+		super.save(loader);
+	}
+	
+	@Override
+	protected void load(Loader loader) {
+		super.load(loader);
+		
+		nation = loadNation();
+		rank = loadNationRank();
+		
+		rifts = config.getInt("rift-count");
+		sanity = config.getInt("sanity.cur-sanity");
+		max_sanity = config.getInt("sanity.max_sanity");
 	}
 	
 }

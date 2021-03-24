@@ -6,15 +6,16 @@ import java.util.UUID;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.nations.nation.Nations;
 import me.felnstaren.felib.logger.Level;
+import me.felnstaren.felib.util.data.BinarySearchable;
 
-public class ClaimRegion {
+public class ClaimRegion extends BinarySearchable<ClaimData> {
 	
 	public static final int WIDTH = 32;
 	public static final int HEIGH = 32;
 	
 	private int x;
 	private int z;
-	private ArrayList<ClaimData> claims;
+	//private ArrayList<ClaimData> claims;
 	private ArrayList<UUID> nations;
 	private String path;
 	
@@ -22,7 +23,7 @@ public class ClaimRegion {
 		this.x = x;
 		this.z = z;
 		
-		claims = new ArrayList<ClaimData>();
+		//claims = new ArrayList<ClaimData>();
 		nations = new ArrayList<UUID>();
 		path = "/chunkdata/" + x + "x" + z + "z.txt";
 		
@@ -38,7 +39,7 @@ public class ClaimRegion {
 		
 		String[] unparsed_chunks = line[1].split(",");
 		for(String unparsed_chunk : unparsed_chunks)
-			claims.add(new ClaimData(unparsed_chunk));
+			/*claims.*/add(new ClaimData(unparsed_chunk));
 		
 		//Remove Deleted Nations
 		for(int i = 0; i < nations.size(); i++) {
@@ -56,9 +57,10 @@ public class ClaimRegion {
 	}
 	
 	private ClaimData getClaim(int location) {
-		for(ClaimData c : claims)
-			if(c.location() == location) return c;
-		return null;
+		return get(location);
+		//for(ClaimData c : claims)
+		//	if(c.location() == location) return c;
+		//return null;
 	}
 	
 	public void claim(int x, int z, UUID nation, int town) {
@@ -72,9 +74,9 @@ public class ClaimRegion {
 		
 		ClaimData chunk = getClaim(location);
 		if(chunk == null) 
-			claims.add(new ClaimData(location, native_nation_id, town));
+			/*claims.*/add(new ClaimData(location, native_nation_id, town));
 		else {
-			chunk.setNation(nations.indexOf(nation));
+			chunk.setNation(native_nation_id);
 			chunk.setTown(town);
 		}
 	}
@@ -84,21 +86,22 @@ public class ClaimRegion {
 		unclaim(z * WIDTH + x);
 	}
 	
-	private void unclaim(int location) {
-		int nation_hits = 0;
-		ClaimData chunk = getClaim(location);
+	private void unclaim(int location) { //TODO: Dirty, doesn't remove nation if all nation's claims are gone
+		remove(location);
+		//int nation_hits = 0;
+		//ClaimData chunk = getClaim(location);
 		
-		for(int i = 0; i < claims.size(); i++) {
-			if(claims.get(i).nation() == chunk.nation()) nation_hits++;
-			if(claims.get(i).location() != location) continue;
-			claims.remove(i);
-			i--;
-		}
+		//for(int i = 0; i < claims.size(); i++) {
+		//	if(claims.get(i).nation() == chunk.nation()) nation_hits++;
+		//	if(claims.get(i).location() != location) continue;
+		//	claims.remove(i);
+		//	i--;
+		//}
 		
-		if(nation_hits > 1) return;
-		nations.remove(chunk.nation());
-		for(ClaimData shift : claims)
-			if(shift.nation() > chunk.nation()) shift.setNation(shift.nation() - 1);
+		//if(nation_hits > 1) return;
+		//nations.remove(chunk.nation());
+		//for(ClaimData shift : claims)
+		//	if(shift.nation() > chunk.nation()) shift.setNation(shift.nation() - 1);
 	}
 	
 	
@@ -111,9 +114,9 @@ public class ClaimRegion {
 		}
 		data += "\n";
 		
-		for(int i = 0; i < claims.size(); i++) {
+		for(int i = 0; i < values.size(); i++) {
 			if(i > 0) data += ",";
-			data += claims.get(i).data();
+			data += values.get(i).data();
 		}
 
 		return data;
@@ -139,9 +142,13 @@ public class ClaimRegion {
 	
 	public void clear(UUID nation) {
 		int index = nations.indexOf(nation);
-		for(int i = 0; i < claims.size(); i++) {
-			if(claims.get(i).nation() != index) continue;
-			claims.remove(i); i--;
+		for(int i = 0; i < values.size(); i++) {
+			if(values.get(i).nation() != index) { //If the claim isn't of the target nation
+				if(values.get(i).nation() > index) //and is greater than the target nation 
+					values.get(i).setNation(values.get(i).nation() - 1); //Then shift the nation if it's higher than this one's index
+				continue; //and skip this value
+			}
+			values.remove(i); i--; //Otherwise remove it
 		}
 		nations.remove(index);
 	}

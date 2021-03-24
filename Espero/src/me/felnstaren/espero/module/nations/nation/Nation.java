@@ -1,6 +1,7 @@
 package me.felnstaren.espero.module.nations.nation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -12,13 +13,16 @@ import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.config.ConfigReader;
 import me.felnstaren.felib.logger.Level;
+import me.felnstaren.felib.util.data.SearchObject;
 
-public class Nation {
+public class Nation implements SearchObject {
 
 	private ArrayList<Town> towns;
 	private ArrayList<NationPlayerRank> ranks;
 	private ArrayList<UUID> members;
 	private ArrayList<UUID> invites;
+	private HashMap<UUID, NationRelation> relations;
+	private int balance;
 	
 	private UUID id;
 	private String display_name;
@@ -32,7 +36,8 @@ public class Nation {
 			this.path = "nationdata/" + id + ".yml";
 			this.config = Espero.LOADER.readConfig(path, "resources/default_nation.yml");
 			
-			this.display_name = config.getString("display_name");
+			this.display_name = config.getString("display_name", "Default Nation");
+			this.balance = config.getInt("balance", 0);
 
 			loadTowns();
 			loadRanks();
@@ -46,19 +51,20 @@ public class Nation {
 	public Nation(String name, EsperoPlayer owner) {
 		try {
 			this.id = UUID.randomUUID();
-			this.path = "nationdata/" + id + ".yml";
+			this.path = "nationdata/" + id.toString() + ".yml";
 			this.config = Espero.LOADER.readConfig(path, "resources/default_nation.yml");
 			this.display_name = name;
+			this.balance = 0;
 		
 			loadRanks();
 		
 			towns = new ArrayList<Town>();
 			members = new ArrayList<UUID>();
-			members.add(owner.getUniqueId());
+			//members.add(owner.getUniqueId());
 			invites = new ArrayList<UUID>();
 		
-			owner.set("nation", id.toString());
-			owner.set("nation-rank", "leader");
+			owner.setNation(this);
+			owner.setNationRank(this.getRank("leader"));
 			//owner.save();
 			save();
 		} catch (Exception e) {
@@ -137,6 +143,28 @@ public class Nation {
 		return display_name;
 	}
 	
+	public int getBalance() {
+		return balance;
+	}
+	
+	public void setBalance(int value) {
+		this.balance = value;
+	}
+	
+	public void addBalance(int value) {
+		this.balance += value;
+	}
+	
+	public NationRelation getRelation(UUID other) {
+		NationRelation relation = relations.get(other);
+		if(relation == null) return NationRelation.NEUTRAL;
+		else return relation;
+	}
+	
+	public void setRelation(UUID other, NationRelation relation) {
+		if(relations.containsKey(other)) relations.remove(other);
+		relations.put(other, relation);
+	}
 	
 	
 	private void loadTowns() {
@@ -161,6 +189,7 @@ public class Nation {
 	
 	public void save() {
 		config.set("display_name", display_name);
+		config.set("balance", balance);
 		
 		String[] smembers = new String[members.size()];
 		for(int i = 0; i < smembers.length; i++)
@@ -185,7 +214,7 @@ public class Nation {
 		for(UUID member : members) {
 			EsperoPlayer emember = new EsperoPlayer(member);
 			emember.setNation(null);
-			emember.setRank("recruit");
+			emember.setNationRank("recruit");
 			//emember.save();
 		}
 		
@@ -196,6 +225,12 @@ public class Nation {
 		ArrayList<Player> players = getOnlineMembers();
 		for(Player player : players) 
 			Messenger.send(player, message);
+	}
+
+	
+	
+	public int searchValue() {
+		return SearchObject.getIndexValue(id);
 	}
 	
 }

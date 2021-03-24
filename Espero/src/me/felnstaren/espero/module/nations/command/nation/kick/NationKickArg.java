@@ -49,7 +49,7 @@ public class NationKickArg extends SubArgument {
 				
 				nation.broadcast("#5F5" + player.getDisplayName() + " #5F5has kicked " + other.getDisplayName() + " #5F5from the nation!");
 				eother.setNation(null);
-				eother.setRank("recruit");
+				eother.setNationRank("recruit");
 				//eother.save();
 				
 				

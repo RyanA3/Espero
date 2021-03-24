@@ -10,11 +10,11 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.felnstaren.espero.Espero;
-import me.felnstaren.felib.config.ConfigObject;
 import me.felnstaren.felib.config.ConfigObjectManager;
 import me.felnstaren.felib.logger.Level;
+import me.felnstaren.felib.util.data.SearchObject;
 
-public class EsperoPlayerManager extends ConfigObjectManager implements Listener {
+public class EsperoPlayerManager extends ConfigObjectManager<EsperoPlayer> implements Listener {
 
 	public EsperoPlayerManager(JavaPlugin plugin) {
 		super(Espero.LOADER);
@@ -22,15 +22,16 @@ public class EsperoPlayerManager extends ConfigObjectManager implements Listener
 	}
 	
 	
-	
+	//Load player into memory on join
 	@EventHandler
 	public void onJoin(PlayerJoinEvent event) {
 		this.add(new EsperoPlayer(event.getPlayer()));
 	}
 	
+	//Unload player from memory and save config file on quit
 	@EventHandler
 	public void onQuit(PlayerQuitEvent event) {
-		this.remove(event.getPlayer().getUniqueId().clockSequence());
+		this.remove(SearchObject.getIndexValue(event.getPlayer().getUniqueId()));
 	}
 	
 	
@@ -41,12 +42,12 @@ public class EsperoPlayerManager extends ConfigObjectManager implements Listener
 	
 	public EsperoPlayer getPlayer(UUID id) {
 		Espero.LOGGER.log(Level.DEBUG, "Searching Players for " + id);
-		ConfigObject ep = get(id.clockSequence());
+		EsperoPlayer ep = get(SearchObject.getIndexValue(id));
 		if(ep != null) { Espero.LOGGER.log(Level.DEBUG, "Found Loaded Player"); return (EsperoPlayer) ep;  }
 		Espero.LOGGER.log(Level.DEBUG, "Player Not Found, loading... ");
 		ep = new EsperoPlayer(id);
 		add(ep);
-		return (EsperoPlayer) ep;
+		return ep;
 	}
 
 }

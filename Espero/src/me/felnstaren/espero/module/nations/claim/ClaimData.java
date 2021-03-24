@@ -1,6 +1,8 @@
 package me.felnstaren.espero.module.nations.claim;
 
-public class ClaimData {
+import me.felnstaren.felib.util.data.SearchObject;
+
+public class ClaimData implements SearchObject {
 
 	private int location;
 	private int town;
@@ -37,7 +39,7 @@ public class ClaimData {
 	}
 	
 	public int z() {
-		int z = (int) (location / ClaimRegion.WIDTH); 
+		int z = (int) Math.floor(location / ClaimRegion.WIDTH); 
 		return z;
 	}
 	
@@ -59,6 +61,12 @@ public class ClaimData {
 	
 	public void setNation(int nation) {
 		this.nation = nation;
+	}
+
+	
+
+	public int searchValue() {
+		return location;
 	}
 	
 }

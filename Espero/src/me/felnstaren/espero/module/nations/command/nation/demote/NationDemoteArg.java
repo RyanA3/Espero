@@ -54,7 +54,7 @@ public class NationDemoteArg extends SubArgument {
 					return true;
 				}
 				
-				eother.setRank(demotion.getLabel());
+				eother.setNationRank(demotion.getLabel());
 				//eother.save();
 				nation.broadcast("#F5F" + other.getDisplayName() + " #5F5has been demoted to the rank of #999" + demotion.getDisplayName() + " #5F5by " + player.getDisplayName());
 				

@@ -23,6 +23,11 @@ public class MorphCommand implements CommandExecutor {
 		if(!(sender instanceof Player)) return true;
 		Player player = (Player) sender;
 		
+		if(!player.hasPermission("espero.morph") && !player.isOp()) {
+			Messenger.send(player, "#F55boog");
+			return true;
+		}
+		
 		if(args.length == 0) {
 			EntityMorph morph = mman.getMorphByPlayer(player.getEntityId());
 			if(morph != null) mman.unmorph(morph);
@@ -40,8 +45,9 @@ public class MorphCommand implements CommandExecutor {
 			return true;
 		}
 		
-		if(entity_type == PacketEntityType.HORSE) mman.morph(new RideableMorph(player, entity_type));
-		else mman.morph(new EntityMorph(player, entity_type));
+		//if(entity_type == PacketEntityType.HORSE) mman.morph(new RideableMorph(player, entity_type));
+		//else
+		mman.morph(new EntityMorph(player, entity_type));
 		Messenger.send(player, "#5F5You are now a " + entity_type.name().replaceAll("HORSE", "HONSE"));
 		
 		return true;

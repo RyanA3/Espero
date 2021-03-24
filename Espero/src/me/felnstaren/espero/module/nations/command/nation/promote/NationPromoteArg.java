@@ -59,7 +59,7 @@ public class NationPromoteArg extends SubArgument {
 					return true;
 				}
 				
-				eother.setRank(promotion.getLabel());
+				eother.setNationRank(promotion.getLabel());
 				//eother.save();
 				nation.broadcast("#F5F" + other.getDisplayName() + " #5F5has been promoted to the rank of #999" + promotion.getDisplayName() + " #5F5by " + player.getDisplayName());
 				

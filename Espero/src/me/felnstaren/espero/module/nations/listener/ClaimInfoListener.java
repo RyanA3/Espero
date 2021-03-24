@@ -28,7 +28,7 @@ public class ClaimInfoListener implements Listener {
 		ClaimChunk to = ClaimBoard.getInstance().getClaim(t.getX(), t.getZ());
 		
 		if(from == null && to == null) return;
-		if(from != null && to != null && from.town == to.town) return;
+		if(from != null && to != null && from.town == to.town && from.nation.equals(to.nation)) return;
 
 		String message = "";
 		Nation nation = null;

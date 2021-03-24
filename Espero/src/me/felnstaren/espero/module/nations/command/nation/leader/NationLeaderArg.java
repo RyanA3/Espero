@@ -49,9 +49,9 @@ public class NationLeaderArg extends SubArgument {
 					return true;
 				}
 				
-				eother.setRank("leader");
+				eother.setNationRank("leader");
 				//eother.save();
-				eplayer.setRank("officer");
+				eplayer.setNationRank("officer");
 				//eplayer.save();
 				
 				nation.broadcast("#5F5" + player.getName() + " has transferred their leadership to " + other.getName());
