@@ -1,17 +1,21 @@
 package me.felnstaren.espero.module.nations.menu.coffer;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import me.felnstaren.espero.Espero;
+import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.item.util.InventoryEditor;
+import me.felnstaren.felib.ui.menu.MenuButton;
 import me.felnstaren.felib.ui.menu.MenuSession;
 import me.felnstaren.felib.ui.menu.MenuSessionHandler;
 import me.felnstaren.felib.ui.prompt.PromptHandler;
 import me.felnstaren.felib.util.math.Maths;
 
-public class CofferMenuDepositButton implements CofferMenuButton {
+public class CofferMenuDepositButton implements MenuButton {
 	
 	int expected_value;
 	
@@ -20,12 +24,12 @@ public class CofferMenuDepositButton implements CofferMenuButton {
 	}
 	
 	
-
-	public void execute(MenuSession session, ItemStack clicked) {
-
-	}
 	
-	public void execute(MenuSession session, ItemStack clicked, Nation nation) {
+	public void execute(MenuSession session, ItemStack clicked) {
+		Player player = session.getPlayer();
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
+		Nation nation = eplayer.getNation();
+		
 		if(expected_value == -1) {
 			session.getMenu().close();
 			MenuSessionHandler.inst().closeSession(session.getPlayer());
