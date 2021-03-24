@@ -16,7 +16,9 @@ import me.felnstaren.espero.module.nations.command.nation.join.NationJoinSub;
 import me.felnstaren.espero.module.nations.command.nation.kick.NationKickSub;
 import me.felnstaren.espero.module.nations.command.nation.leader.NationLeaderSub;
 import me.felnstaren.espero.module.nations.command.nation.leave.NationLeaveSub;
+import me.felnstaren.espero.module.nations.command.nation.list.NationListSub;
 import me.felnstaren.espero.module.nations.command.nation.map.NationMapSub;
+import me.felnstaren.espero.module.nations.command.nation.members.NationMembersSub;
 import me.felnstaren.espero.module.nations.command.nation.promote.NationPromoteSub;
 import me.felnstaren.espero.module.nations.command.nation.unclaim.NationUnclaimSub;
 import me.felnstaren.espero.module.nations.nation.Nation;
@@ -44,6 +46,8 @@ public class NationCommandMaster extends MasterCommand {
 				message.addComponent(new TextComponent("   by Felns").setColor("#CCCCCC").setItalic(true));
 				message.addComponent(new TextComponent("\n /nation").setColor("#AAAAAA"));
 				message.addComponent(new TextComponent("\n         map").setColor("#AAAAAA"));
+				message.addComponent(new TextComponent("\n         members [nation]").setColor("#AAAAAA"));
+				message.addComponent(new TextComponent("\n         list").setColor("#AAAAAA"));
 				
 				if(nation == null) {
 					message.addComponent(new TextComponent("\n         create <name>").setColor("#AAAAAA"));
@@ -110,6 +114,8 @@ public class NationCommandMaster extends MasterCommand {
 		commands.add(new NationClaimSub());
 		commands.add(new NationMapSub());
 		commands.add(new NationUnclaimSub());
+		commands.add(new NationMembersSub());
+		commands.add(new NationListSub());
 	}
 	
 }

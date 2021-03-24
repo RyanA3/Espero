@@ -9,6 +9,7 @@ import me.felnstaren.espero.module.morph.MorphModule;
 import me.felnstaren.espero.module.nations.NationsModule;
 import me.felnstaren.felib.config.Loader;
 import me.felnstaren.felib.logger.Logger;
+import me.felnstaren.felib.player.PlayerNameIDTransposer;
 
 public class Espero extends JavaPlugin {
 
@@ -19,12 +20,14 @@ public class Espero extends JavaPlugin {
 	public static Logger LOGGER;
 	public static Loader LOADER;
 	public static EsperoPlayerManager PLAYERS;
+	public static PlayerNameIDTransposer OFFLINE_PLAYERS;
 	
 	public void onEnable() {
 		LOGGER = new Logger(this.getServer().getConsoleSender(), this.getName());
 		LOADER = new Loader(this, LOGGER);
 		LOADER.mkDirs("/nationdata/", "/playerdata/", "/chunkdata/");
 		PLAYERS = new EsperoPlayerManager(this);
+		OFFLINE_PLAYERS = new PlayerNameIDTransposer(this, LOADER, "nameids.txt");
 		
 		//magic_module = new MagicModule();
 		//magic_module.onEnable(this);
@@ -42,6 +45,7 @@ public class Espero extends JavaPlugin {
 		nations_module.onDisable(this);
 		morph_module.onDisable(this);
 		PLAYERS.saveAll();
+		OFFLINE_PLAYERS.save();
 	}
 	
 }
