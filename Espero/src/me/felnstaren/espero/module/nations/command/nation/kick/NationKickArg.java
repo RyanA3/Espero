@@ -52,7 +52,7 @@ public class NationKickArg extends SubArgument {
 					return true;
 				}
 				
-				nation.broadcast("#5F5" + player.getDisplayName() + " #5F5has kicked " + other.getDisplayName() + " #5F5from the nation!");
+				nation.broadcast("#5F5" + player.getDisplayName() + " #5F5has kicked " + args[current] + " #5F5from the nation!");
 				eother.setNationRank("recruit");
 				eother.setNation(null);
 	
