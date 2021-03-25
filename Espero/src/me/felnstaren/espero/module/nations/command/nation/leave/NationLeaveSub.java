@@ -38,7 +38,7 @@ public class NationLeaveSub extends SubCommand {
 				
 				if(nation.getMembers().size() == 0) {
 					Messenger.broadcast("#F22" + nation.getDisplayName() + " #F55has been disbanded!");
-					Nations.getInstance().unregister(nation.getID());
+					Nations.inst().unregister(nation.getID());
 					nation.disband();
 				}
 				

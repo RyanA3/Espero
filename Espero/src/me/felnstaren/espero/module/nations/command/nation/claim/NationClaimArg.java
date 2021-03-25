@@ -34,7 +34,8 @@ public class NationClaimArg extends SubArgument {
 				}
 				
 				Chunk loc = player.getLocation().getChunk();
-				ClaimChunk claim = ClaimBoard.getInstance().getClaim(loc.getX(), loc.getZ());
+				int cx = loc.getX(); int cz = loc.getZ();
+				ClaimChunk claim = ClaimBoard.inst().getClaim(cx, cz);
 				
 				int claim_type = 0;
 				for(Town town : nation.getTowns()) {
@@ -42,8 +43,9 @@ public class NationClaimArg extends SubArgument {
 						claim_type = town.getID(); break; } }
 				
 				if(claim == null) {
-					ClaimBoard.getInstance().claim(loc.getX(), loc.getZ(), nation.getID(), 0);
+					ClaimBoard.inst().claim(cx, cz, nation.getID(), 0);
 					nation.broadcast("#5F5" + player.getDisplayName() + " #5F5claimed chunk at (" + loc.getX() + "," + loc.getZ() + ") for nation");
+					updateNationArea(cx, cz, 1, nation);
 					return true;
 				}
 				
@@ -58,12 +60,14 @@ public class NationClaimArg extends SubArgument {
 						return true;
 					}
 					
-					ClaimBoard.getInstance().claim(loc.getX(), loc.getZ(), nation.getID(), claim_type);
+					ClaimBoard.inst().claim(loc.getX(), loc.getZ(), nation.getID(), claim_type);
 					nation.broadcast("#5F5" + player.getDisplayName() + " #5F5modified chunk at (" + loc.getX() + "," + loc.getZ() + ") from nation to " + args[current]);
+					nation.addTownArea(1);
 				} else {
 					if(claim_type == 0) {
-						ClaimBoard.getInstance().claim(loc.getX(), loc.getZ(), nation.getID(), claim_type);
+						ClaimBoard.inst().claim(loc.getX(), loc.getZ(), nation.getID(), claim_type);
 						nation.broadcast("#5F5" + player.getDisplayName() + " #5F5modified chunk at (" + loc.getX()+ "," + loc.getZ() + ") from town to nation");
+						nation.addTownArea(-1);
 						return true;
 					}
 					
@@ -73,6 +77,31 @@ public class NationClaimArg extends SubArgument {
 				return true;
 			}
 		}, "<claimtype>");
+	}
+	
+	
+	
+	/**
+	 * Update Nation Perimeter and area based on surrounding 4 chunks
+	 * @param cx
+	 * @param cz
+	 * @param claim_action -1 = unclaim, +1 = claim
+	 * @param nation
+	 */
+	public static void updateNationArea(int cx, int cz, int claim_action, Nation nation) {
+		ClaimChunk check = ClaimBoard.inst().getClaim(cx+1, cz);
+		if(check != null && check.nation.equals(nation.getID())) nation.addPerimeter(-claim_action);
+		else nation.addPerimeter(claim_action);
+		check = ClaimBoard.inst().getClaim(cx-1, cz);
+		if(check != null && check.nation.equals(nation.getID())) nation.addPerimeter(-claim_action);
+		else nation.addPerimeter(claim_action);
+		check = ClaimBoard.inst().getClaim(cx, cz+1);
+		if(check != null && check.nation.equals(nation.getID())) nation.addPerimeter(-claim_action);
+		else nation.addPerimeter(claim_action);
+		check = ClaimBoard.inst().getClaim(cx, cz-1);
+		if(check != null && check.nation.equals(nation.getID())) nation.addPerimeter(-claim_action);
+		else nation.addPerimeter(claim_action);
+		nation.addArea(claim_action);
 	}
 
 }

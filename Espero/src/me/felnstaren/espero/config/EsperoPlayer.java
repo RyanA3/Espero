@@ -36,7 +36,7 @@ public class EsperoPlayer extends DataPlayer {
 		String nation_id = config.getString("nation", "");
 		if(nation_id.length() == 0) return null;
 		
-		Nation nation = Nations.getInstance().getNation(UUID.fromString(nation_id));
+		Nation nation = Nations.inst().getNation(UUID.fromString(nation_id));
 		if(nation == null) return null;
 		
 		if(nation.getMembers().contains(uuid)) return nation;

@@ -23,6 +23,7 @@ public class Nation implements SearchObject {
 	private ArrayList<UUID> invites;
 	private HashMap<UUID, NationRelation> relations;
 	private int balance;
+	private int area, perimeter, town_area;
 	
 	private UUID id;
 	private String display_name;
@@ -38,6 +39,9 @@ public class Nation implements SearchObject {
 			
 			this.display_name = config.getString("display_name", "Default Nation");
 			this.balance = config.getInt("balance", 0);
+			this.area = config.getInt("area", 0);
+			this.perimeter = config.getInt("perimeter", 0);
+			this.town_area = config.getInt("town_area", 0);
 
 			loadTowns();
 			loadRanks();
@@ -66,6 +70,10 @@ public class Nation implements SearchObject {
 			owner.setNation(this);
 			owner.setNationRank(this.getRank("leader"));
 			//owner.save();
+			this.area = 0;
+			this.perimeter = 0;
+			this.town_area = 0;
+			
 			save();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -143,17 +151,18 @@ public class Nation implements SearchObject {
 		return display_name;
 	}
 	
-	public int getBalance() {
-		return balance;
-	}
-	
-	public void setBalance(int value) {
-		this.balance = value;
-	}
-	
-	public void addBalance(int value) {
-		this.balance += value;
-	}
+	public int getBalance() { return balance; }
+	public void setBalance(int value) { this.balance = value; }
+	public void addBalance(int value) { this.balance += value; }
+	public int getArea() { return area; }
+	public void setArea(int value) { this.area = value; }
+	public void addArea(int value) { this.area += value; }
+	public int getPerimeter() { return perimeter; }
+	public void setPerimeter(int value) { this.perimeter = value; }
+	public void addPerimeter(int value) { this.perimeter += value; }
+	public int getTownArea() { return town_area; }
+	public void setTownArea(int value) { this.town_area = value; }
+	public void addTownArea(int value) { this.town_area += value; }
 	
 	public NationRelation getRelation(UUID other) {
 		NationRelation relation = relations.get(other);
@@ -190,6 +199,9 @@ public class Nation implements SearchObject {
 	public void save() {
 		config.set("display_name", display_name);
 		config.set("balance", balance);
+		config.set("area", area);
+		config.set("perimeter", perimeter);
+		config.set("town_area", town_area);
 		
 		String[] smembers = new String[members.size()];
 		for(int i = 0; i < smembers.length; i++)

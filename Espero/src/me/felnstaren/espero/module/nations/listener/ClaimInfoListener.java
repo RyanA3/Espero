@@ -24,8 +24,8 @@ public class ClaimInfoListener implements Listener {
 		if(f.equals(t)) return;
 		//player.sendMessage("\n" + ClaimBoard.getInstance().getRegion(t.getX(), t.getZ()).map(t.getX(), t.getZ()));
 		
-		ClaimChunk from = ClaimBoard.getInstance().getClaim(f.getX(), f.getZ());
-		ClaimChunk to = ClaimBoard.getInstance().getClaim(t.getX(), t.getZ());
+		ClaimChunk from = ClaimBoard.inst().getClaim(f.getX(), f.getZ());
+		ClaimChunk to = ClaimBoard.inst().getClaim(t.getX(), t.getZ());
 		
 		if(from == null && to == null) return;
 		if(from != null && to != null && from.town == to.town && from.nation.equals(to.nation)) return;
@@ -36,12 +36,12 @@ public class ClaimInfoListener implements Listener {
 		
 		if(to != null) {
 			message = "#2D2Entering ";
-			nation = Nations.getInstance().getNation(to.nation);
+			nation = Nations.inst().getNation(to.nation);
 			if(nation != null) town = nation.getTown(to.town);
 		}
 		else if(from != null) {
 			message = "#D22Leaving ";
-			nation = Nations.getInstance().getNation(from.nation);
+			nation = Nations.inst().getNation(from.nation);
 			if(nation != null) town = nation.getTown(from.town);
 		}
 		

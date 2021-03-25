@@ -10,8 +10,12 @@ public class Nations {
 	
 	private static Nations INSTANCE;
 	
-	public static Nations getInstance() {
-		if(INSTANCE == null) INSTANCE = new Nations();
+	public static void init() {
+		INSTANCE = new Nations();
+	}
+	
+	public static Nations inst() {
+		if(INSTANCE == null) init();
 		return INSTANCE;
 	}
 	

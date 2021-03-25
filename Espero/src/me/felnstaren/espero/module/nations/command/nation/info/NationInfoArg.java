@@ -1,4 +1,4 @@
-package me.felnstaren.espero.module.nations.command.nation.members;
+package me.felnstaren.espero.module.nations.command.nation.info;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -9,9 +9,9 @@ import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.CommandStub;
 import me.felnstaren.felib.command.SubArgument;
 
-public class NationMembersArg extends SubArgument {
+public class NationInfoArg extends SubArgument {
 
-	public NationMembersArg() {
+	public NationInfoArg() {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Nation nation = Nations.inst().getNation(args[current]);
@@ -20,10 +20,10 @@ public class NationMembersArg extends SubArgument {
 					return true;
 				}
 				
-				Messenger.send((Player) sender, "#AAA" + NationMembersSub.constructMembersList(nation));
+				Messenger.send((Player) sender, NationInfoSub.constructNationInfo(nation));
 				return true;
 			}
 		}, "<nation>");
 	}
-
+	
 }

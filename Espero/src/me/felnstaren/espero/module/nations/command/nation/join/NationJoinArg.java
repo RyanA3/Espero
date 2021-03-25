@@ -30,7 +30,7 @@ public class NationJoinArg extends SubArgument {
 					name += args[i];
 				}
 				
-				Nation to_join = Nations.getInstance().getNation(name);
+				Nation to_join = Nations.inst().getNation(name);
 				if(to_join == null) {
 					Messenger.send(player, "#F55Couldn't find a nation called " + name);
 					return true;

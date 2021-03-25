@@ -23,7 +23,7 @@ public class CofferListener implements Listener {
 		if(block.getType() != Material.ENDER_CHEST) return;
 		event.setCancelled(true);
 	    
-		ClaimChunk claim = ClaimBoard.getInstance().getClaim(block.getChunk().getX(), block.getChunk().getZ());
+		ClaimChunk claim = ClaimBoard.inst().getClaim(block.getChunk().getX(), block.getChunk().getZ());
 		EsperoPlayer player = Espero.PLAYERS.getPlayer(event.getPlayer());
 
 		if(claim == null || !player.getNation().getID().equals(claim.getNation().getID())) {

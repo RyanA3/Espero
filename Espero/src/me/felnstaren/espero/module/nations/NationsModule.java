@@ -6,6 +6,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.IModule;
+import me.felnstaren.espero.module.nations.chat.NationPlayerChatManager;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.command.nation.NationCommandMaster;
 import me.felnstaren.espero.module.nations.listener.ClaimInfoListener;
@@ -18,15 +19,16 @@ public class NationsModule implements IModule {
 	
 	BukkitRunnable save_task = new BukkitRunnable() {
 		public void run() {
-			Nations.getInstance().save();
-			ClaimBoard.getInstance().save();
+			Nations.inst().save();
+			ClaimBoard.inst().save();
 			Espero.LOGGER.log(Level.INFO, "Saved nations and claims");
 		}
 	};
 	
 	public void onEnable(JavaPlugin plugin) {
-		Nations.getInstance();
+		Nations.init();
 		ClaimBoard.init();
+		NationPlayerChatManager.init(plugin);
 		
 		save_task.runTaskTimer(plugin, 100, 10000);
 		
@@ -40,8 +42,8 @@ public class NationsModule implements IModule {
 
 	public void onDisable(JavaPlugin plugin) {
 		save_task.cancel();
-		Nations.getInstance().save();
-		ClaimBoard.getInstance().save();
+		Nations.inst().save();
+		ClaimBoard.inst().save();
 	}
 
 }

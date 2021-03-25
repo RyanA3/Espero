@@ -30,7 +30,7 @@ public class NationCreateArg extends SubArgument {
 					name += args[i];
 				}				
 				
-				if(Nations.getInstance().getNation(name) != null) {
+				if(Nations.inst().getNation(name) != null) {
 					Messenger.send(player, "#F55A nation with this name already exists!");
 					return true;
 				}
@@ -42,7 +42,7 @@ public class NationCreateArg extends SubArgument {
 				
 				
 				Nation nation = new Nation(name, eplayer);
-				Nations.getInstance().registerNewNation(nation);
+				Nations.inst().registerNewNation(nation);
 				
 				Messenger.broadcast("#5F5The nation of #2F2" + nation.getDisplayName() + " #5F5has risen from the ashes!");
 				Messenger.send(player, "#5F5Successfully create a new nation called #7F7" + name);

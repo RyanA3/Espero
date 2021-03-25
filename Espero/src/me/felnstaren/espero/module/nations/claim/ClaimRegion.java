@@ -43,7 +43,7 @@ public class ClaimRegion extends BinarySearchable<ClaimData> {
 		
 		//Remove Deleted Nations
 		for(int i = 0; i < nations.size(); i++) {
-			if(Nations.getInstance().getNation(nations.get(i)) != null) continue;
+			if(Nations.inst().getNation(nations.get(i)) != null) continue;
 			clear(nations.get(i)); i--;
 		}
 	}

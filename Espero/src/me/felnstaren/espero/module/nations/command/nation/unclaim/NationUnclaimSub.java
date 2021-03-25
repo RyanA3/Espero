@@ -8,6 +8,7 @@ import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
+import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimArg;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.CommandStub;
@@ -19,7 +20,7 @@ public class NationUnclaimSub extends SubCommand {
 		super(new CommandStub() {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
-				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
+				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
 				Nation nation = eplayer.getNation();
 				
 				if(nation == null) {
@@ -33,7 +34,8 @@ public class NationUnclaimSub extends SubCommand {
 				}
 				
 				Chunk loc = player.getLocation().getChunk();
-				ClaimChunk claim = ClaimBoard.getInstance().getClaim(loc.getX(), loc.getZ());
+				int cx = loc.getX(); int cz = loc.getZ();
+				ClaimChunk claim = ClaimBoard.inst().getClaim(cx, cz);
 				
 				if(claim == null) {
 					Messenger.send(player, "#F55This chunk is not claimed!");
@@ -45,8 +47,11 @@ public class NationUnclaimSub extends SubCommand {
 					return true;
 				}
 				
-				ClaimBoard.getInstance().unclaim(loc.getX(), loc.getZ());
-				nation.broadcast("#5F5" + player.getDisplayName() + " #5F5unclaimed chunk at (" + loc.getX() + "," + loc.getZ() + ")");
+				if(claim.town != 0) nation.addTownArea(-1);
+				NationClaimArg.updateNationArea(cx, cz, -1, nation);
+				
+				ClaimBoard.inst().unclaim(cx, cz);
+				nation.broadcast("#5F5" + player.getDisplayName() + " #5F5unclaimed chunk at (" + cx + "," + cz + ")");
 				
 				return true;
 			}

@@ -13,7 +13,7 @@ public class ClaimBoard {
 		INSTANCE = new ClaimBoard();
 	}
 	
-	public static ClaimBoard getInstance() {
+	public static ClaimBoard inst() {
 		return INSTANCE;
 	}
 	
@@ -37,7 +37,7 @@ public class ClaimBoard {
 		
 		if(data == null) return null;
 		UUID nation = region.getRelativeNation(data.nation());
-		if(Nations.getInstance().getNation(nation) == null) return null;
+		if(Nations.inst().getNation(nation) == null) return null;
 		
 		return new ClaimChunk(x, z, region.getRelativeNation(data.nation()), data.town()); 
 	}

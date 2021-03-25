@@ -1,9 +1,11 @@
 display_name: "Default Nation"
 balance: 0
 
+area: 0
+perimeter: 0
+town_area: 0
+
 towns:
- 1:
-  display_name: "Capital"
 
 ranks:
  recruit:

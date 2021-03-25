@@ -29,7 +29,7 @@ public class ClaimChunk {
 	
 	
 	public Nation getNation() {
-		return Nations.getInstance().getNation(nation);
+		return Nations.inst().getNation(nation);
 	}
 	
 	public Town getTown() {
@@ -37,7 +37,7 @@ public class ClaimChunk {
 	}
 	
 	public ClaimChunk getRelative(int offX, int offZ) {
-		return ClaimBoard.getInstance().getClaim(x + offX, z + offZ);
+		return ClaimBoard.inst().getClaim(x + offX, z + offZ);
 	}
 
 }

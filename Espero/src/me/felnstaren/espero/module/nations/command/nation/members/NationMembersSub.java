@@ -26,7 +26,7 @@ public class NationMembersSub extends SubCommand {
 					return true;
 				}
 				
-				Messenger.send(player, "#AAA" + constructMembersList(nation));
+				Messenger.send(player, "#AAA &a-=&8[ &7" + nation.getDisplayName() + " &8]&a=- \n" + constructMembersList(nation));
 				return true;
 			}
 		}, "members");
@@ -37,7 +37,7 @@ public class NationMembersSub extends SubCommand {
 
 	
 	public static String constructMembersList(Nation nation) {
-		String members = " &a-=&8[ &7" + nation.getDisplayName() + " &8]&a=- \n";
+		String members = "";
 		for(UUID id : nation.getMembers())
 			members += " " + Espero.OFFLINE_PLAYERS.getName(id);
 		

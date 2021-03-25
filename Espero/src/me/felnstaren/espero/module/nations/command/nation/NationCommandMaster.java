@@ -8,9 +8,11 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.module.nations.command.nation.chat.NationChatSub;
 import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimSub;
 import me.felnstaren.espero.module.nations.command.nation.create.NationCreateSub;
 import me.felnstaren.espero.module.nations.command.nation.demote.NationDemoteSub;
+import me.felnstaren.espero.module.nations.command.nation.info.NationInfoSub;
 import me.felnstaren.espero.module.nations.command.nation.invite.NationInviteSub;
 import me.felnstaren.espero.module.nations.command.nation.join.NationJoinSub;
 import me.felnstaren.espero.module.nations.command.nation.kick.NationKickSub;
@@ -48,6 +50,8 @@ public class NationCommandMaster extends MasterCommand {
 				message.addComponent(new TextComponent("\n         map").setColor("#AAAAAA"));
 				message.addComponent(new TextComponent("\n         members [nation]").setColor("#AAAAAA"));
 				message.addComponent(new TextComponent("\n         list").setColor("#AAAAAA"));
+				message.addComponent(new TextComponent("\n         chat").setColor("#AAAAAA"));
+				message.addComponent(new TextComponent("\n         info").setColor("#AAAAAA"));
 				
 				if(nation == null) {
 					message.addComponent(new TextComponent("\n         create <name>").setColor("#AAAAAA"));
@@ -85,7 +89,7 @@ public class NationCommandMaster extends MasterCommand {
 		},
 		new TabSuggestor("<nation>") {
 			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
-				return Nations.getInstance().getNationNames();
+				return Nations.inst().getNationNames();
 			}
 		},
 		new TabSuggestor("<claimtype>") {
@@ -116,6 +120,8 @@ public class NationCommandMaster extends MasterCommand {
 		commands.add(new NationUnclaimSub());
 		commands.add(new NationMembersSub());
 		commands.add(new NationListSub());
+		commands.add(new NationChatSub());
+		commands.add(new NationInfoSub());
 	}
 	
 }

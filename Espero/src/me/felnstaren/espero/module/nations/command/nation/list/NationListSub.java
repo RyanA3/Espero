@@ -15,7 +15,7 @@ public class NationListSub extends SubCommand {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
 				String message =  " &a-=&8[ &a" + "Espero's Nations" + " &8]&a=- \n";
-				for(String name : Nations.getInstance().getNationNames()) message += "   " + name;
+				for(String name : Nations.inst().getNationNames()) message += "   " + name;
 				Messenger.send(player, "#AAA" + Messenger.color(message));
 				
 				return true;

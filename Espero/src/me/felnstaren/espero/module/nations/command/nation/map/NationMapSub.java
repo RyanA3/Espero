@@ -15,7 +15,7 @@ public class NationMapSub extends SubCommand {
 			public boolean handle(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
 				Chunk location = player.getLocation().getChunk();
-				player.sendMessage(ClaimBoard.getInstance().getRegion(location.getX(), location.getZ()).map(location.getX(), location.getZ()));
+				player.sendMessage(ClaimBoard.inst().getRegion(location.getX(), location.getZ()).map(location.getX(), location.getZ()));
 				return true;
 			}
 		}, "map");

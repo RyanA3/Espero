@@ -31,7 +31,7 @@ public class PlayerClaimInteractHandler implements Listener {
 	
 	private boolean candoshit(Player player, Location location, String permission) {
 		Chunk c = location.getChunk();
-		ClaimChunk claim = ClaimBoard.getInstance().getClaim(c.getX(), c.getZ());
+		ClaimChunk claim = ClaimBoard.inst().getClaim(c.getX(), c.getZ());
 		if(claim == null) return true;
 		
 		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
