@@ -42,6 +42,7 @@ public class CofferMenuDepositButton implements MenuButton {
 					try { amount = Math.abs(Integer.parseInt(response)); }
 					catch (Exception e) { Messenger.send(player, PlayerMessage.ERROR_INVALID_ARGUMENT.message().replaceAll("%argument%", response)); }
 					if(amount > total_economy_items) amount = total_economy_items;
+					if(amount + nation.getBalance() > CofferMenu.MAX_COFFER_BAL) amount = (int) Maths.clamp(CofferMenu.MAX_COFFER_BAL - nation.getBalance(), 0, CofferMenu.MAX_COFFER_BAL);
 					if(amount == 0) { Messenger.send(player, PlayerMessage.ERROR_TRANSACTION_CANCELLED.message()); this.expired = true; return; }
 				
 					InventoryEditor.remove(player.getInventory(), new ItemStack(Material.EMERALD), amount);

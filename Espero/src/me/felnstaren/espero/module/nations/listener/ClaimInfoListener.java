@@ -11,6 +11,7 @@ import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Nations;
 import me.felnstaren.espero.module.nations.nation.Town;
+import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 
 public class ClaimInfoListener implements Listener {
@@ -35,19 +36,19 @@ public class ClaimInfoListener implements Listener {
 		Town town = null;
 		
 		if(to != null) {
-			message = "#2D2Entering ";
+			message = Color.GREEN + "Entering ";
 			nation = Nations.inst().getNation(to.nation);
 			if(nation != null) town = nation.getTown(to.town);
 		}
 		else if(from != null) {
-			message = "#D22Leaving ";
+			message = Color.RED + "Leaving ";
 			nation = Nations.inst().getNation(from.nation);
 			if(nation != null) town = nation.getTown(from.town);
 		}
 		
 		
-		if(town != null) message = message + "#999the town of " + town.name;
-		else if(nation != null) message = message + "#999the common lands of " + nation.getDisplayName();
+		if(town != null) message = message + Color.LIGHT_GRAY + "the town of " + town.name;
+		else if(nation != null) message = message + Color.LIGHT_GRAY + "the common lands of " + nation.getDisplayName();
 
 		if(nation != null) Messenger.send(player, message);
 	}

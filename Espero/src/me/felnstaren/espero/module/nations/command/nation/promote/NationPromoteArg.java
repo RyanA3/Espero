@@ -33,17 +33,21 @@ public class NationPromoteArg extends SubArgument {
 				}
 				
 				Player other = Bukkit.getPlayerExact(args[current]);
-				if(other == null) {
+				EsperoPlayer eother;
+				if(other == null)
+					eother = Espero.PLAYERS.getPlayer(Espero.OFFLINE_PLAYERS.getID(args[current]));
+				else 
+					eother = Espero.PLAYERS.getPlayer(other);
+				if(eother == null) {
 					Messenger.send(player, PlayerMessage.ERROR_PLAYER_NOT_ONLINE.message());
 					return true;
 				}
 				
-				if(other.equals(player)) {
+				if(eother.getUniqueId().equals(player.getUniqueId())) {
 					Messenger.send(player, "#F55You can't promote yourself!");
 					return true;
 				}
-				
-				EsperoPlayer eother = Espero.PLAYERS.getPlayer(other); //new EsperoPlayer(other);
+
 				if(eother.getNation() == null || !eother.getNation().getID().equals(nation.getID())) {
 					Messenger.send(player, PlayerMessage.ERROR_PLAYER_IN_SEPERATE_NATION.message());
 					return true;

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.messaging.PlayerMessage;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.CommandStub;
@@ -36,8 +37,13 @@ public class NationInviteArg extends SubArgument {
 				}
 				
 				Player invitee = Bukkit.getPlayerExact(args[current]);
-				if(invitee == null) {
-					Messenger.send(player, "#F55" + args[current] + " is not online right now or does not exist!");
+				EsperoPlayer eother;
+				if(invitee == null)
+					eother = Espero.PLAYERS.getPlayer(Espero.OFFLINE_PLAYERS.getID(args[current]));
+				else 
+					eother = Espero.PLAYERS.getPlayer(invitee);
+				if(eother == null) {
+					Messenger.send(player, PlayerMessage.ERROR_PLAYER_NOT_ONLINE.message());
 					return true;
 				}
 				
