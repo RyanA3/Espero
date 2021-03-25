@@ -12,6 +12,7 @@ import me.felnstaren.espero.module.nations.command.nation.chat.NationChatSub;
 import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimSub;
 import me.felnstaren.espero.module.nations.command.nation.create.NationCreateSub;
 import me.felnstaren.espero.module.nations.command.nation.demote.NationDemoteSub;
+import me.felnstaren.espero.module.nations.command.nation.disband.NationDisbandSub;
 import me.felnstaren.espero.module.nations.command.nation.info.NationInfoSub;
 import me.felnstaren.espero.module.nations.command.nation.invite.NationInviteSub;
 import me.felnstaren.espero.module.nations.command.nation.join.NationJoinSub;
@@ -74,6 +75,8 @@ public class NationCommandMaster extends MasterCommand {
 						message.addComponent(new TextComponent("\n         claim").setColor("#AAAAAA"));
 					if(rank.isPermitted("claim"))
 						message.addComponent(new TextComponent("\n         unclaim").setColor("#AAAAAA"));
+					if(rank.getLabel().equals("leader"))
+						message.addComponent(new TextComponent("\n         disband").setColor("#AAAAAA"));
 				}
 				
 				Messenger.send(player, message);
@@ -122,6 +125,7 @@ public class NationCommandMaster extends MasterCommand {
 		commands.add(new NationListSub());
 		commands.add(new NationChatSub());
 		commands.add(new NationInfoSub());
+		commands.add(new NationDisbandSub());
 	}
 	
 }

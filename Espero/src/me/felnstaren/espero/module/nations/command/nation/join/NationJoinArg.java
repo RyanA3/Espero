@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.messaging.PlayerMessage;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Nations;
 import me.felnstaren.felib.chat.Messenger;
@@ -20,7 +21,7 @@ public class NationJoinArg extends SubArgument {
 				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 				
 				if(eplayer.getNation() != null) {
-					Messenger.send(player, "#F55You must leave your nation first!");
+					Messenger.send(player, PlayerMessage.ERROR_IN_NATION.message());
 					return true;
 				}
 				
@@ -32,12 +33,12 @@ public class NationJoinArg extends SubArgument {
 				
 				Nation to_join = Nations.inst().getNation(name);
 				if(to_join == null) {
-					Messenger.send(player, "#F55Couldn't find a nation called " + name);
+					Messenger.send(player, PlayerMessage.ERROR_INVALID_ARGUMENT.message().replace("%argument%", name));
 					return true;
 				}
 				
 				if(!to_join.getInvites().contains(player.getUniqueId())) {
-					Messenger.send(player, "#F55This nation hasn't invited you to join them!");
+					Messenger.send(player, PlayerMessage.ERROR_NOT_INVITED.message());
 					return true;
 				}
 				

@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.util.data.BinarySearchable;
 import me.felnstaren.felib.util.data.SearchObject;
 
@@ -61,10 +62,13 @@ public class NationPlayerChatManager extends BinarySearchable<EsperoPlayer> impl
 		if(event.isCancelled()) return;
 		EsperoPlayer player = super.get(SearchObject.getIndexValue(event.getPlayer().getUniqueId()));
 		if(player == null) return;
+		Nation nation = player.getNation();
+		if(nation == null) { unregister(player); return; }
+		
 		event.setCancelled(true);
 		
 		String message = NCHAT_PREFIX + event.getPlayer().getDisplayName() + "   #AAA" + event.getMessage();
-		player.getNation().broadcast(message);
+		nation.broadcast(message);
 	}
 	
 	@EventHandler

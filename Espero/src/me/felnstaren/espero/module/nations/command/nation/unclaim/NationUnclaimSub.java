@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.messaging.PlayerMessage;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimArg;
@@ -24,12 +25,12 @@ public class NationUnclaimSub extends SubCommand {
 				Nation nation = eplayer.getNation();
 				
 				if(nation == null) {
-					Messenger.send(player, "#F55You must be in a nation to use this command!");
+					Messenger.send(player, PlayerMessage.ERROR_NOT_IN_NATION.message());
 					return true;
 				}
 				
 				if(!eplayer.getNationRank().isPermitted("claim")) {
-					Messenger.send(player, "#F55You do not have permission to do this in your nation!");
+					Messenger.send(player, PlayerMessage.ERROR_NATION_PERMISSION.message());
 					return true;
 				}
 				

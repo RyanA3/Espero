@@ -40,9 +40,9 @@ public class NationInfoSub extends SubCommand {
 		String message = "#AAA &a-=&8[ &7" + nation.getDisplayName() + " &8]&a=- \n";
 		message += "#66E Claim[" + nation.getArea() + "] Perimeter[" + nation.getPerimeter() + "] Town[" + nation.getTownArea() + "]\n";
 		message += "#66E Balance[" + nation.getBalance() + "] Members[" + nation.getMembers().size() + "]";
-		message += "\n#999------------[Members]------------\n#6D6";
+		message += "\n#999   [Members]\n#6D6";
 		message += NationMembersSub.constructMembersList(nation);
-		message += "\n#999-------------[Towns]---------------\n#6D6";
+		message += "\n#999   [Towns]\n#6D6";
 		for(Town t : nation.getTowns()) message += " " + t.name;
 		
 		return message;

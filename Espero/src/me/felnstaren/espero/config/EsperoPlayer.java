@@ -76,6 +76,7 @@ public class EsperoPlayer extends DataPlayer {
 	}
 	
 	public void setNationRank(String rank) {
+		if(rank == null || nation == null) this.rank = null; 
 		this.rank = nation.getRank(rank);
 	}
 	
@@ -121,6 +122,7 @@ public class EsperoPlayer extends DataPlayer {
 	protected void save(Loader loader) {
 		if(nation != null) this.config.set("nation", nation.getID().toString());
 		if(rank != null)   this.config.set("nation-rank", rank.getLabel());
+		else               this.config.set("nation-rank", "recruit");
 		this.config.set("rift-count", rifts);
 		this.config.set("sanity.cur-sanity", sanity);
 		this.config.set("sanity.max-sanity", max_sanity);

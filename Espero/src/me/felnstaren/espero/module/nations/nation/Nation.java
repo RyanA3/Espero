@@ -177,7 +177,8 @@ public class Nation implements SearchObject {
 	
 	
 	private void loadTowns() {
-		towns = ConfigReader.readSectionInSectionObjects(config, "towns", Town.class);
+		if(config.getConfigurationSection("towns") == null) towns = new ArrayList<Town>();
+		else towns = ConfigReader.readSectionInSectionObjects(config, "towns", Town.class);
 	}
 	
 	private void loadRanks() {

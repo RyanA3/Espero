@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.messaging.PlayerMessage;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.felib.chat.Messenger;
@@ -22,39 +23,39 @@ public class NationDemoteArg extends SubArgument {
 				Nation nation = eplayer.getNation();
 				
 				if(nation == null) {
-					Messenger.send(player, "#F55You must be in a nation to use this command!");
+					Messenger.send(player, PlayerMessage.ERROR_NOT_IN_NATION.message());
 					return true;
 				}
 				
 				if(!eplayer.getNationRank().isPermitted("demote")) {
-					Messenger.send(player, "#F55You do not have permission to do this in your nation!");
+					Messenger.send(player, PlayerMessage.ERROR_NATION_PERMISSION.message());
 					return true;
 				}
 				
 				Player other = Bukkit.getPlayerExact(args[current]);
-				if(other == null) {
-					Messenger.send(player, "#F55This player is not online at the moment!");
+				if(other == null) { //TODO: Add handling offline players
+					Messenger.send(player, PlayerMessage.ERROR_PLAYER_NOT_ONLINE.message());
 					return true;
 				}
 				
 				EsperoPlayer eother = Espero.PLAYERS.getPlayer(other); //new EsperoPlayer(other);
 				if(eother.getNation() == null || !eother.getNation().getID().equals(nation.getID())) {
-					Messenger.send(player, "#F55This player is not in your nation!");
+					Messenger.send(player, PlayerMessage.ERROR_PLAYER_IN_SEPERATE_NATION.message());
 					return true;
 				}
 				
 				if(eother.getNationRank().getWeight() >= eplayer.getNationRank().getWeight()) {
-					Messenger.send(player, "#F55You can't demote this player!");
+					Messenger.send(player, PlayerMessage.ERROR_CANT_DEMOTE.message());
 					return true;
 				}
 				
 				NationPlayerRank demotion = nation.getNextLowestRank(eother.getNationRank());
 				if(demotion == null) {
-					Messenger.send(player, "#F55This player is already at the lowest rank possible!");
+					Messenger.send(player, PlayerMessage.ERROR_CANT_DEMOTE.message());
 					return true;
 				}
 				
-				eother.setNationRank(demotion.getLabel());
+				eother.setNationRank(demotion);
 				//eother.save();
 				nation.broadcast("#F5F" + other.getDisplayName() + " #5F5has been demoted to the rank of #999" + demotion.getDisplayName() + " #5F5by " + player.getDisplayName());
 				
