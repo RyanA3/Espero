@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.messaging.PlayerMessage;
+import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.nation.Nation;
@@ -27,12 +27,12 @@ public class NationClaimArg extends SubArgument {
 		Nation nation = eplayer.getNation();
 		
 		if(nation == null) {
-			Messenger.send(player, PlayerMessage.ERROR_NOT_IN_NATION.message());
+			Messenger.send(player, Format.ERROR_NOT_IN_NATION.message());
 			return true;
 		}
 		
 		if(!eplayer.getNationRank().isPermitted("claim")) {
-			Messenger.send(player, PlayerMessage.ERROR_NATION_PERMISSION.message());
+			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 			return true;
 		}
 		
@@ -53,13 +53,13 @@ public class NationClaimArg extends SubArgument {
 		}
 		
 		if(!claim.nation.equals(nation.getID())) {
-			Messenger.send(player, PlayerMessage.ERROR_CHUNK_ALREADY_CLAIMED.message());
+			Messenger.send(player, Format.ERROR_CHUNK_ALREADY_CLAIMED.message());
 			return true;
 		}
 		
 		if(claim.town == 0) {
 			if(claim_type == 0) {
-				Messenger.send(player, PlayerMessage.ERROR_CHUNK_ALREADY_CLAIMED.message());
+				Messenger.send(player, Format.ERROR_CHUNK_ALREADY_CLAIMED.message());
 				return true;
 			}
 			
@@ -74,7 +74,7 @@ public class NationClaimArg extends SubArgument {
 				return true;
 			}
 			
-			Messenger.send(player, PlayerMessage.ERROR_CHUNK_ALREADY_CLAIMED.message());				
+			Messenger.send(player, Format.ERROR_CHUNK_ALREADY_CLAIMED.message());				
 		}
 		
 		return true;

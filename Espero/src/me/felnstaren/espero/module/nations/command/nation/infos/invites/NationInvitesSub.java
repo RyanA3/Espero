@@ -3,7 +3,7 @@ package me.felnstaren.espero.module.nations.command.nation.infos.invites;
 import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
-import me.felnstaren.espero.messaging.PlayerMessage;
+import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.command.nation.infos.NationInfosSub;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Color;
@@ -20,7 +20,7 @@ public class NationInvitesSub extends NationInfosSub {
 	
 	public String message(Nation nation) {
 		return nation.neatHeader() 
-				+ PlayerMessage.LABEL_ARG.message("Invites", nation.getInvites().size() + "") + "\n"
+				+ Format.LABEL_ARG.message("Invites", nation.getInvites().size() + "") + "\n"
 				+ constructInvitesList(nation) + "\n";
 	}
 	

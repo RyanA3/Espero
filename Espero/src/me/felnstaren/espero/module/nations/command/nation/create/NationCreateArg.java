@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.messaging.PlayerMessage;
+import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Nations;
 import me.felnstaren.felib.chat.Messenger;
@@ -24,7 +24,7 @@ public class NationCreateArg extends SubArgument {
 		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 		
 		if(eplayer.getNation() != null) {
-			Messenger.send(player, PlayerMessage.ERROR_IN_NATION.message());
+			Messenger.send(player, Format.ERROR_IN_NATION.message());
 			return true;
 		}
 		
@@ -35,12 +35,12 @@ public class NationCreateArg extends SubArgument {
 		}				
 		
 		if(Nations.inst().getNation(name) != null) {
-			Messenger.send(player, PlayerMessage.ERROR_NAME_TAKEN.message());
+			Messenger.send(player, Format.ERROR_NAME_TAKEN.message());
 			return true;
 		}
 		
 		if(args[current].length() > 16) {
-			Messenger.send(player, PlayerMessage.ERROR_TOO_LONG.message().replaceAll("%length%", "16"));
+			Messenger.send(player, Format.ERROR_TOO_LONG.message().replaceAll("%length%", "16"));
 			return true;
 		}
 		

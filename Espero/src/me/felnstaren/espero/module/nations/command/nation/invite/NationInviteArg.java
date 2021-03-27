@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.messaging.PlayerMessage;
+import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
@@ -46,7 +46,7 @@ public class NationInviteArg extends SubArgument {
 		else 
 			eother = Espero.PLAYERS.getPlayer(invitee);
 		if(eother == null) {
-			Messenger.send(player, PlayerMessage.ERROR_PLAYER_NOT_ONLINE.message());
+			Messenger.send(player, Format.ERROR_PLAYER_NOT_ONLINE.message());
 			return true;
 		}
 		

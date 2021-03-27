@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.messaging.PlayerMessage;
+import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.menu.coffer.CofferMenu;
@@ -35,7 +35,7 @@ public class CofferListener implements Listener {
 		ClaimChunk claim = ClaimBoard.inst().getClaim(block.getChunk().getX(), block.getChunk().getZ());
 
 		if(claim == null || !nation.getID().equals(claim.getNation().getID())) {
-			Messenger.send(event.getPlayer(), PlayerMessage.ERROR_COFFERS_OUT_NATION.message());
+			Messenger.send(event.getPlayer(), Format.ERROR_COFFERS_OUT_NATION.message());
 			return;
 		}
 

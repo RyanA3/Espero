@@ -1,6 +1,6 @@
 package me.felnstaren.espero.module.nations.command.nation.infos.towns;
 
-import me.felnstaren.espero.messaging.PlayerMessage;
+import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.command.nation.infos.NationInfosSub;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Town;
@@ -17,7 +17,7 @@ public class NationTownsSub extends NationInfosSub {
 	
 	public String message(Nation nation) {
 		return nation.neatHeader()
-				+ PlayerMessage.LABEL_ARG.message("Towns", nation.getTowns().size() + "") + "\n"
+				+ Format.LABEL_ARG.message("Towns", nation.getTowns().size() + "") + "\n"
 				+ constructTownsList(nation) + "\n";
 	}
 	

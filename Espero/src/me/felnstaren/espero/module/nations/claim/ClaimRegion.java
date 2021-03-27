@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.nations.nation.Nations;
-import me.felnstaren.felib.logger.Level;
 import me.felnstaren.felib.util.data.BinarySearchable;
 
 public class ClaimRegion extends BinarySearchable<ClaimData> {

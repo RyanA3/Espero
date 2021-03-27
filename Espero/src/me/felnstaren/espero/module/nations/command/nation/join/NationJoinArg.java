@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.messaging.PlayerMessage;
+import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Nations;
 import me.felnstaren.felib.chat.Messenger;
@@ -28,7 +28,7 @@ public class NationJoinArg extends SubArgument {
 		
 		Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND A");
 		if(eplayer.getNation() != null) {
-			Messenger.send(player, PlayerMessage.ERROR_IN_NATION.message());
+			Messenger.send(player, Format.ERROR_IN_NATION.message());
 			return true;
 		}
 		
@@ -42,13 +42,13 @@ public class NationJoinArg extends SubArgument {
 		Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND C");
 		Nation to_join = Nations.inst().getNation(name);
 		if(to_join == null) {
-			Messenger.send(player, PlayerMessage.ERROR_INVALID_ARGUMENT.message().replace("%argument%", name));
+			Messenger.send(player, Format.ERROR_INVALID_ARGUMENT.message().replace("%argument%", name));
 			return true;
 		}
 		
 		Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND D");
 		if(!to_join.getInvites().contains(player.getUniqueId())) {
-			Messenger.send(player, PlayerMessage.ERROR_NOT_INVITED.message());
+			Messenger.send(player, Format.ERROR_NOT_INVITED.message());
 			return true;
 		}
 		

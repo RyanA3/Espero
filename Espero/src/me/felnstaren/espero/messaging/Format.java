@@ -2,7 +2,7 @@ package me.felnstaren.espero.messaging;
 
 import me.felnstaren.felib.chat.Color;
 
-public enum PlayerMessage {
+public enum Format {
 	
 	ERROR_COLOR("#F55"),
 	ERROR_TRANSACTION_CANCELLED(ERROR_COLOR + "Transaction Cancelled"),
@@ -25,12 +25,15 @@ public enum PlayerMessage {
 	HEADER_VALUE(Color.LIGHT_GRAY + "-=" + Color.GRAY + "[ " + Color.WHITE + "%value0%" + Color.ARROW_RIGHT + "%value1%" + Color.GRAY + " ]" + Color.LIGHT_GRAY + "=-"),
 	SUBHEADER_VALUE(Color.LIGHT_GRAY + "-" + Color.GRAY + "<" + Color.WHEAT + "%value0%" + Color.ARROW_RIGHT + "%value1%" + Color.GRAY + ">" + Color.LIGHT_GRAY + "-"),
 	ARG(Color.GRAY + "[" + Color.LIGHT_GRAY + "%value0%" + Color.GRAY + "]"),
-	LABEL_ARG(Color.GRAY + "[" + Color.LIGHT_GRAY + "%value0%" + Color.ARROW_RIGHT + "%value1%" + Color.GRAY + "]");
+	LABEL_ARG(Color.GRAY + "[" + Color.LIGHT_GRAY + "%value0%" + Color.ARROW_RIGHT + "%value1%" + Color.GRAY + "]"),
+	FORCE_ARG(Color.GRAY + "<" + Color.LIGHT_GRAY + "%value0%" + Color.GRAY + ">"),
+	FORCE_LABEL_ARG(Color.GRAY + "<" + Color.LIGHT_GRAY + "%value0%" + Color.ARROW_RIGHT + "%value1%" + Color.GRAY + ">");
+	
 	
 	
 	private String message;
 	
-	private PlayerMessage(String message) {
+	private Format(String message) {
 		this.message = message;
 	}
 	

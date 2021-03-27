@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.messaging.PlayerMessage;
+import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.item.util.InventoryEditor;
@@ -42,9 +42,9 @@ public class CofferMenuWithdrawButton implements MenuButton {
 				public void callback(String response) {
 					int amount = 0;
 					try { amount = Math.abs(Integer.parseInt(response)); }
-					catch (Exception e) { Messenger.send(player, PlayerMessage.ERROR_INVALID_ARGUMENT.message().replaceAll("%argument%", response)); }
+					catch (Exception e) { Messenger.send(player, Format.ERROR_INVALID_ARGUMENT.message().replaceAll("%argument%", response)); }
 					if(amount > nation.getBalance()) amount = nation.getBalance();
-					if(amount == 0) { Messenger.send(player, PlayerMessage.ERROR_TRANSACTION_CANCELLED.message()); this.expired = true; return; }
+					if(amount == 0) { Messenger.send(player, Format.ERROR_TRANSACTION_CANCELLED.message()); this.expired = true; return; }
 					
 					InventoryEditor.add(player.getInventory(), new ItemStack(Material.EMERALD), amount, true);
 					nation.addBalance(-amount);
@@ -55,7 +55,7 @@ public class CofferMenuWithdrawButton implements MenuButton {
 		} else {
 			int amount = expected_value;
 			if(amount > nation.getBalance()) amount = nation.getBalance();
-			if(amount == 0) { Messenger.send(session.getPlayer(), PlayerMessage.ERROR_TRANSACTION_CANCELLED.message()); return; }
+			if(amount == 0) { Messenger.send(session.getPlayer(), Format.ERROR_TRANSACTION_CANCELLED.message()); return; }
 			
 			InventoryEditor.add(session.getPlayer().getInventory(), new ItemStack(Material.EMERALD), amount, true);
 			nation.addBalance(-amount);

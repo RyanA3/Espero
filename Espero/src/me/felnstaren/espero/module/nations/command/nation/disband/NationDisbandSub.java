@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.messaging.PlayerMessage;
+import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.nation.Nations;
@@ -29,13 +29,13 @@ public class NationDisbandSub extends SubCommand {
 		Nation nation = eplayer.getNation();
 		
 		if(nation == null) {
-			Messenger.send(player, PlayerMessage.ERROR_NOT_IN_NATION.message());
+			Messenger.send(player, Format.ERROR_NOT_IN_NATION.message());
 			return true;
 		}
 		
 		NationPlayerRank rank = eplayer.getNationRank();
 		if(!rank.getLabel().equals("leader")) {
-			Messenger.send(player, PlayerMessage.ERROR_NATION_PERMISSION.message());
+			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 			return true;
 		}
 		

@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.messaging.PlayerMessage;
+import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.chat.NationPlayerChatManager;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubCommand;
@@ -21,7 +21,7 @@ public class NationChatSub extends SubCommand {
 		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
 		
 		if(eplayer.getNation() == null) {
-			Messenger.send(player, PlayerMessage.ERROR_NOT_IN_NATION.message());
+			Messenger.send(player, Format.ERROR_NOT_IN_NATION.message());
 			return true;
 		}
 		
