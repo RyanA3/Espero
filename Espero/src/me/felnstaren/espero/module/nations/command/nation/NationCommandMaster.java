@@ -13,7 +13,10 @@ import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimSub;
 import me.felnstaren.espero.module.nations.command.nation.create.NationCreateSub;
 import me.felnstaren.espero.module.nations.command.nation.demote.NationDemoteSub;
 import me.felnstaren.espero.module.nations.command.nation.disband.NationDisbandSub;
-import me.felnstaren.espero.module.nations.command.nation.info.NationInfoSub;
+import me.felnstaren.espero.module.nations.command.nation.infos.info.NationInfoSub;
+import me.felnstaren.espero.module.nations.command.nation.infos.invites.NationInvitesSub;
+import me.felnstaren.espero.module.nations.command.nation.infos.members.NationMembersSub;
+import me.felnstaren.espero.module.nations.command.nation.infos.towns.NationTownsSub;
 import me.felnstaren.espero.module.nations.command.nation.invite.NationInviteSub;
 import me.felnstaren.espero.module.nations.command.nation.join.NationJoinSub;
 import me.felnstaren.espero.module.nations.command.nation.kick.NationKickSub;
@@ -21,9 +24,9 @@ import me.felnstaren.espero.module.nations.command.nation.leader.NationLeaderSub
 import me.felnstaren.espero.module.nations.command.nation.leave.NationLeaveSub;
 import me.felnstaren.espero.module.nations.command.nation.list.NationListSub;
 import me.felnstaren.espero.module.nations.command.nation.map.NationMapSub;
-import me.felnstaren.espero.module.nations.command.nation.members.NationMembersSub;
 import me.felnstaren.espero.module.nations.command.nation.promote.NationPromoteSub;
 import me.felnstaren.espero.module.nations.command.nation.unclaim.NationUnclaimSub;
+import me.felnstaren.espero.module.nations.command.nation.uninvite.NationUninviteSub;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.nation.Nations;
@@ -31,58 +34,13 @@ import me.felnstaren.espero.module.nations.nation.Town;
 import me.felnstaren.felib.chat.Message;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.chat.TextComponent;
-import me.felnstaren.felib.command.CommandStub;
 import me.felnstaren.felib.command.MasterCommand;
 import me.felnstaren.felib.command.TabSuggestor;
 
 public class NationCommandMaster extends MasterCommand {
 
 	public NationCommandMaster() {
-		super(new CommandStub() {
-			public boolean handle(CommandSender sender, String[] args, int current) {
-				Player player = (Player) sender;
-				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
-				Nation nation = eplayer.getNation();
-				
-				Message message = new Message();
-				message.addComponent(new TextComponent("-= Nations =-").setColor("#0077FF"));
-				message.addComponent(new TextComponent("   by Felns").setColor("#CCCCCC").setItalic(true));
-				message.addComponent(new TextComponent("\n /nation").setColor("#AAAAAA"));
-				message.addComponent(new TextComponent("\n         map").setColor("#AAAAAA"));
-				message.addComponent(new TextComponent("\n         members [nation]").setColor("#AAAAAA"));
-				message.addComponent(new TextComponent("\n         list").setColor("#AAAAAA"));
-				message.addComponent(new TextComponent("\n         chat").setColor("#AAAAAA"));
-				message.addComponent(new TextComponent("\n         info").setColor("#AAAAAA"));
-				
-				if(nation == null) {
-					message.addComponent(new TextComponent("\n         create <name>").setColor("#AAAAAA"));
-					message.addComponent(new TextComponent("\n         join <nation>").setColor("#AAAAAA"));
-				} else {
-					message.addComponent(new TextComponent("\n         leave").setColor("#AAAAAA"));
-					
-					NationPlayerRank rank = eplayer.getNationRank();
-					if(rank.isPermitted("recruit")) 
-						message.addComponent(new TextComponent("\n         invite <player>").setColor("#AAAAAA"));
-					if(rank.isPermitted("kick"))
-						message.addComponent(new TextComponent("\n         kick <player>").setColor("#AAAAAA"));
-					if(rank.isPermitted("promote"))
-						message.addComponent(new TextComponent("\n         promote <player>").setColor("#AAAAAA"));
-					if(rank.isPermitted("demote"))
-						message.addComponent(new TextComponent("\n         demote <player>").setColor("#AAAAAA"));
-					if(nation.getNextHighestRank(rank) == null)
-						message.addComponent(new TextComponent("\n         leader <player>").setColor("#AAAAAA"));
-					if(rank.isPermitted("claim"))
-						message.addComponent(new TextComponent("\n         claim").setColor("#AAAAAA"));
-					if(rank.isPermitted("claim"))
-						message.addComponent(new TextComponent("\n         unclaim").setColor("#AAAAAA"));
-					if(rank.getLabel().equals("leader"))
-						message.addComponent(new TextComponent("\n         disband").setColor("#AAAAAA"));
-				}
-				
-				Messenger.send(player, message);
-				return true;
-			}
-		}, "nation", "espero.nation", 
+		super("nation", "espero.nation", 
 		new TabSuggestor("<player>") {
 			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
 				ArrayList<String> players = new ArrayList<String>();
@@ -126,6 +84,59 @@ public class NationCommandMaster extends MasterCommand {
 		commands.add(new NationChatSub());
 		commands.add(new NationInfoSub());
 		commands.add(new NationDisbandSub());
+		commands.add(new NationInvitesSub());
+		commands.add(new NationTownsSub());
+		commands.add(new NationUninviteSub());
+	}
+	
+	
+	
+	public boolean stub(CommandSender sender, String[] args, int current) {
+		Player player = (Player) sender;
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
+		Nation nation = eplayer.getNation();
+		
+		Message message = new Message();
+		message.addComponent(new TextComponent("-= Nations =-").setColor("#0077FF"));
+		message.addComponent(new TextComponent("   by Felns").setColor("#CCCCCC").setItalic(true));
+		message.addComponent(new TextComponent("\n /nation").setColor("#AAAAAA"));
+		message.addComponent(new TextComponent("\n         map").setColor("#AAAAAA"));
+		message.addComponent(new TextComponent("\n         members [nation]").setColor("#AAAAAA"));
+		message.addComponent(new TextComponent("\n         invites [nation]").setColor("#AAAAAA"));
+		message.addComponent(new TextComponent("\n         towns [nation]").setColor("#AAAAAA"));
+		message.addComponent(new TextComponent("\n         list").setColor("#AAAAAA"));
+		message.addComponent(new TextComponent("\n         chat").setColor("#AAAAAA"));
+		message.addComponent(new TextComponent("\n         info").setColor("#AAAAAA"));
+		
+		if(nation == null) {
+			message.addComponent(new TextComponent("\n         create <name>").setColor("#AAAAAA"));
+			message.addComponent(new TextComponent("\n         join <nation>").setColor("#AAAAAA"));
+		} else {
+			message.addComponent(new TextComponent("\n         leave").setColor("#AAAAAA"));
+			
+			NationPlayerRank rank = eplayer.getNationRank();
+			if(rank.isPermitted("recruit")) {
+				message.addComponent(new TextComponent("\n         invite <player>").setColor("#AAAAAA"));
+				message.addComponent(new TextComponent("\n         uninvite <player>").setColor("#AAAAAA"));
+			}
+			if(rank.isPermitted("kick"))
+				message.addComponent(new TextComponent("\n         kick <player>").setColor("#AAAAAA"));
+			if(rank.isPermitted("promote"))
+				message.addComponent(new TextComponent("\n         promote <player>").setColor("#AAAAAA"));
+			if(rank.isPermitted("demote"))
+				message.addComponent(new TextComponent("\n         demote <player>").setColor("#AAAAAA"));
+			if(nation.getNextHighestRank(rank) == null)
+				message.addComponent(new TextComponent("\n         leader <player>").setColor("#AAAAAA"));
+			if(rank.isPermitted("claim"))
+				message.addComponent(new TextComponent("\n         claim").setColor("#AAAAAA"));
+			if(rank.isPermitted("claim"))
+				message.addComponent(new TextComponent("\n         unclaim").setColor("#AAAAAA"));
+			if(rank.getLabel().equals("leader"))
+				message.addComponent(new TextComponent("\n         disband").setColor("#AAAAAA"));
+		}
+		
+		Messenger.send(player, message);
+		return true;
 	}
 	
 }

@@ -52,7 +52,7 @@ public class ClaimRegion extends BinarySearchable<ClaimData> {
 	
 	public ClaimData getClaim(int x, int z) {
 		int offx = Math.abs(x) % WIDTH; int offz = Math.abs(z) % HEIGH;  //Modulo to get into relative chunk coords
-		Espero.LOGGER.log(Level.DEBUG, "Chunk(" + x + "," + z + ") -> (" + offx + "," + offz + ") -> " + (offz * WIDTH + offx));
+		//Espero.LOGGER.log(Level.DEBUG, "Chunk(" + x + "," + z + ") -> (" + offx + "," + offz + ") -> " + (offz * WIDTH + offx));
 		return getClaim(offz * WIDTH + offx);
 	}
 	
@@ -163,7 +163,7 @@ public class ClaimRegion extends BinarySearchable<ClaimData> {
 				if(offx == px && offz == pz) map += "+";
 				else if(data == null) map += "-";
 				else map += "#";
-				Espero.LOGGER.log(Level.DEBUG, "Chunk at (" + (offx + (x * WIDTH)) + "," + (offz + (z * HEIGH)) + "): " + data == null ? data.nation() + "" : "none");
+				//Espero.LOGGER.log(Level.DEBUG, "Chunk at (" + (offx + (x * WIDTH)) + "," + (offz + (z * HEIGH)) + "): " + data == null ? data.nation() + "" : "none");
 			}
 			map += "\n";
 		}

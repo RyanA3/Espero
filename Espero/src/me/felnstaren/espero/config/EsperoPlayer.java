@@ -33,14 +33,26 @@ public class EsperoPlayer extends DataPlayer {
 	
 	
 	private Nation loadNation() {
+		Espero.LOGGER.log(Level.DEBUG, "Loading nation for player " + uuid.toString());
+		
 		String nation_id = config.getString("nation", "");
-		if(nation_id.length() == 0) return null;
+		if(nation_id.length() == 0) {
+			Espero.LOGGER.log(Level.DEBUG, "Nation unset, return null");
+			return null;
+		}
 		
 		Nation nation = Nations.inst().getNation(UUID.fromString(nation_id));
-		if(nation == null) return null;
+		if(nation == null) {
+			Espero.LOGGER.log(Level.DEBUG, "Nation not found, return null");
+			return null;
+		}
 		
+		Espero.LOGGER.log(Level.DEBUG, "Found nation: " + nation.getDisplayName());
 		if(nation.getMembers().contains(uuid)) return nation;
-		else return null;
+		else {
+			Espero.LOGGER.log(Level.DEBUG, "Nation no longer contains player, return null");
+			return null;
+		}
 	}
 	
 	public Nation getNation() {
@@ -48,15 +60,19 @@ public class EsperoPlayer extends DataPlayer {
 	}
 	
 	public void setNation(Nation join) {
-		if(join == null && nation != null) 
+		if(join == null && nation != null) {
 			nation.getMembers().remove(uuid);
-		else {
+		} else {
 			join.getMembers().add(uuid);
 			join.getInvites().remove(uuid);
 			setNationRank(join.getRank("recruit"));
 		}
 		
 		this.nation = join;
+		String message = "SETTING NATION: ";
+		if(nation != null) message += nation.getDisplayName();
+		else message += "none";
+		Espero.LOGGER.log(Level.DEBUG, message);
 	}
 	
 	
@@ -121,6 +137,7 @@ public class EsperoPlayer extends DataPlayer {
 	@Override
 	protected void save(Loader loader) {
 		if(nation != null) this.config.set("nation", nation.getID().toString());
+		else this.config.set("nation", "");
 		if(rank != null)   this.config.set("nation-rank", rank.getLabel());
 		else               this.config.set("nation-rank", "recruit");
 		this.config.set("rift-count", rifts);
@@ -133,7 +150,7 @@ public class EsperoPlayer extends DataPlayer {
 	protected void load(Loader loader) {
 		super.load(loader);
 		
-		nation = loadNation();
+		this.nation = loadNation();
 		rank = loadNationRank();
 		
 		rifts = config.getInt("rift-count");

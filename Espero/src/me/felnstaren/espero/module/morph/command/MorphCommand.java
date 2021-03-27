@@ -45,9 +45,8 @@ public class MorphCommand implements CommandExecutor {
 			return true;
 		}
 		
-		//if(entity_type == PacketEntityType.HORSE) mman.morph(new RideableMorph(player, entity_type));
-		//else
-		mman.morph(new EntityMorph(player, entity_type));
+		if(entity_type == PacketEntityType.HORSE) mman.morph(new RideableMorph(player, entity_type));
+		else mman.morph(new EntityMorph(player, entity_type));
 		Messenger.send(player, "#5F5You are now a " + entity_type.name().replaceAll("HORSE", "HONSE"));
 		
 		return true;

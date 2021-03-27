@@ -1,4 +1,4 @@
-package me.felnstaren.espero.module.nations.command.nation.invite;
+package me.felnstaren.espero.module.nations.command.nation.uninvite;
 
 import java.util.UUID;
 
@@ -13,29 +13,24 @@ import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 
-public class NationInviteArg extends SubArgument {
+public class NationUninviteArg extends SubArgument {
 
-	//Poggers for Programming
-	//LoveArrow was here
-	
-	public NationInviteArg() {
+	public NationUninviteArg() {
 		super("<player>");
 	}
-	
-	
-	
+
 	public boolean stub(CommandSender sender, String[] args, int current) {
 		Player player = (Player) sender;
 		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
 		Nation nation = eplayer.getNation();
 		
 		if(nation == null) {
-			Messenger.send(player, "#F55You must be in a nation to invite someone to it!");
+			Messenger.send(player, "#F55You must be in a nation to revoke an invitation to it!");
 			return true;
 		}
 		
 		if(!eplayer.hasPermission("recruit", nation)) {
-			Messenger.send(player, "#F55You do not have permission to invite players into your nation!");
+			Messenger.send(player, "#F55You do not have permission to revoke invitations in your nation!");
 			return true;
 		}
 		
@@ -51,18 +46,16 @@ public class NationInviteArg extends SubArgument {
 		}
 		
 		UUID iid = eother.getUniqueId();
-		if(nation.getInvites().contains(iid) || nation.getMembers().contains(iid)) {
-			Messenger.send(player, "#F55" + args[current] + " is already invited or a member of this nation!");
+		if(!nation.getInvites().contains(iid) || nation.getMembers().contains(iid)) {
+			Messenger.send(player, "#F55" + args[current] + " is not invited nation!");
 			return true;
 		}
 		
-		nation.getInvites().add(eother.getUniqueId());
-		//nation.save();
-		
-		nation.broadcast("#5F5" + player.getDisplayName() + " has invited " + args[current] + " to the nation!");
-		if(invitee != null) Messenger.send(invitee, "#5F5You've been invited to join " + nation.getDisplayName());
+		nation.getInvites().remove(eother.getUniqueId());
+		nation.broadcast("#5F5" + player.getDisplayName() + " has revoked " + args[current] + "'s invitation to the nation!");
+		if(invitee != null) Messenger.send(invitee, "#5F5Your invitation to " + nation.getDisplayName() + " was revoked!");
 		
 		return true;
 	}
-	
+
 }

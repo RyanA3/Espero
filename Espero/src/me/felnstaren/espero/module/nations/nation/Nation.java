@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.messaging.PlayerMessage;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.config.ConfigReader;
 import me.felnstaren.felib.logger.Level;
@@ -244,6 +245,10 @@ public class Nation implements SearchObject {
 	
 	public int searchValue() {
 		return SearchObject.getIndexValue(id);
+	}
+	
+	public String neatHeader() {
+		return PlayerMessage.HEADER.message(display_name);
 	}
 	
 }

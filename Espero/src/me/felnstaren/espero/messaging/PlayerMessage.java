@@ -1,5 +1,7 @@
 package me.felnstaren.espero.messaging;
 
+import me.felnstaren.felib.chat.Color;
+
 public enum PlayerMessage {
 	
 	ERROR_COLOR("#F55"),
@@ -16,7 +18,14 @@ public enum PlayerMessage {
 	ERROR_CANT_KICK(ERROR_COLOR + "You cannot kick this player!"), 
 	ERROR_INVALID_ARGUMENT(ERROR_COLOR + "Invalid Argument: %argument%"),
 	ERROR_NOT_INVITED(ERROR_COLOR + "You have not been invited by this nation!"),
-	ERROR_COFFERS_OUT_NATION(ERROR_COLOR + "You can only access your coffers in your own nation!");
+	ERROR_COFFERS_OUT_NATION(ERROR_COLOR + "You can only access your coffers in your own nation!"),
+	
+	HEADER(Color.LIGHT_GRAY + "-=" + Color.GRAY + "[ " + Color.WHITE + "%value0%" + Color.GRAY + " ]" + Color.LIGHT_GRAY + "=- "),
+	SUBHEADER(Color.LIGHT_GRAY + "-" + Color.GRAY + "<" + Color.WHEAT + "%value0%" + Color.GRAY + ">" + Color.LIGHT_GRAY + "-"),
+	HEADER_VALUE(Color.LIGHT_GRAY + "-=" + Color.GRAY + "[ " + Color.WHITE + "%value0%" + Color.ARROW_RIGHT + "%value1%" + Color.GRAY + " ]" + Color.LIGHT_GRAY + "=-"),
+	SUBHEADER_VALUE(Color.LIGHT_GRAY + "-" + Color.GRAY + "<" + Color.WHEAT + "%value0%" + Color.ARROW_RIGHT + "%value1%" + Color.GRAY + ">" + Color.LIGHT_GRAY + "-"),
+	ARG(Color.GRAY + "[" + Color.LIGHT_GRAY + "%value0%" + Color.GRAY + "]"),
+	LABEL_ARG(Color.GRAY + "[" + Color.LIGHT_GRAY + "%value0%" + Color.ARROW_RIGHT + "%value1%" + Color.GRAY + "]");
 	
 	
 	private String message;
@@ -27,6 +36,13 @@ public enum PlayerMessage {
 	
 	public String message() {
 		return message;
+	}
+	
+	public String message(String... values) {
+		String out = message + "";
+		for(int i = 0; i < values.length; i++)
+			out = out.replaceAll("%value" + i + "%", values[i]);
+		return out;
 	}
 	
 	@Override

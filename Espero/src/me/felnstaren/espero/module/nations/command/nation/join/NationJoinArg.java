@@ -9,47 +9,56 @@ import me.felnstaren.espero.messaging.PlayerMessage;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Nations;
 import me.felnstaren.felib.chat.Messenger;
-import me.felnstaren.felib.command.CommandStub;
 import me.felnstaren.felib.command.SubArgument;
+import me.felnstaren.felib.logger.Level;
 
 public class NationJoinArg extends SubArgument {
 
 	public NationJoinArg() {
-		super(new CommandStub() {
-			public boolean handle(CommandSender sender, String[] args, int current) {
-				Player player = (Player) sender;
-				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
-				
-				if(eplayer.getNation() != null) {
-					Messenger.send(player, PlayerMessage.ERROR_IN_NATION.message());
-					return true;
-				}
-				
-				String name = "";
-				for(int i = 1; i < args.length && i < 4; i++) {
-					if(i > 1) name += " ";
-					name += args[i];
-				}
-				
-				Nation to_join = Nations.inst().getNation(name);
-				if(to_join == null) {
-					Messenger.send(player, PlayerMessage.ERROR_INVALID_ARGUMENT.message().replace("%argument%", name));
-					return true;
-				}
-				
-				if(!to_join.getInvites().contains(player.getUniqueId())) {
-					Messenger.send(player, PlayerMessage.ERROR_NOT_INVITED.message());
-					return true;
-				}
-				
-				eplayer.setNation(to_join);
-				//eplayer.save();
-				to_join.save();
-				
-				to_join.broadcast("5F5" + to_join.getDisplayName() + " has joined the nation!");
-				return true;
-			}
-		}, "<nation>");
+		super("<nation>");
+	}
+	
+	
+	
+	public boolean stub(CommandSender sender, String[] args, int current) {
+		Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND");
+		
+		Player player = (Player) sender;
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
+		
+		Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND A");
+		if(eplayer.getNation() != null) {
+			Messenger.send(player, PlayerMessage.ERROR_IN_NATION.message());
+			return true;
+		}
+		
+		Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND B");
+		String name = "";
+		for(int i = 1; i < args.length && i < 4; i++) {
+			if(i > 1) name += " ";
+			name += args[i];
+		}
+		
+		Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND C");
+		Nation to_join = Nations.inst().getNation(name);
+		if(to_join == null) {
+			Messenger.send(player, PlayerMessage.ERROR_INVALID_ARGUMENT.message().replace("%argument%", name));
+			return true;
+		}
+		
+		Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND D");
+		if(!to_join.getInvites().contains(player.getUniqueId())) {
+			Messenger.send(player, PlayerMessage.ERROR_NOT_INVITED.message());
+			return true;
+		}
+		
+		Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND E");
+		eplayer.setNation(to_join);
+		//eplayer.save();
+		//to_join.save();
+		
+		to_join.broadcast("#5F5" + player.getName() + " has joined the nation!");
+		return true;
 	}
 	
 }

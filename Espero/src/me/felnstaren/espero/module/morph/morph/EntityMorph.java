@@ -152,9 +152,10 @@ public class EntityMorph {
 	protected DataWatcherWrapper getCurrentWatcher() {
 		DataWatcherWrapper entity_watcher = new DataWatcherWrapper(null, true);
 		entity_watcher.register(MetadataValue.ENTITY_INFO_BYTE, genEntityInfoByte());
-		entity_watcher.register(MetadataValue.ENTITY_CUSTOM_NAME, Optional.of(Reflector.newInstanceOf("ChatComponentText", player.getDisplayName())));
+		//entity_watcher.register(MetadataValue.ENTITY_CUSTOM_NAME, Optional.of(Reflector.newInstanceOf("ChatComponentText", player.getDisplayName())));
 		entity_watcher.register(MetadataValue.ENTITY_IS_CUSTOM_NAME_VISIBLE, true);
 		entity_watcher.register(MetadataValue.LIVING_ENTITY_HEALTH, (float) player.getHealth());
+		//entity_watcher.register(MetadataValue.LIVING_ENTITY_INFO_BYTE, ByteInfo.createWithSet(ByteInfo.LIVING_ENTITY_IS_RIPTIDING));
 		return entity_watcher;
 	}
 	
