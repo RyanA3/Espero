@@ -11,6 +11,7 @@ import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.command.nation.NationCommandMaster;
 import me.felnstaren.espero.module.nations.listener.ClaimInfoListener;
 import me.felnstaren.espero.module.nations.listener.CofferListener;
+import me.felnstaren.espero.module.nations.listener.NationRelationCombatListener;
 import me.felnstaren.espero.module.nations.listener.PlayerClaimInteractHandler;
 import me.felnstaren.espero.module.nations.nation.Nations;
 import me.felnstaren.felib.logger.Level;
@@ -29,7 +30,7 @@ public class NationsModule implements IModule {
 		Nations.init();
 		ClaimBoard.init();
 		NationPlayerChatManager.init(plugin);
-		
+
 		save_task.runTaskTimer(plugin, 100, 10000);
 		
 		plugin.getCommand("nation").setExecutor(new NationCommandMaster());
@@ -38,6 +39,7 @@ public class NationsModule implements IModule {
 		pm.registerEvents(new ClaimInfoListener(), plugin);
 		pm.registerEvents(new PlayerClaimInteractHandler(), plugin);
 		pm.registerEvents(new CofferListener(), plugin);
+		pm.registerEvents(new NationRelationCombatListener(), plugin);
 	}
 
 	public void onDisable(JavaPlugin plugin) {

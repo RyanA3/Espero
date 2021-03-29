@@ -9,16 +9,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.infoout.InfoMessage;
-import me.felnstaren.espero.module.nations.infoout.InfoMessageController;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRelation;
 
 public class NationRelationCombatListener implements Listener {
 	
-	private InfoMessageController imc;
-	
-	
-
 	@EventHandler
 	public void onWombat(EntityDamageByEntityEvent event) {
 		if(!(event.getEntity() instanceof Player)) return;
@@ -40,12 +35,12 @@ public class NationRelationCombatListener implements Listener {
 		if(victim_nation == null || damager_nation == null) return;
 		
 		if(victim_nation.getID().equals(damager_nation.getID())) {
-			imc.send(damager, InfoMessage.CANT_COMBAT_NATION);
+			Espero.IMC.send(damager, InfoMessage.CANT_COMBAT_NATION);
 			event.setCancelled(true); return;
 		}
 		
 		if(victim_nation.getRelation(damager_nation.getID()) == NationRelation.ALLY) {
-			imc.send(damager, InfoMessage.CANT_COMBAT_ALLY);
+			Espero.IMC.send(damager, InfoMessage.CANT_COMBAT_ALLY);
 			event.setCancelled(true); return;
 		}
 	}
