@@ -11,6 +11,7 @@ public class Town implements ConfigurationSectionObject {
 	private int z;
 	private int id;
 	public String name;
+	private int area;
 	
 	public Town(ConfigurationSection data) {
 		load(data);
@@ -21,18 +22,21 @@ public class Town implements ConfigurationSectionObject {
 		this.id = id;
 		this.x = x;
 		this.z = z;
+		this.area = 0;
 	}
 	
 	
 	
-	public int getID() {
-		return id;
-	}
+	public int getID() { return id; }
+	public int getArea() { return area;	}
+	public void setArea(int value) { this.area = value;	}
+	public void addArea(int value) { this.area += value; }
 	
 	public void save(YamlConfiguration config) {
 		config.set("towns." + id + ".cx", x);
 		config.set("towns." + id + ".cz", z);
 		config.set("towns." + id + ".display_name", name);
+		config.set("towns." + id + ".area", area);
 	}
 
 	
@@ -43,6 +47,7 @@ public class Town implements ConfigurationSectionObject {
 		this.name = data.getString("display_name");
 		this.x = data.getInt("cx");
 		this.z = data.getInt("cz");
+		this.area = data.getInt("area", 0);
 		return this;
 	}
 	

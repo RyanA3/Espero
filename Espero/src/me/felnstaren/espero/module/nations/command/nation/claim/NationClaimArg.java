@@ -11,6 +11,7 @@ import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Town;
+import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 
@@ -47,7 +48,7 @@ public class NationClaimArg extends SubArgument {
 		
 		if(claim == null) {
 			ClaimBoard.inst().claim(cx, cz, nation.getID(), 0);
-			nation.broadcast("#5F5" + player.getDisplayName() + " #5F5claimed chunk at (" + loc.getX() + "," + loc.getZ() + ") for nation");
+			nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " claimed chunk at (" + loc.getX() + "," + loc.getZ() + ") for nation");
 			updateNationArea(cx, cz, 1, nation);
 			return true;
 		}
@@ -63,13 +64,19 @@ public class NationClaimArg extends SubArgument {
 				return true;
 			}
 			
-			ClaimBoard.inst().claim(loc.getX(), loc.getZ(), nation.getID(), claim_type);
-			nation.broadcast("#5F5" + player.getDisplayName() + " #5F5modified chunk at (" + loc.getX() + "," + loc.getZ() + ") from nation to " + args[current]);
-			nation.addTownArea(1);
+			if(isTouching(cx, cz, nation, claim_type)) {
+				ClaimBoard.inst().claim(cx, cz, nation.getID(), claim_type);
+				nation.getTown(claim_type).addArea(1);
+				nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " modified chunk at (" + cx + "," + cz + ") from nation to " + args[current]);
+				nation.addTownArea(1);
+			} else {
+				Messenger.send(player, Color.RED + "Town claims cannot be disconnected from their town!");
+				return true;
+			}
 		} else {
 			if(claim_type == 0) {
-				ClaimBoard.inst().claim(loc.getX(), loc.getZ(), nation.getID(), claim_type);
-				nation.broadcast("#5F5" + player.getDisplayName() + " #5F5modified chunk at (" + loc.getX()+ "," + loc.getZ() + ") from town to nation");
+				ClaimBoard.inst().claim(cx, cz, nation.getID(), claim_type);
+				nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " modified chunk at (" + cx + "," + cz + ") from town to nation");
 				nation.addTownArea(-1);
 				return true;
 			}
@@ -103,6 +110,13 @@ public class NationClaimArg extends SubArgument {
 		if(check != null && check.nation.equals(nation.getID())) nation.addPerimeter(-claim_action);
 		else nation.addPerimeter(claim_action);
 		nation.addArea(claim_action);
+	}
+	
+	public static boolean isTouching(int cx, int cz, Nation nation, int town) {
+		return ClaimBoard.inst().isTown(cx+1, cz, nation, town)
+				|| ClaimBoard.inst().isTown(cx-1, cz, nation, town)
+				|| ClaimBoard.inst().isTown(cx, cz+1, nation, town)
+				|| ClaimBoard.inst().isTown(cx, cz-1, nation, town);
 	}
 
 }

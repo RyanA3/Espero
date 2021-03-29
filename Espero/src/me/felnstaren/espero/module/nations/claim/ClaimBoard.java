@@ -3,6 +3,7 @@ package me.felnstaren.espero.module.nations.claim;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.Nations;
 
 public class ClaimBoard {
@@ -40,6 +41,27 @@ public class ClaimBoard {
 		if(Nations.inst().getNation(nation) == null) return null;
 		
 		return new ClaimChunk(x, z, region.getRelativeNation(data.nation()), data.town()); 
+	}
+	
+	public boolean isNation(int x, int z, Nation nation) {
+		return isNation(x, z, nation.getID());
+	}
+	
+	public boolean isNation(int x, int z, UUID nation) {
+		ClaimChunk claim = getClaim(x, z);
+		if(claim == null || claim.nation == null) return false;
+		return claim.nation.equals(nation);
+	}
+	
+	public boolean isTown(int x, int z, Nation nation, int town) {
+		return isTown(x, z, nation.getID(), town);
+	}
+	
+	public boolean isTown(int x, int z, UUID nation, int town) {
+		ClaimChunk claim = getClaim(x, z);
+		if(claim == null || claim.nation == null) return false;
+		if(!claim.nation.equals(nation)) return false;
+		return town == claim.town;
 	}
 	
 	/**

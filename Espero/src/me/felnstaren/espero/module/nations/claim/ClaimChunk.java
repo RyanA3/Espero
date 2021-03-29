@@ -39,5 +39,26 @@ public class ClaimChunk {
 	public ClaimChunk getRelative(int offX, int offZ) {
 		return ClaimBoard.inst().getClaim(x + offX, z + offZ);
 	}
+	
+	
+	
+	public static boolean isNation(ClaimChunk chunk, UUID nation) {
+		if(chunk == null || chunk.nation == null) return false;
+		return chunk.nation.equals(nation);
+	}
+	
+	/**
+	 * 
+	 * @param chunk
+	 * @param nation
+	 * @param town  -1 = Ignore Town Argument   0 = No Town   1-Infinity = Town ID
+	 * @return
+	 */
+	public static boolean isTown(ClaimChunk chunk, UUID nation, int town) {
+		if(chunk == null || chunk.nation == null) return false;
+		if(!chunk.nation.equals(nation)) return false;
+		if(town == -1) return true;
+		return chunk.town == town;
+	}
 
 }
