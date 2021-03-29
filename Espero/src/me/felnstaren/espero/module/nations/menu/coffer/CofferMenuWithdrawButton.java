@@ -1,15 +1,14 @@
 package me.felnstaren.espero.module.nations.menu.coffer;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
+import me.felnstaren.espero.module.economy.Economy;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
-import me.felnstaren.felib.item.util.InventoryEditor;
 import me.felnstaren.felib.ui.menu.MenuButton;
 import me.felnstaren.felib.ui.menu.MenuSession;
 import me.felnstaren.felib.ui.menu.MenuSessionHandler;
@@ -46,7 +45,7 @@ public class CofferMenuWithdrawButton implements MenuButton {
 					if(amount > nation.getBalance()) amount = nation.getBalance();
 					if(amount == 0) { Messenger.send(player, Format.ERROR_TRANSACTION_CANCELLED.message()); this.expired = true; return; }
 					
-					InventoryEditor.add(player.getInventory(), new ItemStack(Material.EMERALD), amount, true);
+					Economy.deposit(player, amount);
 					nation.addBalance(-amount);
 					nation.broadcast("#FF4" + player.getName() + " withdrew " + amount + "E from the nation's coffers!");
 					this.expired = true;
@@ -57,7 +56,7 @@ public class CofferMenuWithdrawButton implements MenuButton {
 			if(amount > nation.getBalance()) amount = nation.getBalance();
 			if(amount == 0) { Messenger.send(session.getPlayer(), Format.ERROR_TRANSACTION_CANCELLED.message()); return; }
 			
-			InventoryEditor.add(session.getPlayer().getInventory(), new ItemStack(Material.EMERALD), amount, true);
+			Economy.deposit(player, amount);
 			nation.addBalance(-amount);
 			nation.broadcast("#FF4" + session.getPlayer().getName() + " withdrew " + amount + "E from the nation's coffers!");
 			((CofferMenu) session.getMenu()).update();

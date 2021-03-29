@@ -2,6 +2,7 @@ package me.felnstaren.espero.module.nations.nation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -47,6 +48,7 @@ public class Nation implements SearchObject {
 			loadTowns();
 			loadRanks();
 			loadUsers();
+			loadRelations();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Espero.LOGGER.log(Level.SEVERE, "Corruption presence at unsafe levels");
@@ -67,6 +69,7 @@ public class Nation implements SearchObject {
 			members = new ArrayList<UUID>();
 			//members.add(owner.getUniqueId());
 			invites = new ArrayList<UUID>();
+			relations = new HashMap<UUID, NationRelation>();
 		
 			owner.setNation(this);
 			owner.setNationRank(this.getRank("leader"));
@@ -85,13 +88,12 @@ public class Nation implements SearchObject {
 	
 	
 	
-	public ArrayList<UUID> getMembers() {
-		return members;
-	}
+	public ArrayList<UUID> getMembers() { return members; }
+	public ArrayList<Town> getTowns() { return towns; }
+	public ArrayList<UUID> getInvites() { return invites; }
+	public UUID getID() { return id; }
+	public String getDisplayName() { return display_name; }
 	
-	public ArrayList<Town> getTowns() {
-		return towns;
-	}
 	
 	public ArrayList<Player> getOnlineMembers() {
 		ArrayList<Player> players = new ArrayList<Player>();
@@ -104,19 +106,16 @@ public class Nation implements SearchObject {
 		return players;
 	}
 	
-	public ArrayList<UUID> getInvites() {
-		return invites;
+	public Town getTown(int id) {
+		for(Town t : towns)
+			if(t.getID() == id) return t;
+		return null;
 	}
+	
 	
 	public NationPlayerRank getRank(String label) {
 		for(NationPlayerRank rank : ranks)
 			if(rank.getLabel().equals(label)) return rank;
-		return null;
-	}
-	
-	public Town getTown(int id) {
-		for(Town t : towns)
-			if(t.getID() == id) return t;
 		return null;
 	}
 	
@@ -144,13 +143,6 @@ public class Nation implements SearchObject {
 	
 	
 	
-	public UUID getID() {
-		return id;
-	}
-	
-	public String getDisplayName() {
-		return display_name;
-	}
 	
 	public int getBalance() { return balance; }
 	public void setBalance(int value) { this.balance = value; }
@@ -173,6 +165,7 @@ public class Nation implements SearchObject {
 	
 	public void setRelation(UUID other, NationRelation relation) {
 		if(relations.containsKey(other)) relations.remove(other);
+		if(relation == null) return;
 		relations.put(other, relation);
 	}
 	
@@ -196,6 +189,15 @@ public class Nation implements SearchObject {
 		invites = ConfigReader.readUUIDList(config, "invites");
 	}
 	
+	private void loadRelations() {
+		relations = new HashMap<UUID, NationRelation>();
+		List<String> srelations = config.getStringList("relations");
+		for(String value : srelations) {
+			String[] values = value.split("\\.");
+			relations.put(UUID.fromString(values[0]), NationRelation.valueOf(values[1]));
+		}
+	}
+	
 	
 	
 	public void save() {
@@ -214,6 +216,11 @@ public class Nation implements SearchObject {
 		for(int i = 0; i < sinvites.length; i++)
 			sinvites[i] = invites.get(i).toString();
 		config.set("invites", sinvites);
+		
+		ArrayList<String> srelations = new ArrayList<String>();
+		for(UUID uuid : relations.keySet()) 
+			srelations.add(uuid.toString() + "\\." + relations.get(uuid).name());
+		config.set("relations", srelations);
 		
 		for(NationPlayerRank rank : ranks)
 			rank.save(config);
