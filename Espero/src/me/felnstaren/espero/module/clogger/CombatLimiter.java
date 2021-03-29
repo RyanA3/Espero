@@ -24,7 +24,8 @@ public class CombatLimiter implements Listener {
 	}
 	
 	private static final String[] INSULTS = { "%player% logged out while in combat! They're probably a Rivian", "%player% is probably slamming their desk right now!", "%player% soiled themself!",
-			"%player% couldn't hold it together, sad!", "%player% fled in terror", "%player% gave way to the harsh reality, shame!", "%player% sacraficed their pride!"};
+			"%player% couldn't hold it together, sad!", "%player% fled in terror", "%player% gave way to the harsh reality, shame!", "%player% sacraficed their pride!", "%player% felt threatened by cod spell!",
+			"%player% loudly proclaimed, \"Cringe!\" Chaos ensued"};
 	private static final Random RANDOM = new Random();
 	
 	private CombatTimeHandler chandler;
