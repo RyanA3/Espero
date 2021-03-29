@@ -19,3 +19,6 @@ commands:
  morph:
   aliases: []
   description: HeHe Packets go Brr
+ combat:
+  aliases: []
+  description: How much longer will you be in combat?

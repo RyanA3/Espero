@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.felnstaren.espero.command.standalone.TestCommand;
 import me.felnstaren.espero.config.EsperoPlayerManager;
+import me.felnstaren.espero.module.clogger.CombatLoggerModule;
 import me.felnstaren.espero.module.magic.MagicModule;
 import me.felnstaren.espero.module.morph.MorphModule;
 import me.felnstaren.espero.module.nations.NationsModule;
@@ -17,6 +18,7 @@ public class Espero extends JavaPlugin {
 	private MagicModule magic_module;
 	private NationsModule nations_module;
 	private MorphModule morph_module;
+	private CombatLoggerModule combat_logger_module;
 	public static Logger LOGGER;
 	public static Loader LOADER;
 	public static EsperoPlayerManager PLAYERS;
@@ -37,6 +39,9 @@ public class Espero extends JavaPlugin {
 		nations_module = new NationsModule();
 		nations_module.onEnable(this);
 		
+		combat_logger_module = new CombatLoggerModule();
+		combat_logger_module.onEnable(this);
+		
 		this.getCommand("test").setExecutor(new TestCommand());
 	}
 	
@@ -44,6 +49,7 @@ public class Espero extends JavaPlugin {
 		//magic_module.onDisable(this);
 		nations_module.onDisable(this);
 		morph_module.onDisable(this);
+		combat_logger_module.onDisable(this);
 		PLAYERS.saveAll();
 		OFFLINE_PLAYERS.save();
 	}
