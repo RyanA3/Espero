@@ -47,10 +47,15 @@ public class NationClaimArg extends SubArgument {
 				claim_type = town.getID(); break; } }
 		
 		if(claim == null) {
-			ClaimBoard.inst().claim(cx, cz, nation.getID(), 0);
-			nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " claimed chunk at (" + loc.getX() + "," + loc.getZ() + ") for nation");
-			updateNationArea(cx, cz, 1, nation);
-			return true;
+			if(nation.getArea() == 0 || isTouching(cx, cz, nation, -1)) {
+				ClaimBoard.inst().claim(cx, cz, nation.getID(), 0);
+				nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " claimed chunk at (" + loc.getX() + "," + loc.getZ() + ") for nation");
+				updateNationArea(cx, cz, 1, nation);
+				return true;
+			} else {
+				Messenger.send(player, Color.RED + "Nation claims cannot be disconnected from eachother!");
+				return true;
+			}
 		}
 		
 		if(!claim.nation.equals(nation.getID())) {
@@ -75,10 +80,10 @@ public class NationClaimArg extends SubArgument {
 			}
 		} else {
 			if(claim_type == 0) {
-				ClaimBoard.inst().claim(cx, cz, nation.getID(), claim_type);
-				nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " modified chunk at (" + cx + "," + cz + ") from town to nation");
-				nation.addTownArea(-1);
-				return true;
+					ClaimBoard.inst().claim(cx, cz, nation.getID(), claim_type);
+					nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " modified chunk at (" + cx + "," + cz + ") from town to nation");
+					nation.addTownArea(-1);
+					return true;
 			}
 			
 			Messenger.send(player, Format.ERROR_CHUNK_ALREADY_CLAIMED.message());				

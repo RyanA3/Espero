@@ -67,7 +67,8 @@ public class NationHelpSub extends SubCommand {
 			    + "\n  claim " + Format.FORCE_ARG.message("type") + Color.LIGHT_GRAY
 			    + "\n  unclaim"
 				+ "\n  chat"
-				+ "\n  leader " + Format.FORCE_ARG.message("player")
+				+ "\n  leader " + Format.FORCE_ARG.message("player") + Color.LIGHT_GRAY
+				+ "\n  relation " + Format.FORCE_ARG.message("nation")
 				)
 				.addComponent(new TextComponent("\n          <}-").setColor(Color.WHEAT + "").setBold(true).setClickComponent(new ClickComponent("/nation help 1")))
 				.addComponent(new TextComponent("   |   ").setColor(Color.LIGHT_GRAY + ""))

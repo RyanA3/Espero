@@ -61,6 +61,7 @@ public class ClaimBoard {
 		ClaimChunk claim = getClaim(x, z);
 		if(claim == null || claim.nation == null) return false;
 		if(!claim.nation.equals(nation)) return false;
+		if(town == -1) return true;
 		return town == claim.town;
 	}
 	
