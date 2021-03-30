@@ -2,6 +2,7 @@ package me.felnstaren.espero.module.nations.menu.relation;
 
 import org.bukkit.entity.Player;
 
+import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRelation;
 import me.felnstaren.felib.chat.Color;
@@ -14,7 +15,11 @@ public class NationRelationPrompt extends ChatOptionPrompt {
 	private Nation other;
 	
 	public NationRelationPrompt(Player player, Nation own, Nation other) {
-		super(player, 20, Color.LIGHT_GRAY + "Which relation would you like to request to have with " + other.getDisplayName() + "?", 
+		super(player, 20, Color.WHEAT + "Which relation would you like to request to have with " + other.getDisplayName() + "?"
+				+ "\n" + Format.ARG.message("%option1") + Color.LIGHT_GRAY
+				+ "      " + Format.ARG.message("%option2") + Color.LIGHT_GRAY
+				+ "      " + Format.ARG.message("%option3") + Color.LIGHT_GRAY
+				+ "      " + Format.ARG.message("%option4"), 
 				new String[]{ "Ally", "Truce", "Neutral", "Enemy" });
 		this.own = own;
 		this.other = other;
@@ -25,7 +30,7 @@ public class NationRelationPrompt extends ChatOptionPrompt {
 		NationRelation requestrelation = NationRelation.valueOf(response.toUpperCase());
 		
 		if(requestrelation == prevrelation) {
-			Messenger.send(player, "You're already " + response + " with this nation!");
+			Messenger.send(player, Color.RED + "You're already " + response + " with this nation!");
 			return;
 		}
 		

@@ -193,7 +193,7 @@ public class Nation implements SearchObject {
 		relations = new HashMap<UUID, NationRelation>();
 		List<String> srelations = config.getStringList("relations");
 		for(String value : srelations) {
-			String[] values = value.split("\\.");
+			String[] values = value.split(":");
 			relations.put(UUID.fromString(values[0]), NationRelation.valueOf(values[1]));
 		}
 	}
@@ -219,7 +219,7 @@ public class Nation implements SearchObject {
 		
 		ArrayList<String> srelations = new ArrayList<String>();
 		for(UUID uuid : relations.keySet()) 
-			srelations.add(uuid.toString() + "\\." + relations.get(uuid).name());
+			srelations.add(uuid.toString() + ":" + relations.get(uuid).name());
 		config.set("relations", srelations);
 		
 		for(NationPlayerRank rank : ranks)
