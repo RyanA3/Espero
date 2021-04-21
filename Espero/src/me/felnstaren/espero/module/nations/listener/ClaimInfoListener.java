@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.Nations;
+import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.espero.module.nations.nation.Town;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
@@ -37,12 +37,12 @@ public class ClaimInfoListener implements Listener {
 		
 		if(to != null) {
 			message = Color.GREEN + "Entering ";
-			nation = Nations.inst().getNation(to.nation);
+			nation = NationRegistry.inst().getNation(to.nation);
 			if(nation != null) town = nation.getTown(to.town);
 		}
 		else if(from != null) {
 			message = Color.RED + "Leaving ";
-			nation = Nations.inst().getNation(from.nation);
+			nation = NationRegistry.inst().getNation(from.nation);
 			if(nation != null) town = nation.getTown(from.town);
 		}
 		

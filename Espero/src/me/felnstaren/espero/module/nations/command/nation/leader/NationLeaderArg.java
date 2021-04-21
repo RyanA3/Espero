@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
+import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.felib.chat.Messenger;
@@ -57,9 +58,9 @@ public class NationLeaderArg extends SubArgument {
 			return true;
 		}
 		
-		eother.setNationRank("leader");
+		Nations.setNationRank(eother, nation.getHighestRank());
 		//eother.save();
-		eplayer.setNationRank("officer");
+		Nations.setNationRank(eother, nation.getNextLowestRank(nation.getHighestRank()));
 		//eplayer.save();
 		
 		nation.broadcast("#5F5" + player.getName() + " has transferred their leadership to " + args[current]);

@@ -8,7 +8,7 @@ import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.menu.relation.NationRelationPrompt;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.Nations;
+import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 import me.felnstaren.felib.ui.prompt.PromptHandler;
@@ -35,7 +35,7 @@ public class NationRelationArg extends SubArgument {
 			return true;
 		}
 		
-		Nation of = Nations.inst().getNation(args[current]);
+		Nation of = NationRegistry.inst().getNation(args[current]);
 		if(of == null) {
 			Messenger.send(player, Format.ERROR_INVALID_ARGUMENT.message(args[current]));
 			return true;

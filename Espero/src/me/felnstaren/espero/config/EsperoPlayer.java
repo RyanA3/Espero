@@ -7,15 +7,15 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
-import me.felnstaren.espero.module.nations.nation.Nations;
+import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.felib.config.DataPlayer;
 import me.felnstaren.felib.config.Loader;
 import me.felnstaren.felib.logger.Level;
 
 public class EsperoPlayer extends DataPlayer {
 	
-	private Nation nation;
-	private NationPlayerRank rank;
+	private Nation nation = null;
+	private NationPlayerRank rank = null;
 	
 	private int rifts;
 	private int sanity;
@@ -32,112 +32,26 @@ public class EsperoPlayer extends DataPlayer {
 	
 	
 	
-	private Nation loadNation() {
-		Espero.LOGGER.log(Level.DEBUG, "Loading nation for player " + uuid.toString());
-		
-		String nation_id = config.getString("nation", "");
-		if(nation_id.length() == 0) {
-			Espero.LOGGER.log(Level.DEBUG, "Nation unset, return null");
-			return null;
-		}
-		
-		Nation nation = Nations.inst().getNation(UUID.fromString(nation_id));
-		if(nation == null) {
-			Espero.LOGGER.log(Level.DEBUG, "Nation not found, return null");
-			return null;
-		}
-		
-		Espero.LOGGER.log(Level.DEBUG, "Found nation: " + nation.getDisplayName());
-		if(nation.getMembers().contains(uuid)) return nation;
-		else {
-			Espero.LOGGER.log(Level.DEBUG, "Nation no longer contains player, return null");
-			return null;
-		}
-	}
+	@Deprecated
+	public void setNation(Nation nation) { this.nation = nation; }
+	public Nation getNation()            { return nation;        }
 	
-	public Nation getNation() {
-		return nation;
-	}
-	
-	public void setNation(Nation join) {
-		if(join == null && nation != null) {
-			nation.getMembers().remove(uuid);
-		} else {
-			join.getMembers().add(uuid);
-			join.getInvites().remove(uuid);
-			setNationRank(join.getRank("recruit"));
-		}
-		
-		this.nation = join;
-		String message = "SETTING NATION: ";
-		if(nation != null) message += nation.getDisplayName();
-		else message += "none";
-		Espero.LOGGER.log(Level.DEBUG, message);
-	}
+	public void setNationRank(NationPlayerRank rank) { this.rank = rank; }
+	public NationPlayerRank getNationRank()          { return rank;      }
 	
 	
 	
-	private NationPlayerRank loadNationRank() {
-		if(nation == null) return null;
-		String nation_rank = config.getString("nation-rank", "recruit");
-		return nation.getRank(nation_rank);
-	}
-	
-	public NationPlayerRank getNationRank() {
-		return rank;
-	}
-	
-	public void setNationRank(NationPlayerRank rank) {
-		this.rank = rank;
-	}
-	
-	public void setNationRank(String rank) {
-		if(rank == null || nation == null) this.rank = null; 
-		this.rank = nation.getRank(rank);
-	}
-	
-	
-	
-	/**
-	 * Check if a player has permission to do something within a nation's borders
-	 * @param nation_permission
-	 * @param nation
-	 * @return
-	 */
-	public boolean hasPermission(String nation_permission, Nation check) {
-		if(rank == null) return false;
-		return this.nation.getID().equals(check.getID()) && rank.isPermitted(nation_permission);
-	}
-	
-	
-	
-	public void addRift() {
-		rifts++;
-		updateRifts(rifts);
-	}
-	
-	public void delRift() {
-		rifts--;
-		updateRifts(rifts);
-	}
-	
-	private void updateRifts(int rifts) {
+	public void addRift(int count) {
+		rifts += count;
 		max_sanity = 100 - (20 * rifts);
 		if(sanity > max_sanity) sanity = max_sanity;
 	}
 	
 	
-	
-	public static boolean hasGenerated(UUID uuid) {
-		return Espero.LOADER.datafile("playerdata/" + uuid + ".yml").exists();
-	}
-	
-	
-	
 	@Override
 	protected void save(Loader loader) {
 		if(nation != null) this.config.set("nation", nation.getID().toString());
-		else this.config.set("nation", "");
+		else               this.config.set("nation", "");
 		if(rank != null)   this.config.set("nation-rank", rank.getLabel());
 		else               this.config.set("nation-rank", "recruit");
 		this.config.set("rift-count", rifts);
@@ -149,13 +63,24 @@ public class EsperoPlayer extends DataPlayer {
 	@Override
 	protected void load(Loader loader) {
 		super.load(loader);
-		
-		this.nation = loadNation();
-		rank = loadNationRank();
-		
+
+		//TODO: Check if config#getString() can return empty string for null strings
+		if(config.getString("nation") != null) nation = NationRegistry.inst().getNation(UUID.fromString(config.getString("nation")));
+		if(nation != null && !nation.getMembers().contains(uuid)) nation = null;  //Just... in... case...
+		if(nation != null) rank = config.getString("nation-rank") == null ? nation.getLowestRank() : nation.getRank(config.getString("nation-rank"));
+
 		rifts = config.getInt("rift-count");
 		sanity = config.getInt("sanity.cur-sanity");
 		max_sanity = config.getInt("sanity.max_sanity");
+	}
+	
+	
+	
+	/*
+	 * Check if a player file has generated
+	 */
+	public static boolean hasGenerated(UUID uuid) {
+		return Espero.LOADER.datafile("playerdata/" + uuid + ".yml").exists();
 	}
 	
 }

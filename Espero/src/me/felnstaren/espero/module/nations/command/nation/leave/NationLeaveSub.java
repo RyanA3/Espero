@@ -8,7 +8,7 @@ import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
-import me.felnstaren.espero.module.nations.nation.Nations;
+import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubCommand;
 
@@ -42,7 +42,7 @@ public class NationLeaveSub extends SubCommand {
 		
 		if(nation.getMembers().size() == 0) {
 			Messenger.broadcast("#F22" + nation.getDisplayName() + " #F55has been disbanded!");
-			Nations.inst().unregister(nation.getID());
+			NationRegistry.inst().unregister(nation.getID());
 			nation.disband();
 		}
 		

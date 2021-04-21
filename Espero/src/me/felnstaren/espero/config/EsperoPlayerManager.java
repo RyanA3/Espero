@@ -1,5 +1,6 @@
 package me.felnstaren.espero.config;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -38,6 +39,12 @@ public class EsperoPlayerManager extends ConfigObjectManager<EsperoPlayer> imple
 	
 	public EsperoPlayer getPlayer(Player player) {
 		return getPlayer(player.getUniqueId());
+	}
+	
+	public ArrayList<EsperoPlayer> getPlayers(ArrayList<UUID> ids) {
+		ArrayList<EsperoPlayer> players = new ArrayList<EsperoPlayer>();
+		for(UUID id : ids) players.add(getPlayer(id));
+		return players;
 	}
 	
 	public EsperoPlayer getPlayer(UUID id) {

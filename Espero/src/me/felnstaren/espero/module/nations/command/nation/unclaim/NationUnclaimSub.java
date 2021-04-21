@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.config.Option;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
@@ -74,6 +75,7 @@ public class NationUnclaimSub extends SubCommand {
 		
 		ClaimBoard.inst().unclaim(cx, cz);
 		nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " unclaimed chunk at (" + cx + "," + cz + ")");
+		nation.addBalance(Option.CLAIM_SELL_COST);
 		
 		return true;
 	}

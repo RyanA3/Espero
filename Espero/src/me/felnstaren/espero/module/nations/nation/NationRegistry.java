@@ -6,15 +6,15 @@ import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
 
-public class Nations {
+public class NationRegistry {
 	
-	private static Nations INSTANCE;
+	private static NationRegistry INSTANCE;
 	
 	public static void init() {
-		INSTANCE = new Nations();
+		INSTANCE = new NationRegistry();
 	}
 	
-	public static Nations inst() {
+	public static NationRegistry inst() {
 		if(INSTANCE == null) init();
 		return INSTANCE;
 	}
@@ -24,7 +24,7 @@ public class Nations {
 	private ArrayList<String> nations_names;
 	private ArrayList<UUID>   nations_ids;
 	
-	public Nations() {
+	public NationRegistry() {
 		String path = "/nationdata/";
 		File folder = Espero.LOADER.load(path);
 		File[] datas = folder.listFiles();
@@ -41,6 +41,11 @@ public class Nations {
 		}
 	}
 	
+	
+	
+	public ArrayList<Nation> getNations() {
+		return nations;
+	}
 	
 	public Nation getNation(UUID id) {
 		try { return nations.get(nations_ids.indexOf(id)); }

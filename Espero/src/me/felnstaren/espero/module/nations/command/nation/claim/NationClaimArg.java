@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.config.Option;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
@@ -48,6 +49,12 @@ public class NationClaimArg extends SubArgument {
 		
 		if(claim == null) {
 			if(nation.getArea() == 0 || isTouching(cx, cz, nation, -1)) {
+				if(nation.getBalance() < Option.CLAIM_PURCHASE_COST + Option.MIN_COFFERS_BALANCE) {
+					Messenger.send(player, Color.RED + "Your nation cannot afford this!");
+					return true;
+				}
+				
+				nation.addBalance(-Option.CLAIM_PURCHASE_COST);
 				ClaimBoard.inst().claim(cx, cz, nation.getID(), 0);
 				nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " claimed chunk at (" + loc.getX() + "," + loc.getZ() + ") for nation");
 				updateNationArea(cx, cz, 1, nation);
@@ -80,10 +87,11 @@ public class NationClaimArg extends SubArgument {
 			}
 		} else {
 			if(claim_type == 0) {
-					ClaimBoard.inst().claim(cx, cz, nation.getID(), claim_type);
-					nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " modified chunk at (" + cx + "," + cz + ") from town to nation");
-					nation.addTownArea(-1);
-					return true;
+				ClaimBoard.inst().claim(cx, cz, nation.getID(), claim_type);
+				nation.getTown(claim.town).addArea(-1);
+				nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " modified chunk at (" + cx + "," + cz + ") from town to nation");
+				nation.addTownArea(-1);
+				return true;
 			}
 			
 			Messenger.send(player, Format.ERROR_CHUNK_ALREADY_CLAIMED.message());				

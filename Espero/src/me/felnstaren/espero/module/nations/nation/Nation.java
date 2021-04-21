@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
+import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.config.ConfigReader;
 import me.felnstaren.felib.logger.Level;
@@ -67,13 +68,11 @@ public class Nation implements SearchObject {
 		
 			towns = new ArrayList<Town>();
 			members = new ArrayList<UUID>();
-			//members.add(owner.getUniqueId());
 			invites = new ArrayList<UUID>();
 			relations = new HashMap<UUID, NationRelation>();
 		
-			owner.setNation(this);
-			owner.setNationRank(this.getRank("leader"));
-			//owner.save();
+			Nations.setNation(owner, this);
+
 			this.area = 0;
 			this.perimeter = 0;
 			this.town_area = 0;
@@ -81,16 +80,20 @@ public class Nation implements SearchObject {
 			save();
 		} catch (Exception e) {
 			e.printStackTrace();
-			Espero.LOGGER.log(Level.SEVERE, "Error creating nation");
+			Espero.LOGGER.log(Level.SEVERE, "<!> Severe error creating nation! <!>");
 			Espero.LOADER.delete(Espero.LOADER.datafile(path));
+			Nations.disband(this);
 		}
 	}
 	
 	
-	
+	public String getPath() { return path; }
 	public ArrayList<UUID> getMembers() { return members; }
+	public ArrayList<EsperoPlayer> getLoadedMembers() { return Espero.PLAYERS.getPlayers(members); }
 	public ArrayList<Town> getTowns() { return towns; }
+	public ArrayList<String> getTownsNames() { ArrayList<String> names = new ArrayList<String>(); for(Town t : towns) names.add(t.name); return names; }
 	public ArrayList<UUID> getInvites() { return invites; }
+	public ArrayList<EsperoPlayer> getLoadedInvites() { return Espero.PLAYERS.getPlayers(invites); }
 	public UUID getID() { return id; }
 	public String getDisplayName() { return display_name; }
 	
@@ -119,6 +122,26 @@ public class Nation implements SearchObject {
 		return null;
 	}
 	
+	public NationPlayerRank getLowestRank() {
+		int low = 100;
+		NationPlayerRank lowest = null;
+		for(NationPlayerRank test : ranks) {
+			if(test.getWeight() >= low) continue;
+			low = test.getWeight();
+			lowest = test;
+		} return lowest;
+	}
+	
+	public NationPlayerRank getHighestRank() {
+		int high = 0;
+		NationPlayerRank highest = null;
+		for(NationPlayerRank test : ranks) {
+			if(test.getWeight() <= high) continue;
+			high = test.getWeight();
+			highest = test;
+		} return highest;
+	}
+	
 	public NationPlayerRank getNextHighestRank(NationPlayerRank rank) {
 		int floor = rank.getWeight();
 		NationPlayerRank closest_high = null;
@@ -126,8 +149,7 @@ public class Nation implements SearchObject {
 			if(test.getWeight() <= floor) continue;
 			if(closest_high == null) closest_high = test;
 			else if(test.getWeight() < closest_high.getWeight()) closest_high = test;
-		}
-		return closest_high;
+		} return closest_high;
 	}
 	
 	public NationPlayerRank getNextLowestRank(NationPlayerRank rank) {
@@ -137,8 +159,7 @@ public class Nation implements SearchObject {
 			if(test.getWeight() >= cieling) continue;
 			if(closest_low == null) closest_low = test;
 			else if(test.getWeight() > closest_low.getWeight()) closest_low = test;
-		}
-		return closest_low;
+		} return closest_low;
 	}
 	
 	
@@ -157,12 +178,14 @@ public class Nation implements SearchObject {
 	public void setTownArea(int value) { this.town_area = value; }
 	public void addTownArea(int value) { this.town_area += value; }
 	
+	@Deprecated
 	public NationRelation getRelation(UUID other) {
 		NationRelation relation = relations.get(other);
 		if(relation == null) return NationRelation.NEUTRAL;
 		else return relation;
 	}
 	
+	@Deprecated
 	public void setRelation(UUID other, NationRelation relation) {
 		if(relations.containsKey(other)) relations.remove(other);
 		if(relation == null) return;
@@ -230,17 +253,8 @@ public class Nation implements SearchObject {
 		
 		Espero.LOADER.save(path, config);
 	}
+
 	
-	public void disband() {
-		for(UUID member : members) {
-			EsperoPlayer emember = new EsperoPlayer(member);
-			emember.setNation(null);
-			emember.setNationRank("recruit");
-			//emember.save();
-		}
-		
-		Espero.LOADER.delete(path);
-	}
 
 	public void broadcast(String message) {
 		ArrayList<Player> players = getOnlineMembers();
@@ -256,6 +270,14 @@ public class Nation implements SearchObject {
 	
 	public String neatHeader() {
 		return Format.HEADER.message(display_name);
+	}
+	
+	
+	
+	@Override
+	public boolean equals(Object o) {
+		if(!(o instanceof Nation)) return false;
+		return ((Nation) o).searchValue() == searchValue();
 	}
 	
 }

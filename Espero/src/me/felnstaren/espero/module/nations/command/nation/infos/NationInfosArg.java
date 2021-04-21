@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.Nations;
+import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 
@@ -18,7 +18,7 @@ public abstract class NationInfosArg extends SubArgument {
 	
 	
 	public boolean stub(CommandSender sender, String[] args, int current) {
-		Nation nation = Nations.inst().getNation(args[current]);
+		Nation nation = NationRegistry.inst().getNation(args[current]);
 		if(nation == null) {
 			Messenger.send((Player) sender, Format.ERROR_INVALID_ARGUMENT.message().replaceAll("%argument%", args[current]));
 			return true;

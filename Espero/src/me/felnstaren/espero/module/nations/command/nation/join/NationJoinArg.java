@@ -7,7 +7,7 @@ import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.Nations;
+import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 import me.felnstaren.felib.logger.Level;
@@ -40,7 +40,7 @@ public class NationJoinArg extends SubArgument {
 		}
 		
 		Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND C");
-		Nation to_join = Nations.inst().getNation(name);
+		Nation to_join = NationRegistry.inst().getNation(name);
 		if(to_join == null) {
 			Messenger.send(player, Format.ERROR_INVALID_ARGUMENT.message().replace("%argument%", name));
 			return true;

@@ -30,7 +30,7 @@ import me.felnstaren.espero.module.nations.command.nation.relation.NationRelatio
 import me.felnstaren.espero.module.nations.command.nation.unclaim.NationUnclaimSub;
 import me.felnstaren.espero.module.nations.command.nation.uninvite.NationUninviteSub;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.Nations;
+import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.espero.module.nations.nation.Town;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.MasterCommand;
@@ -49,7 +49,7 @@ public class NationCommandMaster extends MasterCommand {
 		},
 		new TabSuggestor("<nation>") {
 			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
-				return Nations.inst().getNationNames();
+				return NationRegistry.inst().getNationNames();
 			}
 		},
 		new TabSuggestor("<claimtype>") {

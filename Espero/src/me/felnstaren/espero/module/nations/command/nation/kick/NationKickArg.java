@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
+import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
@@ -56,8 +57,7 @@ public class NationKickArg extends SubArgument {
 		}
 		
 		nation.broadcast("#5F5" + player.getDisplayName() + " #5F5has kicked " + args[current] + " #5F5from the nation!");
-		eother.setNationRank("recruit");
-		eother.setNation(null);
+		Nations.setNation(eother, null);
 
 		return true;
 	}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
-import me.felnstaren.espero.module.nations.nation.Nations;
+import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.felib.util.data.BinarySearchable;
 
 public class ClaimRegion extends BinarySearchable<ClaimData> {
@@ -42,7 +42,7 @@ public class ClaimRegion extends BinarySearchable<ClaimData> {
 		
 		//Remove Deleted Nations
 		for(int i = 0; i < nations.size(); i++) {
-			if(Nations.inst().getNation(nations.get(i)) != null) continue;
+			if(NationRegistry.inst().getNation(nations.get(i)) != null) continue;
 			clear(nations.get(i)); i--;
 		}
 	}

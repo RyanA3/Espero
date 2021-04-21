@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.Nations;
+import me.felnstaren.espero.module.nations.nation.NationRegistry;
 
 public class ClaimBoard {
 
@@ -38,7 +38,7 @@ public class ClaimBoard {
 		
 		if(data == null) return null;
 		UUID nation = region.getRelativeNation(data.nation());
-		if(Nations.inst().getNation(nation) == null) return null;
+		if(NationRegistry.inst().getNation(nation) == null) return null;
 		
 		return new ClaimChunk(x, z, region.getRelativeNation(data.nation()), data.town()); 
 	}

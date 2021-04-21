@@ -8,8 +8,9 @@ import me.felnstaren.espero.module.clogger.CombatLoggerModule;
 import me.felnstaren.espero.module.economy.EconomyModule;
 import me.felnstaren.espero.module.magic.MagicModule;
 import me.felnstaren.espero.module.morph.MorphModule;
-import me.felnstaren.espero.module.nations.NationsModule;
+import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.infoout.InfoMessageController;
+import me.felnstaren.espero.module.wind.WindModule;
 import me.felnstaren.felib.config.Loader;
 import me.felnstaren.felib.logger.Logger;
 import me.felnstaren.felib.player.PlayerNameIDTransposer;
@@ -18,10 +19,11 @@ public class Espero extends JavaPlugin {
 
 	@SuppressWarnings("unused")
 	private MagicModule magic_module;
-	private NationsModule nations_module;
+	private Nations nations_module;
 	private MorphModule morph_module;
 	private CombatLoggerModule combat_logger_module;
 	private EconomyModule economy_module;
+	private WindModule wind_module;
 	public static Logger LOGGER;
 	public static Loader LOADER;
 	public static EsperoPlayerManager PLAYERS;
@@ -41,7 +43,7 @@ public class Espero extends JavaPlugin {
 		morph_module = new MorphModule();
 		morph_module.onEnable(this);
 		
-		nations_module = new NationsModule();
+		nations_module = new Nations();
 		nations_module.onEnable(this);
 		
 		combat_logger_module = new CombatLoggerModule();
@@ -49,6 +51,9 @@ public class Espero extends JavaPlugin {
 		
 		economy_module = new EconomyModule();
 		economy_module.onEnable(this);
+		
+		wind_module = new WindModule();
+		wind_module.onEnable(this);
 		
 		this.getCommand("test").setExecutor(new TestCommand());
 	}

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
+import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
@@ -26,7 +27,7 @@ public class NationInviteArg extends SubArgument {
 	
 	public boolean stub(CommandSender sender, String[] args, int current) {
 		Player player = (Player) sender;
-		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
 		Nation nation = eplayer.getNation();
 		
 		if(nation == null) {
@@ -34,7 +35,7 @@ public class NationInviteArg extends SubArgument {
 			return true;
 		}
 		
-		if(!eplayer.hasPermission("recruit", nation)) {
+		if(!Nations.isPermitted(eplayer, nation, "recruit")) {
 			Messenger.send(player, "#F55You do not have permission to invite players into your nation!");
 			return true;
 		}

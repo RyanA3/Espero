@@ -5,8 +5,10 @@ import org.bukkit.inventory.ItemStack;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.config.Option;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.economy.Economy;
+import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.ui.menu.MenuButton;
@@ -28,7 +30,7 @@ public class CofferMenuWithdrawButton implements MenuButton {
 		Player player = session.getPlayer();
 		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
 		Nation nation = eplayer.getNation();
-		if(!eplayer.hasPermission("coffers", nation)) {
+		if(!Nations.isPermitted(eplayer, nation, "coffers")) {
 			Messenger.send(player, "#F77You do not have permission to withdraw from this nations coffers!");
 			return;
 		}
@@ -42,8 +44,8 @@ public class CofferMenuWithdrawButton implements MenuButton {
 					int amount = 0;
 					try { amount = Math.abs(Integer.parseInt(response)); }
 					catch (Exception e) { Messenger.send(player, Format.ERROR_INVALID_ARGUMENT.message().replaceAll("%argument%", response)); }
-					if(amount > nation.getBalance()) amount = nation.getBalance();
-					if(amount == 0) { Messenger.send(player, Format.ERROR_TRANSACTION_CANCELLED.message()); this.expired = true; return; }
+					if(amount + Option.MIN_COFFERS_BALANCE > nation.getBalance()) amount = nation.getBalance() - Option.MIN_COFFERS_BALANCE;
+					if(amount <= 0) { Messenger.send(player, Format.ERROR_TRANSACTION_CANCELLED.message()); this.expired = true; return; }
 					
 					Economy.deposit(player, amount);
 					nation.addBalance(-amount);
@@ -53,8 +55,8 @@ public class CofferMenuWithdrawButton implements MenuButton {
 			});
 		} else {
 			int amount = expected_value;
-			if(amount > nation.getBalance()) amount = nation.getBalance();
-			if(amount == 0) { Messenger.send(session.getPlayer(), Format.ERROR_TRANSACTION_CANCELLED.message()); return; }
+			if(amount + Option.MIN_COFFERS_BALANCE > nation.getBalance()) amount = nation.getBalance() - Option.MIN_COFFERS_BALANCE;
+			if(amount <= 0) { Messenger.send(session.getPlayer(), Format.ERROR_TRANSACTION_CANCELLED.message()); return; }
 			
 			Economy.deposit(player, amount);
 			nation.addBalance(-amount);

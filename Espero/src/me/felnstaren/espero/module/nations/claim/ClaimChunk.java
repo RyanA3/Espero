@@ -3,7 +3,7 @@ package me.felnstaren.espero.module.nations.claim;
 import java.util.UUID;
 
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.Nations;
+import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.espero.module.nations.nation.Town;
 
 /**
@@ -29,7 +29,7 @@ public class ClaimChunk {
 	
 	
 	public Nation getNation() {
-		return Nations.inst().getNation(nation);
+		return NationRegistry.inst().getNation(nation);
 	}
 	
 	public Town getTown() {
