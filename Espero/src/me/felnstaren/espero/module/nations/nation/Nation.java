@@ -25,6 +25,7 @@ public class Nation implements SearchObject {
 	private ArrayList<UUID> members;
 	private ArrayList<UUID> invites;
 	private HashMap<UUID, NationRelation> relations;
+	private HashMap<UUID, NationRelation> relations_requests;
 	private int balance;
 	private int area, perimeter, town_area;
 	
@@ -70,6 +71,7 @@ public class Nation implements SearchObject {
 			members = new ArrayList<UUID>();
 			invites = new ArrayList<UUID>();
 			relations = new HashMap<UUID, NationRelation>();
+			relations_requests = new HashMap<UUID, NationRelation>();
 		
 			Nations.setNation(owner, this);
 
@@ -178,18 +180,30 @@ public class Nation implements SearchObject {
 	public void setTownArea(int value) { this.town_area = value; }
 	public void addTownArea(int value) { this.town_area += value; }
 	
-	@Deprecated
+	
 	public NationRelation getRelation(UUID other) {
 		NationRelation relation = relations.get(other);
 		if(relation == null) return NationRelation.NEUTRAL;
 		else return relation;
 	}
 	
-	@Deprecated
+	public NationRelation getRelationRequest(UUID sender) {
+		NationRelation relation = relations_requests.get(sender);
+		if(relation == null) return NationRelation.ENEMY;
+		else return relation;
+	}
+	
+	
 	public void setRelation(UUID other, NationRelation relation) {
 		if(relations.containsKey(other)) relations.remove(other);
 		if(relation == null) return;
 		relations.put(other, relation);
+	}
+	
+	public void setRelationRequest(UUID sender, NationRelation relation) {
+		if(relations_requests.containsKey(sender)) relations_requests.remove(sender);
+		if(relation == null) return;
+		relations_requests.put(sender, relation);
 	}
 	
 	
@@ -219,6 +233,13 @@ public class Nation implements SearchObject {
 			String[] values = value.split(":");
 			relations.put(UUID.fromString(values[0]), NationRelation.valueOf(values[1]));
 		}
+		
+		relations_requests = new HashMap<UUID, NationRelation>();
+		List<String> srelations_requests = config.getStringList("relations_requests");
+		for(String value : srelations_requests) {
+			String[] values = value.split(":");
+			relations_requests.put(UUID.fromString(values[0]), NationRelation.valueOf(values[1]));
+		}
 	}
 	
 	
@@ -244,6 +265,11 @@ public class Nation implements SearchObject {
 		for(UUID uuid : relations.keySet()) 
 			srelations.add(uuid.toString() + ":" + relations.get(uuid).name());
 		config.set("relations", srelations);
+		
+		ArrayList<String> srelations_requests = new ArrayList<String>();
+		for(UUID uuid : relations_requests.keySet())
+			srelations_requests.add(uuid.toString() + ":" + relations.get(uuid).name());
+		config.set("relations_requests", srelations_requests);
 		
 		for(NationPlayerRank rank : ranks)
 			rank.save(config);

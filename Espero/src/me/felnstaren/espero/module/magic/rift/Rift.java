@@ -72,7 +72,7 @@ public class Rift {
 	
 	public void destroy() {
 		this.destroy = true;
-		if(owner != null) Espero.PLAYERS.getPlayer(owner).delRift();
+		if(owner != null) Espero.PLAYERS.getPlayer(owner).addRift(-1);
 	}
 	
 	
@@ -95,7 +95,7 @@ public class Rift {
 		
 		RiftManager.getInstance().register(rift);
 		
-		dp.addRift();
+		dp.addRift(1);
 	}
 	
 }

@@ -57,9 +57,8 @@ public class NationInviteArg extends SubArgument {
 			return true;
 		}
 		
-		nation.getInvites().add(eother.getUniqueId());
-		//nation.save();
-		
+		Nations.invite(nation, eother);
+
 		nation.broadcast("#5F5" + player.getDisplayName() + " has invited " + args[current] + " to the nation!");
 		if(invitee != null) Messenger.send(invitee, "#5F5You've been invited to join " + nation.getDisplayName());
 		

@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
+import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
@@ -29,7 +30,7 @@ public class NationUninviteArg extends SubArgument {
 			return true;
 		}
 		
-		if(!eplayer.hasPermission("recruit", nation)) {
+		if(!Nations.isPermitted(eplayer, nation, "recruit")) {
 			Messenger.send(player, "#F55You do not have permission to revoke invitations in your nation!");
 			return true;
 		}
@@ -47,7 +48,7 @@ public class NationUninviteArg extends SubArgument {
 		
 		UUID iid = eother.getUniqueId();
 		if(!nation.getInvites().contains(iid) || nation.getMembers().contains(iid)) {
-			Messenger.send(player, "#F55" + args[current] + " is not invited nation!");
+			Messenger.send(player, "#F55" + args[current] + " is not invited to your nation!");
 			return true;
 		}
 		

@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.nation.Nation;
@@ -43,7 +44,7 @@ public class PlayerClaimInteractHandler implements Listener {
 			return false;
 		}
 		
-		if(!eplayer.hasPermission(permission, nation)) {
+		if(!Nations.isPermitted(eplayer, nation, permission)) {
 			Messenger.send(player, "#F55You do not have permission to " + permission + " in " + nation.getDisplayName() + "!");
 			return false;
 		}

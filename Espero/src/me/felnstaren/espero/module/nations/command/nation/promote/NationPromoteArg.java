@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
+import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.felib.chat.Messenger;
@@ -22,7 +23,7 @@ public class NationPromoteArg extends SubArgument {
 	
 	public boolean stub(CommandSender sender, String[] args, int current) {
 		Player player = (Player) sender;
-		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
 		Nation nation = eplayer.getNation();
 		
 		if(nation == null) {
@@ -67,8 +68,7 @@ public class NationPromoteArg extends SubArgument {
 			return true;
 		}
 		
-		eother.setNationRank(promotion.getLabel());
-		//eother.save();
+		Nations.setNationRank(eother, promotion);
 		nation.broadcast("#F5F" + args[current] + " #5F5has been promoted to the rank of #999" + promotion.getDisplayName() + " #5F5by " + player.getDisplayName());
 		
 		return true;

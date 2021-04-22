@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
+import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.menu.relation.NationRelationPrompt;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
@@ -30,7 +31,7 @@ public class NationRelationArg extends SubArgument {
 			return true;
 		}
 		
-		if(!eplayer.hasPermission("relation", nation)) {
+		if(!Nations.isPermitted(eplayer, nation, "relation")) {
 			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 			return true;
 		}

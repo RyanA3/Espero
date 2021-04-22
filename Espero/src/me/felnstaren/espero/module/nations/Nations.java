@@ -20,6 +20,7 @@ import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.espero.module.nations.nation.NationRelation;
+import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.logger.Level;
 
 @SuppressWarnings("deprecation")
@@ -89,15 +90,26 @@ public class Nations implements IModule {
 		}
 	}
 	
-	//TODO: Messaging? Relation Requests
+	public static boolean nationSetRelation(Nation requester, Nation requestee, NationRelation relation) {
+		if(relation.outranks(requestee.getRelationRequest(requester.getID()))) return false;
+		setRelation(requester, requestee, relation);
+		return true;
+	}
+	
 	public static void setRelation(Nation nation1, Nation nation2, NationRelation relation) {
 		nation1.setRelation(nation2.getID(), relation);
 		nation2.setRelation(nation1.getID(), relation);
+		nation1.broadcast(Color.GREEN + "You are now " + relation.name() + " with " + nation2.getDisplayName());
+		nation2.broadcast(Color.GREEN + "You are now " + relation.name() + " with " + nation1.getDisplayName());
 	}
-	
-	//TODO: This entire function when you feel like it, dumbass
+
 	public static void requestRelation(Nation sender, Nation receiver, NationRelation relation) {
-		
+		if(relation.outranks(receiver.getRelation(sender.getID())) && relation.outranks(receiver.getRelationRequest(sender.getID()))) {
+			sender.broadcast(Color.GREEN + "You have requested to " + relation.name() + " with " + receiver.getDisplayName());
+			receiver.broadcast(Color.GREEN + sender.getDisplayName() + " has requested to " + relation.name());
+			receiver.setRelationRequest(sender.getID(), relation);
+		}
+		else setRelation(sender, receiver, relation);
 	}
 	
 	public static void disband(Nation nation) {
