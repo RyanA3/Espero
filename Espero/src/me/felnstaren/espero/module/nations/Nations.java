@@ -58,9 +58,6 @@ public class Nations implements IModule {
 	
 	
 	
-	
-	
-	
 	/** |----------------------------------------------------------|
 	 *  |     Centralized Nation/Town/Player Utility Commands      |
 	 *  |----------------------------------------------------------| */ 

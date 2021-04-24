@@ -39,6 +39,7 @@ ranks:
   permissions:
    - coffers
    - kick
+   - found
 
 members:
 invites:

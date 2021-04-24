@@ -52,8 +52,8 @@ public class Espero extends JavaPlugin {
 		economy_module = new EconomyModule();
 		economy_module.onEnable(this);
 		
-		wind_module = new WindModule();
-		wind_module.onEnable(this);
+		//wind_module = new WindModule();
+		//wind_module.onEnable(this);
 		
 		this.getCommand("test").setExecutor(new TestCommand());
 	}

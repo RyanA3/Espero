@@ -50,7 +50,7 @@ public class NationUnclaimSub extends SubCommand {
 			return true;
 		}
 		
-		if(!claim.getNation().getID().equals(nation.getID())) {
+		if(!claim.getNation().equals(nation)) {
 			Messenger.send(player, Color.RED + "This chunk does not belong to your nation!");
 			return true;
 		}

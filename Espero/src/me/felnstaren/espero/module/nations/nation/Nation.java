@@ -117,6 +117,12 @@ public class Nation implements SearchObject {
 		return null;
 	}
 	
+	public Town getTown(String name) {
+		for(Town t : towns)
+			if(t.name.equals(name)) return t;
+		return null;
+	}
+	
 	
 	public NationPlayerRank getRank(String label) {
 		for(NationPlayerRank rank : ranks)

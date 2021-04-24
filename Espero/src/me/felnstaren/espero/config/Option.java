@@ -7,6 +7,7 @@ public class Option {
 	// 2-3 days/week 
 	
 	public static int NATION_FOUND_COST    = 500;
+	public static int TOWN_FOUND_COST      = 100;
 	public static int CLAIM_PURCHASE_COST  = 5;
 	public static int CLAIM_SELL_COST      = 3;
 	public static int MIN_COFFERS_BALANCE  = 500;

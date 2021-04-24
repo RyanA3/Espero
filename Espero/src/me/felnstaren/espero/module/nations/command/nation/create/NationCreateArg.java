@@ -15,6 +15,7 @@ import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 import me.felnstaren.felib.ui.prompt.ChatPrompt;
 import me.felnstaren.felib.ui.prompt.PromptHandler;
+import me.felnstaren.felib.util.StringUtil;
 
 public class NationCreateArg extends SubArgument {
 
@@ -47,6 +48,11 @@ public class NationCreateArg extends SubArgument {
 		
 		if(args[current].length() > 16) {
 			Messenger.send(player, Format.ERROR_TOO_LONG.message().replaceAll("%length%", "16"));
+			return true;
+		}
+		
+		if(!StringUtil.isAlphaNumeric(args[current])) {
+			Messenger.send(player, Color.RED + "Nation names must be alpha/numeric");
 			return true;
 		}
 		
