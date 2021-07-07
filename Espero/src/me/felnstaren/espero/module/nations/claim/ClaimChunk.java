@@ -42,23 +42,5 @@ public class ClaimChunk {
 		if(chunk == null || chunk.owner == null) return false;
 		return chunk.owner.equals(owner);
 	}
-	
-	/**
-	 * 
-	 * @param chunk
-	 * @param nation
-	 * @param town  -1 = Ignore Town Argument   0 = No Town   1-Infinity = Town ID
-	 * @return
-	 */
-	@Deprecated // ??? WHAT ???
-	public static boolean isTown(ClaimChunk chunk, UUID owner, int town) {
-		/*if(chunk == null || chunk.nation == null) return false;
-		if(!chunk.owner.equals(nation)) return false;
-		if(town == -1) return true;
-		return chunk.town == town;*/
-		return chunk != null && 
-			   chunk.owner_type == OwnerType.TOWN && 
-			   chunk.owner.equals(owner);
-	}
 
 }

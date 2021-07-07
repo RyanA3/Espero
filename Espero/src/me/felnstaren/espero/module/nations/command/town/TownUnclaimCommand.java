@@ -9,8 +9,11 @@ import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
+import me.felnstaren.espero.module.nations.claim.OwnerType;
 import me.felnstaren.espero.module.nations.command.nation.unclaim.NationUnclaimSub;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
+import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubCommand;
@@ -33,11 +36,6 @@ public class TownUnclaimCommand extends SubCommand {
 			return true;
 		}
 		
-		if(!eplayer.getNationRank().isPermitted("claim")) {
-			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
-			return true;
-		}
-		
 		Chunk loc = player.getLocation().getChunk();
 		int cx = loc.getX(); int cz = loc.getZ();
 		ClaimChunk claim = ClaimBoard.inst().getClaim(cx, cz);
@@ -47,15 +45,23 @@ public class TownUnclaimCommand extends SubCommand {
 			return true;
 		}
 		
-		if(!claim.nation.equals(nation.getID())) {
-			Messenger.send(player, Format.ERROR_CHUNK_ALREADY_CLAIMED.message());
+		if(claim.owner_type != OwnerType.TOWN) {
+			Messenger.send(player, Color.RED + "This chunk is not owned by a town!");
 			return true;
 		}
 		
-		if(NationUnclaimSub.isLegalUnclaim(cx, cz, nation, claim.town)) {
+		Town town = claim.getTown();
+		
+		if(!town.hasPermission(eplayer, Permission.UNCLAIM)) {
+			Messenger.send(player, Color.RED + "You do not have permission to unclaim " + town.name);
+			return true;
+		}
+		
+		if(!NationUnclaimSub.isPivotal(cx, cz, claim.owner)) {
 			nation.addTownArea(-1);
-			nation.getTown(claim.town).addArea(-1);
-			ClaimBoard.inst().claim(cx, cz, nation.getID(), 0);
+			town.addArea(-1);
+			ClaimBoard.inst().unclaim(cx, cz);
+			nation.broadcast(player.getName() + " unclaimed " + town.name + " at " + cx + "x, " + cz + "z");
 		}
 		else {
 			Messenger.send(player, Color.RED + "Unclaiming this would leave two sections of your town disconnected, "

@@ -10,6 +10,7 @@ import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimArg;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.espero.module.nations.town.TownRegistry;
@@ -26,15 +27,16 @@ public class TownClaimCommand extends SubCommand {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
-				Town town = TownRegistry.inst().getTown(args[])
+				Nation nation = eplayer.getNation();
+				Town town = TownRegistry.inst().getTown(args[current]);
 				
 				if(nation == null) {
 					Messenger.send(player, Format.ERROR_NOT_IN_NATION.message());
 					return true;
 				}
 				
-				if(!eplayer.getNationRank().isPermitted("claim")) {
-					Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
+				if(town == null) {
+					Messenger.send(player, Color.RED + "Town not found: " + args[current]);
 					return true;
 				}
 				
@@ -42,26 +44,21 @@ public class TownClaimCommand extends SubCommand {
 				int cx = loc.getX(); int cz = loc.getZ();
 				ClaimChunk claim = ClaimBoard.inst().getClaim(cx, cz);
 				
-				int town_id = 0;
-				for(Town town : nation.getTowns()) {
-					if(town.name.equals(args[current])) {
-						town_id = town.getID(); break; } }
-				
-				if(town_id == 0) {
-					Messenger.send(player, Color.RED + "Invalid Town");
+				if(!town.hasPermission(eplayer, Permission.CLAIM)) {
+					Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 					return true;
 				}
-				
-				if(!claim.nation.equals(nation.getID())) {
+
+				if(claim != null && !claim.owner.equals(town.getID())) {
 					Messenger.send(player, Format.ERROR_CHUNK_ALREADY_CLAIMED.message());
 					return true;
 				}
 				
-				if(NationClaimArg.isTouching(cx, cz, nation, town_id)) {
-					ClaimBoard.inst().claim(cx, cz, nation.getID(), town_id);
-					nation.getTown(town_id).addArea(1);
-					nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " modified chunk at (" + cx + "," + cz + ") from nation to " + args[current]);
+				if(NationClaimArg.isTouching(cx, cz, town.getID())) {
+					ClaimBoard.inst().claim(cx, cz, town.getID());
+					town.addArea(1);
 					nation.addTownArea(1);
+					nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " claimed " + town.name + " at " + cx + "x, " + cz + "z");
 				} else {
 					Messenger.send(player, Color.RED + "Town claims cannot be disconnected from their town!");
 					return true;

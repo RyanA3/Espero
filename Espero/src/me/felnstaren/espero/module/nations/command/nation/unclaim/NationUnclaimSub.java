@@ -13,6 +13,7 @@ import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimArg;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
@@ -36,7 +37,7 @@ public class NationUnclaimSub extends SubCommand {
 			return true;
 		}
 		
-		if(!eplayer.getNationRank().isPermitted("claim")) {
+		if(!nation.hasPermission(eplayer, Permission.UNCLAIM)) {
 			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 			return true;
 		}
@@ -50,29 +51,19 @@ public class NationUnclaimSub extends SubCommand {
 			return true;
 		}
 		
-		if(!claim.getNation().equals(nation)) {
+		if(!claim.owner.equals(nation.getID())) {
 			Messenger.send(player, Color.RED + "This chunk does not belong to your nation!");
 			return true;
 		}
 		
-		if(claim.town != 0) {
-			if(isLegalUnclaim(cx, cz, nation, claim.town)) {
-				nation.addTownArea(-1);
-				nation.getTown(claim.town).addArea(-1);
-			}
-			else {
-				Messenger.send(player, Color.RED + "Unclaiming this would leave two sections of your town disconnected, "
-						+ "town claims must remain contiguous, please unclaim the other parts first");
-				return true;
-			}
-		} else if(!isLegalUnclaim(cx, cz, nation, -1)) {
+
+		if(isPivotal(cx, cz, nation.getID())) {
 			Messenger.send(player, Color.RED + "Unclaiming this would leave two sections of your nation disconnected, "
 					+ "nation claims must remain contiguous, please unclaim the other parts first");
 			return true;
 		}
 		
 		NationClaimArg.updateNationArea(cx, cz, -1, nation);
-		
 		ClaimBoard.inst().unclaim(cx, cz);
 		nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " unclaimed chunk at (" + cx + "," + cz + ")");
 		nation.addBalance(Option.CLAIM_SELL_COST);
@@ -84,14 +75,15 @@ public class NationUnclaimSub extends SubCommand {
 	
 	/**
 	 * Oh god refactor somehow
+	 * Returns true if unclaiming the specified chunk at cx and cz 
+	 * will result in two sections of claims separating
 	 * @param cx
 	 * @param cz
 	 * @param nation
 	 * @param town
 	 * @return
 	 */
-	public static boolean isLegalUnclaim(int cx, int cz, Nation nation, int town) {
-		UUID id = nation.getID();
+	public static boolean isPivotal(int cx, int cz, UUID owner) {
 		ClaimChunk[][] chunks = new ClaimChunk[3][3];
 		for(int offX = 0; offX < 3; offX++) {
 			for(int offZ = 0; offZ < 3; offZ++) {
@@ -99,40 +91,40 @@ public class NationUnclaimSub extends SubCommand {
 			}
 		}
 		
-		if(ClaimChunk.isTown( chunks[+1 +1][0  +1], id, town)
-		&& ClaimChunk.isTown( chunks[-1 +1][0  +1], id, town)
-		&& !ClaimChunk.isTown(chunks[0  +1][+1 +1], id, town)
-		&& !ClaimChunk.isTown(chunks[0  +1][-1 +1], id, town)
-		) return false;
+		if(ClaimChunk.isOwnedBy( chunks[+1 +1][0  +1], owner)
+		&& ClaimChunk.isOwnedBy( chunks[-1 +1][0  +1], owner)
+		&& !ClaimChunk.isOwnedBy(chunks[0  +1][+1 +1], owner)
+		&& !ClaimChunk.isOwnedBy(chunks[0  +1][-1 +1], owner)
+		) return true;
 		
-		if(!ClaimChunk.isTown(chunks[+1 +1][0  +1], id, town)
-		&& !ClaimChunk.isTown(chunks[-1 +1][0  +1], id, town)
-		&& ClaimChunk.isTown( chunks[   +1][+1 +1], id, town)
-		&& ClaimChunk.isTown( chunks[0  +1][-1 +1], id, town)
-		) return false;
+		if(!ClaimChunk.isOwnedBy(chunks[+1 +1][0  +1], owner)
+		&& !ClaimChunk.isOwnedBy(chunks[-1 +1][0  +1], owner)
+		&& ClaimChunk.isOwnedBy( chunks[   +1][+1 +1], owner)
+		&& ClaimChunk.isOwnedBy( chunks[0  +1][-1 +1], owner)
+		) return true;
 		
 		
-		if(ClaimChunk.isTown( chunks[+1 +1][0  +1], id, town)
-		&& ClaimChunk.isTown( chunks[0  +1][+1 +1], id, town)
-		&& !ClaimChunk.isTown(chunks[+1 +1][+1 +1], id, town)
-		) return false;
+		if(ClaimChunk.isOwnedBy( chunks[+1 +1][0  +1], owner)
+		&& ClaimChunk.isOwnedBy( chunks[0  +1][+1 +1], owner)
+		&& !ClaimChunk.isOwnedBy(chunks[+1 +1][+1 +1], owner)
+		) return true;
 		
-		if(ClaimChunk.isTown( chunks[-1 +1][0  +1], id, town)
-		&& ClaimChunk.isTown( chunks[0  +1][+1 +1], id, town)
-		&& !ClaimChunk.isTown(chunks[-1 +1][+1 +1], id, town)
-		) return false;
+		if(ClaimChunk.isOwnedBy( chunks[-1 +1][0  +1], owner)
+		&& ClaimChunk.isOwnedBy( chunks[0  +1][+1 +1], owner)
+		&& !ClaimChunk.isOwnedBy(chunks[-1 +1][+1 +1], owner)
+		) return true;
 		
-		if(ClaimChunk.isTown( chunks[+1 +1][0  +1], id, town)
-		&& ClaimChunk.isTown( chunks[0  +1][-1 +1], id, town)
-		&& !ClaimChunk.isTown(chunks[+1 +1][-1 +1], id, town)
-		) return false;
+		if(ClaimChunk.isOwnedBy( chunks[+1 +1][0  +1], owner)
+		&& ClaimChunk.isOwnedBy( chunks[0  +1][-1 +1], owner)
+		&& !ClaimChunk.isOwnedBy(chunks[+1 +1][-1 +1], owner)
+		) return true;
 		
-		if(ClaimChunk.isTown( chunks[-1 +1][0  +1], id, town)
-		&& ClaimChunk.isTown( chunks[0  +1][-1 +1], id, town)
-		&& !ClaimChunk.isTown(chunks[-1 +1][-1 +1], id, town)
-		) return false;
+		if(ClaimChunk.isOwnedBy( chunks[-1 +1][0  +1], owner)
+		&& ClaimChunk.isOwnedBy( chunks[0  +1][-1 +1], owner)
+		&& !ClaimChunk.isOwnedBy(chunks[-1 +1][-1 +1], owner)
+		) return true;
 		
-		return true;
+		return false;
 	}
 	
 }
