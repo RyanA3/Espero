@@ -1,0 +1,32 @@
+members:
+
+ranks:
+ recruit:
+  display_name: "Recruit"
+  permissions:
+   - CONTAINER
+   - BUTTON
+   - DOOR
+ member:
+  display_name: "Member"
+  permissions:
+   - BUILD
+   - LEVER
+   - STONE_BUTTON
+ officer:
+  display_name: "Officer"
+  permissions:
+   - INVITE
+   - KICK
+   - PROMOTE
+   - DEMOTE
+   - CLAIM
+   - UNCLAIM
+ leader:
+  display_name: "Leader"
+  permissions:
+   - COFFERS_WITHDRAW
+   - NATION_DISBAND
+   - TOWN_CREATE
+   - TOWN_DISBAND
+   - TOWN_SELL

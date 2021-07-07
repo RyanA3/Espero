@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
+import me.felnstaren.felib.util.data.BinarySearchable;
+import me.felnstaren.felib.util.data.SearchObject;
 
-public class NationRegistry {
+public class NationRegistry extends BinarySearchable<Nation> {
 	
 	private static NationRegistry INSTANCE;
 	
@@ -20,65 +22,49 @@ public class NationRegistry {
 	}
 	
 
-	private ArrayList<Nation> nations;
-	private ArrayList<String> nations_names;
-	private ArrayList<UUID>   nations_ids;
 	
 	public NationRegistry() {
+		Espero.LOGGER.debug("Loading nations into memory...");
+		
 		String path = "/nationdata/";
 		File folder = Espero.LOADER.load(path);
 		File[] datas = folder.listFiles();
 		
-		nations = new ArrayList<Nation>();
-		nations_names = new ArrayList<String>();
-		nations_ids = new ArrayList<UUID>();
-		
 		for(File data : datas) {
-			Nation nation = new Nation(UUID.fromString(data.getName().replace(".yml", "")));
-			nations.add(nation);
-			nations_names.add(nation.getDisplayName());
-			nations_ids.add(nation.getID());
+			Espero.LOGGER.stream("Loading nation from file " + data.getPath() + "...");
+			Nation nation = new Nation(UUID.fromString(data.getName().split("\\.")[0]));
+			super.add(nation);
 		}
 	}
 	
 	
 	
-	public ArrayList<Nation> getNations() {
-		return nations;
+	public void 			 register   (Nation nation )   { super.add(nation); 								   }
+	public void 			 unregister (UUID nation_id)   { super.remove(SearchObject.getIndexValue(nation_id)); }
+	public void 		     unregister (Nation nation )   { super.remove(nation);                                }
+	public ArrayList<Nation> getNations ()    			   { return super.values; }
+	public Nation 			 getNation  (UUID id)          { return super.get(SearchObject.getIndexValue(id)); }
+	public Nation 			 getNation  (String name)      {	//Linear Search, finds a nation by its name
+		for(Nation n : super.values) 
+			if(n.getDisplayName().equals(name)) 
+				return n;
+		return null;
+	}	
+	public ArrayList<String> getNationNames() 			   {	//Compiles a List of Nation Names from the main nation list
+		ArrayList<String> nation_names = new ArrayList<String>();
+		for(Nation n : super.values)
+			nation_names.add(n.getDisplayName());
+		return nation_names;
 	}
 	
-	public Nation getNation(UUID id) {
-		try { return nations.get(nations_ids.indexOf(id)); }
-		catch (Exception e) { return null; }
-	}
-	
-	public Nation getNation(String name) {
-		try { return nations.get(nations_names.indexOf(name)); }
-		catch (Exception e) { return null; } 
-	}
-	
-	public ArrayList<String> getNationNames() {
-		return nations_names;
-	}
-	
-	public void registerNewNation(Nation nation) {
-		nations.add(nation);
-		nations_names.add(nation.getDisplayName());
-		nations_ids.add(nation.getID());
-	}
-	
-	public void unregister(UUID nation_id) {
-		int to_remove = -1;
-		for(int i = 0; i < nations.size(); i++) if(nations.get(i).getID().equals(nation_id)) to_remove = i;
-		if(to_remove < 0) return;
-		nations.remove(to_remove);
-		nations_names.remove(to_remove);
-		nations_ids.remove(to_remove);
-	}
+
 	
 	public void save() {
-		for(Nation nation : nations)
+		Espero.LOGGER.debug("Saving all nations...");
+		for(Nation nation : super.values) {
+			Espero.LOGGER.stream("Saving nation " + nation.name + "...");
 			nation.save();
+		}
 	}
 	
 }

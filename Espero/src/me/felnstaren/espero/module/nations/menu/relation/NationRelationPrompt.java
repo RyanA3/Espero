@@ -9,6 +9,7 @@ import me.felnstaren.espero.module.nations.nation.NationRelation;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.ui.prompt.ChatOptionPrompt;
 
+//Unused (for now?)
 public class NationRelationPrompt extends ChatOptionPrompt {
 
 	private Nation own;
@@ -26,8 +27,8 @@ public class NationRelationPrompt extends ChatOptionPrompt {
 	}
 	
 	public void callback(String response) {
-		NationRelation requestrelation = NationRelation.valueOf(response.toUpperCase());
-		Nations.requestRelation(own, other, requestrelation);	
+		//NationRelation requestrelation = NationRelation.valueOf(response.toUpperCase());
+		//Nations.requestRelation(own, other, requestrelation);	
 		this.expired = true;
 	}
 

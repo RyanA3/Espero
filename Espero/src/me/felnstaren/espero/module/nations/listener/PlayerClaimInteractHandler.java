@@ -14,11 +14,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
-import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.felib.chat.Messenger;
+import me.felnstaren.espero.module.nations.claim.OwnerType;
+import me.felnstaren.espero.module.nations.group.Permission;
 
 public class PlayerClaimInteractHandler implements Listener {
 	
@@ -30,50 +29,40 @@ public class PlayerClaimInteractHandler implements Listener {
 	
 	
 	
-	private boolean candoshit(Player player, Location location, String permission) {
+	private boolean candoshit(Player player, Location location, Permission permission) {
 		Chunk c = location.getChunk();
 		ClaimChunk claim = ClaimBoard.inst().getClaim(c.getX(), c.getZ());
 		if(claim == null) return true;
 		
-		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
-		Nation nation = claim.getNation();
-		if(nation == null) return true;
-		
-		if(eplayer.getNation() == null || !eplayer.getNation().getID().equals(nation.getID())) {
-			Messenger.send(player, "#F55You do not have permission to " + permission + " in " + nation.getDisplayName() + "!");
-			return false;
-		}
-		
-		if(!Nations.isPermitted(eplayer, nation, permission)) {
-			Messenger.send(player, "#F55You do not have permission to " + permission + " in " + nation.getDisplayName() + "!");
-			return false;
-		}
-		
-		return true;
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //wow thats old
+		if(claim.owner_type == OwnerType.TOWN)
+			return claim.getTown().hasPermission(eplayer, permission);
+		else 
+			return claim.getNation().hasPermission(eplayer, permission);
 	}
 	
 	
 	
 	@EventHandler
 	public void onBreak(BlockBreakEvent event) {
-		if(!candoshit(event.getPlayer(), event.getBlock().getLocation(), "build")) event.setCancelled(true);
+		if(!candoshit(event.getPlayer(), event.getBlock().getLocation(), Permission.BUILD)) event.setCancelled(true);
 	}
 	
 	@EventHandler
 	public void onPlace(BlockPlaceEvent event) {
-		if(!candoshit(event.getPlayer(), event.getBlock().getLocation(), "build")) event.setCancelled(true);
+		if(!candoshit(event.getPlayer(), event.getBlock().getLocation(), Permission.BUILD)) event.setCancelled(true);
 	}
 	
 	@EventHandler
 	public void onRightClick(PlayerInteractEvent event) {
 		if(event.getClickedBlock() == null) return;
 		
-		String what = null;
-		if(event.getClickedBlock().getType() == Material.LEVER) what = "lever";
-		else if(event.getClickedBlock().getType().toString().contains("BUTTON")) what = "button";
-		else if(event.getClickedBlock().getType().toString().contains("DOOR")) what = "door";
-		else if(CONTAINERS.contains(event.getClickedBlock().getType())) what = "container";
-		else if(event.getClickedBlock().getType().toString().contains("BOX")) what = "container";
+		Permission what = null;
+		if(event.getClickedBlock().getType() == Material.LEVER) what = Permission.LEVER;
+		else if(event.getClickedBlock().getType().toString().contains("BUTTON")) what = Permission.BUTTON;
+		else if(event.getClickedBlock().getType().toString().contains("DOOR")) what = Permission.DOOR;
+		else if(CONTAINERS.contains(event.getClickedBlock().getType())) what = Permission.CONTAINER;
+		else if(event.getClickedBlock().getType().toString().contains("BOX")) what = Permission.CONTAINER;
 		if(what == null) return;
 		
 		if(!candoshit(event.getPlayer(), event.getClickedBlock().getLocation(), what)) event.setCancelled(true);

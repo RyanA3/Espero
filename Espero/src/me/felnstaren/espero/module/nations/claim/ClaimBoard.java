@@ -3,7 +3,7 @@ package me.felnstaren.espero.module.nations.claim;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import me.felnstaren.espero.module.nations.nation.Nation;
+import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
 
 public class ClaimBoard {
@@ -37,44 +37,37 @@ public class ClaimBoard {
 		ClaimData data = region.getClaim(x, z);
 		
 		if(data == null) return null;
-		UUID nation = region.getRelativeNation(data.nation());
+		UUID nation = region.getLocalOwner(data.owner());
 		if(NationRegistry.inst().getNation(nation) == null) return null;
 		
-		return new ClaimChunk(x, z, region.getRelativeNation(data.nation()), data.town()); 
+		return new ClaimChunk(x, z, region.getLocalOwner(data.owner()), region.getLocalOwnerType(data.owner())); 
 	}
 	
-	public boolean isNation(int x, int z, Nation nation) {
-		return isNation(x, z, nation.getID());
-	}
-	
-	public boolean isNation(int x, int z, UUID nation) {
+	//Checks if a specified chunk is claimed by a specified owner (nation or town)
+	public boolean isOwnedBy(int x, int z, UUID owner) {
 		ClaimChunk claim = getClaim(x, z);
-		if(claim == null || claim.nation == null) return false;
-		return claim.nation.equals(nation);
+		return claim != null && claim.owner.equals(owner);
 	}
-	
-	public boolean isTown(int x, int z, Nation nation, int town) {
-		return isTown(x, z, nation.getID(), town);
-	}
-	
-	public boolean isTown(int x, int z, UUID nation, int town) {
+	//Checks if a specified chunk is claimed by a non-descript town
+	public boolean isTown(int x, int z)   {
 		ClaimChunk claim = getClaim(x, z);
-		if(claim == null || claim.nation == null) return false;
-		if(!claim.nation.equals(nation)) return false;
-		if(town == -1) return true;
-		return town == claim.town;
+		return claim != null && claim.owner_type == OwnerType.TOWN;
+	}
+	//Checks if a specified chunk is claimed by a non-descript nation
+	public boolean isNation(int x, int z) {
+		ClaimChunk claim = getClaim(x, z);
+		return claim != null && claim.owner_type == OwnerType.NATION;
 	}
 	
 	/**
 	 * Sets the claimed chunk at the specified chunk coordinates
-	 * @param nation Nation to claim for
+	 * @param owner Nation or Town to claim for
 	 * @param x The x Chunk Coordinate
 	 * @param z The z Chunk Coordinate
-	 * @param town Type of claim
 	 */
-	public void claim(int x, int z, UUID nation, int town) {
-		ClaimRegion region = getRegion(x, z);     
-		region.claim(x, z, nation, town);
+	public void claim(int x, int z, UUID owner) {
+		ClaimRegion region = getRegion(x, z);
+		region.claim(x, z, owner);
 	}
 	
 	/**
@@ -91,11 +84,15 @@ public class ClaimBoard {
 	
 	
 	public void save() {
-		for(ClaimRegion region : loaded_regions)
+		Espero.LOGGER.debug("Saving all claim regions...");
+		for(ClaimRegion region : loaded_regions) {
+			Espero.LOGGER.stream("Saving claim region " + region.x() + "x " + region.z() + "z...");
 			region.save();
+		}
 	}
 	
 	public void unload() {
+		Espero.LOGGER.debug("Unloading all claim regions...");
 		save();
 		loaded_regions.clear();
 	}

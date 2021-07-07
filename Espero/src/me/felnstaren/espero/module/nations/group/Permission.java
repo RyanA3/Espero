@@ -1,0 +1,24 @@
+package me.felnstaren.espero.module.nations.group;
+
+public enum Permission {
+
+	BUILD,
+	CONTAINER,
+	DOOR,
+	LEVER,
+	BUTTON,
+	STONE_BUTTON,
+	CLAIM,
+	UNCLAIM,
+	INVITE,
+	PROMOTE,
+	DEMOTE,
+	KICK,
+	COFFERS_WITHDRAW,
+	TOWN_CREATE,
+	TOWN_DISBAND,
+	TOWN_SELL,
+	NATION_DISBAND,
+	NATION_TRANSFER_LEADERSHIP;
+	
+}

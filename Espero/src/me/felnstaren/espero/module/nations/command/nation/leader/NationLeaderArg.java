@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
-import me.felnstaren.espero.module.nations.Nations;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
+import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 
@@ -31,8 +31,7 @@ public class NationLeaderArg extends SubArgument {
 			return true;
 		}
 		
-		NationPlayerRank rank = eplayer.getNationRank();
-		if(!rank.getLabel().equals("leader")) {
+		if(!nation.hasPermission(eplayer, Permission.NATION_TRANSFER_LEADERSHIP)) {
 			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 			return true;
 		}
@@ -58,12 +57,10 @@ public class NationLeaderArg extends SubArgument {
 			return true;
 		}
 		
-		Nations.setNationRank(eother, nation.getHighestRank());
-		//eother.save();
-		Nations.setNationRank(eother, nation.getNextLowestRank(nation.getHighestRank()));
-		//eplayer.save();
-		
-		nation.broadcast("#5F5" + player.getName() + " has transferred their leadership to " + args[current]);
+		int leader = nation.getGroup().relRank(eplayer);
+		nation.getGroup().demote(eplayer);
+		nation.getGroup().setRank(eother, leader);
+		nation.broadcast(Color.GREEN + player.getName() + " has transferred their leadership to " + args[current]);
 		
 		return true;
 	}

@@ -10,8 +10,9 @@ import me.felnstaren.espero.config.Option;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.Town;
+import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
@@ -22,7 +23,7 @@ public class NationClaimArg extends SubArgument {
 		super("<claimtype>");
 	}
 	
-	
+	//wow might need to rewrite this
 	public boolean stub(CommandSender sender, String[] args, int current) {
 		Player player = (Player) sender;
 		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
@@ -33,7 +34,7 @@ public class NationClaimArg extends SubArgument {
 			return true;
 		}
 		
-		if(!eplayer.getNationRank().isPermitted("claim")) {
+		if(!eplayer.getNation().hasPermission(eplayer, Permission.CLAIM)) {
 			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 			return true;
 		}
@@ -49,7 +50,7 @@ public class NationClaimArg extends SubArgument {
 		
 		if(claim == null) {
 			if(nation.getArea() == 0 || isTouching(cx, cz, nation, -1)) {
-				if(nation.getBalance() < Option.CLAIM_PURCHASE_COST + Option.MIN_COFFERS_BALANCE) {
+				if(nation.getBalance() < Option.CLAIM_PURCHASE_COST + Option.MIN_COFFERS_BALANCE && nation.getArea() > 5) {
 					Messenger.send(player, Color.RED + "Your nation cannot afford this!");
 					return true;
 				}

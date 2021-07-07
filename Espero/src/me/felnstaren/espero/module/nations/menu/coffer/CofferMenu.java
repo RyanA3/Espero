@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import me.felnstaren.espero.config.Option;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.item.util.ItemBuild;
 import me.felnstaren.felib.ui.menu.ItemSchematic;
@@ -47,7 +48,8 @@ public class CofferMenu extends Menu {
 			new ItemSchematic(new ItemBuild(Material.LIME_STAINED_GLASS_PANE, 1).setName("&aDeposit").setLore("&e&o100", 0).setButton("coffers_deposit_100").construct(), 8, 2),
 			new ItemSchematic(new ItemBuild(Material.LIME_STAINED_GLASS_PANE, 1).setName("&aDeposit").setLore("&e&o10", 0).setButton("coffers_deposit_10").construct(), 7, 2),
 			new ItemSchematic(new ItemBuild(Material.LIME_STAINED_GLASS_PANE, 1).setName("&aDeposit").setLore("&e&o1", 0).setButton("coffers_deposit_1").construct(), 6, 2),
-			new ItemSchematic(new ItemBuild(Material.WRITABLE_BOOK, 1).setName("&f&oNation Coffers").setLore("&7&oYou can deposit and withdraw money from", "&7&oyour nation's central coffers here.", "&7&oThe nation will be dissolved if it doesn't", "&7&ohave sufficient funding in its coffers!").construct(), 5, 2));
+			new ItemSchematic(new ItemBuild(Material.WRITABLE_BOOK, 1).setName("&f&oNation Coffers").setLore("&7&oYou can deposit and withdraw money from", "&7&oyour nation's central coffers here.", "&7&oThe nation will be dissolved if it doesn't", "&7&ohave sufficient funding in its coffers!").construct(), 5, 2),
+			new ItemSchematic(new ItemBuild(Material.REDSTONE_TORCH, 1).setName("&f&oMinimum Balance").setLore("&7&oYour nation's minimum balance is " + Option.MIN_COFFERS_BALANCE + ".", "&7&oYour transaction options are severely limited when", "&7&oyour nation's coffers are below this.").construct(), 5, 1));
 	
 	
 	

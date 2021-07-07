@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
-import me.felnstaren.espero.module.nations.Nations;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
+import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 
@@ -31,7 +31,7 @@ public class NationPromoteArg extends SubArgument {
 			return true;
 		}
 		
-		if(!eplayer.getNationRank().isPermitted("promote")) {
+		if(!nation.hasPermission(eplayer, Permission.PROMOTE)) {
 			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 			return true;
 		}
@@ -57,20 +57,18 @@ public class NationPromoteArg extends SubArgument {
 			return true;
 		}
 		
-		NationPlayerRank promotion = nation.getNextHighestRank(eother.getNationRank());
-		if(promotion == null) {
+		if(nation.getGroup().relRank(eother) == nation.getGroup().toprank() - 1) {
 			Messenger.send(player, "#F55This player already has the highest rank possible!");
 			return true;
 		}
 		
-		if(promotion.getWeight() >= eplayer.getNationRank().getWeight()) {
+		if(!nation.outranks(eplayer, eother)) {
 			Messenger.send(player, "#F55You can't promote this player above or to your own rank!");
 			return true;
 		}
 		
-		Nations.setNationRank(eother, promotion);
-		nation.broadcast("#F5F" + args[current] + " #5F5has been promoted to the rank of #999" + promotion.getDisplayName() + " #5F5by " + player.getDisplayName());
-		
+		nation.promote(eother);
+		nation.broadcast(Color.GREEN + args[current] + Color.GREEN + " has been promoted by " + player.getDisplayName());
 		return true;
 	}
 

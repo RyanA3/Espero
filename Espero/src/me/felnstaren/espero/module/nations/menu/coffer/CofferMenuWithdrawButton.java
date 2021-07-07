@@ -8,7 +8,7 @@ import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.config.Option;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.economy.Economy;
-import me.felnstaren.espero.module.nations.Nations;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.ui.menu.MenuButton;
@@ -30,7 +30,7 @@ public class CofferMenuWithdrawButton implements MenuButton {
 		Player player = session.getPlayer();
 		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
 		Nation nation = eplayer.getNation();
-		if(!Nations.isPermitted(eplayer, nation, "coffers")) {
+		if(!nation.hasPermission(eplayer, Permission.COFFERS_WITHDRAW)) {
 			Messenger.send(player, "#F77You do not have permission to withdraw from this nations coffers!");
 			return;
 		}

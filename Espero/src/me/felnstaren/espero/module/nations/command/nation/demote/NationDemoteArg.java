@@ -7,8 +7,9 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
+import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 
@@ -22,7 +23,7 @@ public class NationDemoteArg extends SubArgument {
 	
 	public boolean stub(CommandSender sender, String[] args, int current) {
 		Player player = (Player) sender;
-		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
 		Nation nation = eplayer.getNation();
 		
 		if(nation == null) {
@@ -30,7 +31,7 @@ public class NationDemoteArg extends SubArgument {
 			return true;
 		}
 		
-		if(!eplayer.getNationRank().isPermitted("demote")) {
+		if(!nation.hasPermission(eplayer, Permission.DEMOTE)) {
 			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 			return true;
 		}
@@ -51,21 +52,13 @@ public class NationDemoteArg extends SubArgument {
 			return true;
 		}
 		
-		if(eother.getNationRank().getWeight() >= eplayer.getNationRank().getWeight()) {
+		if(!nation.outranks(eplayer, eother)) {
 			Messenger.send(player, Format.ERROR_CANT_DEMOTE.message());
 			return true;
 		}
 		
-		NationPlayerRank demotion = nation.getNextLowestRank(eother.getNationRank());
-		if(demotion == null) {
-			Messenger.send(player, Format.ERROR_CANT_DEMOTE.message());
-			return true;
-		}
-		
-		eother.setNationRank(demotion);
-		//eother.save();
-		nation.broadcast("#F5F" + args[current] + " #5F5has been demoted to the rank of #999" + demotion.getDisplayName() + " #5F5by " + player.getDisplayName());
-		
+		nation.demote(eother);
+		nation.broadcast(Color.RED + args[current] + Color.RED + " has been demoted by " + player.getDisplayName());
 		return true;
 	}
 	

@@ -30,7 +30,7 @@ public class CombatTimeHandler {
 	
 	
 	public CombatTimeHandler(JavaPlugin plugin) {
-		task.runTaskTimer(plugin, 100, 1000);
+		task.runTaskTimer(plugin, 100, 20);
 	}
 	
 	public void register(Player player, int time) {

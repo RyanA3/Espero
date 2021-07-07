@@ -1,0 +1,23 @@
+nation_ranks:
+ ranks:
+  recruit:
+   - DOOR
+   - BUTTON
+   - CHEST
+  member:
+   - LEVER
+   - BUILD
+  officer:
+   - CLAIM
+   - UNCLAIM
+   - KICK
+   - INVITE
+   - UNINVITE
+   - PROMOTE
+  leader:
+   - DISBAND
+   - COFFERS
+ players:
+  - uuid.1
+  - uuid.3
+  - uuid.0

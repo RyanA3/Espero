@@ -1,7 +1,5 @@
 package me.felnstaren.espero.module.nations.command.nation.invite;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -9,7 +7,7 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
-import me.felnstaren.espero.module.nations.Nations;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
@@ -35,7 +33,7 @@ public class NationInviteArg extends SubArgument {
 			return true;
 		}
 		
-		if(!Nations.isPermitted(eplayer, nation, "recruit")) {
+		if(!nation.hasPermission(eplayer, Permission.INVITE)) {
 			Messenger.send(player, "#F55You do not have permission to invite players into your nation!");
 			return true;
 		}
@@ -51,14 +49,12 @@ public class NationInviteArg extends SubArgument {
 			return true;
 		}
 		
-		UUID iid = eother.getUniqueId();
-		if(nation.getInvites().contains(iid) || nation.getMembers().contains(iid)) {
+		if(nation.isInvited(eother) || nation.isMember(eother)) {
 			Messenger.send(player, "#F55" + args[current] + " is already invited or a member of this nation!");
 			return true;
 		}
 		
-		Nations.invite(nation, eother);
-
+		nation.invite(eother);
 		nation.broadcast("#5F5" + player.getDisplayName() + " has invited " + args[current] + " to the nation!");
 		if(invitee != null) Messenger.send(invitee, "#5F5You've been invited to join " + nation.getDisplayName());
 		

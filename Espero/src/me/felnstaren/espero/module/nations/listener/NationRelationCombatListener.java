@@ -10,7 +10,6 @@ import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.infoout.InfoMessage;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.NationRelation;
 
 public class NationRelationCombatListener implements Listener {
 	
@@ -36,11 +35,6 @@ public class NationRelationCombatListener implements Listener {
 		
 		if(victim_nation.getID().equals(damager_nation.getID())) {
 			Espero.IMC.send(damager, InfoMessage.CANT_COMBAT_NATION);
-			event.setCancelled(true); return;
-		}
-		
-		if(victim_nation.getRelation(damager_nation.getID()) == NationRelation.ALLY) {
-			Espero.IMC.send(damager, InfoMessage.CANT_COMBAT_ALLY);
 			event.setCancelled(true); return;
 		}
 	}

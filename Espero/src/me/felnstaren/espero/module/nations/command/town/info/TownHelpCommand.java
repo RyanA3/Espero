@@ -60,7 +60,7 @@ public class TownHelpCommand extends SubCommand {
 				)
 				.addComponent(new TextComponent("\n          <}-").setColor(Color.GRAY + "").setBold(true))
 				.addComponent(new TextComponent("   |   ").setColor(Color.LIGHT_GRAY + ""))
-				.addComponent(new TextComponent("-{>\n").setColor(Color.GRAY + ""));//.setBold(true).setClickComponent(new ClickComponent("/town help 1")));
+				.addComponent(new TextComponent("-{>\n").setColor(Color.GRAY + "").setBold(true));//.setClickComponent(new ClickComponent("/town help 1")));
 	}
 
 }

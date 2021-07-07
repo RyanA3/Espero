@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
-import me.felnstaren.espero.module.nations.Nations;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
+import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubCommand;
 
@@ -30,14 +30,13 @@ public class NationDisbandSub extends SubCommand {
 			return true;
 		}
 		
-		NationPlayerRank rank = eplayer.getNationRank();
-		if(!rank.getLabel().equals("leader")) {
+		if(nation.hasPermission(eplayer, Permission.NATION_DISBAND)) {
 			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 			return true;
 		}
 		
-		Nations.disband(nation);
-		Messenger.broadcast("#F22" + nation.getDisplayName() + " #F55has been disbanded!");
+		nation.disband();
+		Messenger.broadcast(Color.RED + nation.getDisplayName() + Color.RED + " has been disbanded!");
 		return true;
 	}
 	

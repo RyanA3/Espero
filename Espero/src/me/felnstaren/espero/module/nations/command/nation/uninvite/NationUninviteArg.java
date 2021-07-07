@@ -1,7 +1,5 @@
 package me.felnstaren.espero.module.nations.command.nation.uninvite;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -9,8 +7,9 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
-import me.felnstaren.espero.module.nations.Nations;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
+import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 
@@ -30,7 +29,7 @@ public class NationUninviteArg extends SubArgument {
 			return true;
 		}
 		
-		if(!Nations.isPermitted(eplayer, nation, "recruit")) {
+		if(!nation.hasPermission(eplayer, Permission.INVITE)) {
 			Messenger.send(player, "#F55You do not have permission to revoke invitations in your nation!");
 			return true;
 		}
@@ -46,16 +45,14 @@ public class NationUninviteArg extends SubArgument {
 			return true;
 		}
 		
-		UUID iid = eother.getUniqueId();
-		if(!nation.getInvites().contains(iid) || nation.getMembers().contains(iid)) {
-			Messenger.send(player, "#F55" + args[current] + " is not invited to your nation!");
+		if(!nation.isInvited(eother)) {
+			Messenger.send(player, Color.RED + args[current] + " is not invited to your nation!");
 			return true;
 		}
 		
-		nation.getInvites().remove(eother.getUniqueId());
-		nation.broadcast("#5F5" + player.getDisplayName() + " has revoked " + args[current] + "'s invitation to the nation!");
-		if(invitee != null) Messenger.send(invitee, "#5F5Your invitation to " + nation.getDisplayName() + " was revoked!");
-		
+		nation.uninvite(eplayer);
+		nation.broadcast(Color.GREEN + player.getDisplayName() + " has revoked " + args[current] + "'s invitation to the nation!");
+		if(invitee != null) Messenger.send(invitee, Color.RED + "Your invitation to " + nation.getDisplayName() + " was revoked!");
 		return true;
 	}
 

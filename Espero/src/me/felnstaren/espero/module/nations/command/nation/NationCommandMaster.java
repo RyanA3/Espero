@@ -31,7 +31,7 @@ import me.felnstaren.espero.module.nations.command.nation.unclaim.NationUnclaimS
 import me.felnstaren.espero.module.nations.command.nation.uninvite.NationUninviteSub;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
-import me.felnstaren.espero.module.nations.nation.Town;
+import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.MasterCommand;
 import me.felnstaren.felib.command.TabSuggestor;

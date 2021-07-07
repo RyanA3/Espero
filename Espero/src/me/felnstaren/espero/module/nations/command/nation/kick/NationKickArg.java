@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
-import me.felnstaren.espero.module.nations.Nations;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
@@ -30,7 +30,7 @@ public class NationKickArg extends SubArgument {
 			return true;
 		}
 		
-		if(!eplayer.getNationRank().isPermitted("kick")) {
+		if(nation.hasPermission(eplayer, Permission.KICK)) {
 			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 			return true;
 		}
@@ -51,13 +51,13 @@ public class NationKickArg extends SubArgument {
 			return true;
 		}
 		
-		if(eother.getNationRank().getWeight() >= eplayer.getNationRank().getWeight()) {
+		if(!nation.outranks(eplayer, eother)) {
 			Messenger.send(player, Format.ERROR_CANT_KICK.message());
 			return true;
 		}
 		
+		nation.kick(eother);
 		nation.broadcast("#5F5" + player.getDisplayName() + " #5F5has kicked " + args[current] + " #5F5from the nation!");
-		Nations.setNation(eother, null);
 
 		return true;
 	}

@@ -8,9 +8,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
+import me.felnstaren.espero.module.nations.claim.OwnerType;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.NationRegistry;
-import me.felnstaren.espero.module.nations.nation.Town;
+import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 
@@ -29,7 +29,7 @@ public class ClaimInfoListener implements Listener {
 		ClaimChunk to = ClaimBoard.inst().getClaim(t.getX(), t.getZ());
 		
 		if(from == null && to == null) return;
-		if(from != null && to != null && from.town == to.town && from.nation.equals(to.nation)) return;
+		if(from != null && to != null && from.owner.equals(to.owner)) return;
 
 		String message = "";
 		Nation nation = null;
@@ -37,13 +37,13 @@ public class ClaimInfoListener implements Listener {
 		
 		if(to != null) {
 			message = Color.GREEN + "Entering ";
-			nation = NationRegistry.inst().getNation(to.nation);
-			if(nation != null) town = nation.getTown(to.town);
+			if(to.owner_type == OwnerType.NATION) nation = to.getNation();
+			else town = to.getTown();
 		}
 		else if(from != null) {
 			message = Color.RED + "Leaving ";
-			nation = NationRegistry.inst().getNation(from.nation);
-			if(nation != null) town = nation.getTown(from.town);
+			if(from.owner_type == OwnerType.NATION) nation = from.getNation();
+			else town = from.getTown();
 		}
 		
 		

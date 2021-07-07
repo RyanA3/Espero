@@ -16,9 +16,15 @@ commands:
  nation:
   aliases: [n]
   description: Default nation command
+ town:
+  aliases: [t]
+  description: Default town command
  morph:
   aliases: []
   description: HeHe Packets go Brr
  combat:
   aliases: []
   description: How much longer will you be in combat?
+ money:
+  aliases: []
+  description: Free money

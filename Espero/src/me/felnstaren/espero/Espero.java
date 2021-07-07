@@ -17,13 +17,12 @@ import me.felnstaren.felib.player.PlayerNameIDTransposer;
 
 public class Espero extends JavaPlugin {
 
-	@SuppressWarnings("unused")
-	private MagicModule magic_module;
+	@SuppressWarnings("unused") private MagicModule magic_module;
 	private Nations nations_module;
 	private MorphModule morph_module;
 	private CombatLoggerModule combat_logger_module;
 	private EconomyModule economy_module;
-	private WindModule wind_module;
+	@SuppressWarnings("unused") private WindModule wind_module;
 	public static Logger LOGGER;
 	public static Loader LOADER;
 	public static EsperoPlayerManager PLAYERS;
@@ -33,7 +32,7 @@ public class Espero extends JavaPlugin {
 	public void onEnable() {
 		LOGGER = new Logger(this.getServer().getConsoleSender(), this.getName());
 		LOADER = new Loader(this, LOGGER);
-		LOADER.mkDirs("/nationdata/", "/playerdata/", "/chunkdata/");
+		LOADER.mkDirs("/nationdata/", "/playerdata/", "/chunkdata/", "/towndata/", "/groupdata/");
 		PLAYERS = new EsperoPlayerManager(this);
 		OFFLINE_PLAYERS = new PlayerNameIDTransposer(this, LOADER, "nameids.txt");
 		IMC = new InfoMessageController(this);

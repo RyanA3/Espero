@@ -1,21 +1,22 @@
 package me.felnstaren.espero.config;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.NationPlayerRank;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
+import me.felnstaren.felib.config.ConfigReader;
 import me.felnstaren.felib.config.DataPlayer;
 import me.felnstaren.felib.config.Loader;
 import me.felnstaren.felib.logger.Level;
 
 public class EsperoPlayer extends DataPlayer {
 	
-	private Nation nation = null;
-	private NationPlayerRank rank = null;
+	private UUID nation;
+	private ArrayList<UUID> groups;
 	
 	private int rifts;
 	private int sanity;
@@ -23,7 +24,7 @@ public class EsperoPlayer extends DataPlayer {
 	
 	public EsperoPlayer(UUID uuid) {
 		super(uuid, "resources/default_player.yml");
-		Espero.LOGGER.log(Level.DEBUG, "Loading player " + uuid.toString());
+		Espero.LOGGER.log(Level.DEBUG, "Loading player " + uuid.toString() + "...");
 	}
 	
 	public EsperoPlayer(Player player) {
@@ -33,11 +34,8 @@ public class EsperoPlayer extends DataPlayer {
 	
 	
 	@Deprecated
-	public void setNation(Nation nation) { this.nation = nation; }
-	public Nation getNation()            { return nation;        }
-	
-	public void setNationRank(NationPlayerRank rank) { this.rank = rank; }
-	public NationPlayerRank getNationRank()          { return rank;      }
+	public void setNation(Nation nation) { this.nation = (nation == null ? null : nation.getID()); }
+	public Nation getNation()            { return NationRegistry.inst().getNation(nation);         }
 	
 	
 	
@@ -50,13 +48,16 @@ public class EsperoPlayer extends DataPlayer {
 	
 	@Override
 	protected void save(Loader loader) {
-		if(nation != null) this.config.set("nation", nation.getID().toString());
+		if(nation != null) this.config.set("nation", nation.toString());
 		else               this.config.set("nation", "");
-		if(rank != null)   this.config.set("nation-rank", rank.getLabel());
-		else               this.config.set("nation-rank", "recruit");
 		this.config.set("rift-count", rifts);
 		this.config.set("sanity.cur-sanity", sanity);
 		this.config.set("sanity.max-sanity", max_sanity);
+		
+		ArrayList<String> sgroups = new ArrayList<String>();
+		for(UUID group : groups) sgroups.add(group.toString());
+		this.config.set("groups", sgroups);
+		
 		super.save(loader);
 	}
 	
@@ -65,13 +66,12 @@ public class EsperoPlayer extends DataPlayer {
 		super.load(loader);
 
 		//TODO: Check if config#getString() can return empty string for null strings
-		if(config.getString("nation") != null) nation = NationRegistry.inst().getNation(UUID.fromString(config.getString("nation")));
-		if(nation != null && !nation.getMembers().contains(uuid)) nation = null;  //Just... in... case...
-		if(nation != null) rank = config.getString("nation-rank") == null ? nation.getLowestRank() : nation.getRank(config.getString("nation-rank"));
+		if(config.getString("nation") != null && config.getString("nation").length() > 0) nation = UUID.fromString(config.getString("nation"));
 
 		rifts = config.getInt("rift-count");
 		sanity = config.getInt("sanity.cur-sanity");
 		max_sanity = config.getInt("sanity.max_sanity");
+		groups = ConfigReader.readUUIDList(config, "groups");
 	}
 	
 	

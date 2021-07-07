@@ -11,7 +11,8 @@ import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimArg;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.Town;
+import me.felnstaren.espero.module.nations.town.Town;
+import me.felnstaren.espero.module.nations.town.TownRegistry;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
@@ -25,7 +26,7 @@ public class TownClaimCommand extends SubCommand {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
-				Nation nation = eplayer.getNation();
+				Town town = TownRegistry.inst().getTown(args[])
 				
 				if(nation == null) {
 					Messenger.send(player, Format.ERROR_NOT_IN_NATION.message());
@@ -48,11 +49,6 @@ public class TownClaimCommand extends SubCommand {
 				
 				if(town_id == 0) {
 					Messenger.send(player, Color.RED + "Invalid Town");
-					return true;
-				}
-				
-				if(claim == null) {
-					Messenger.send(player, Color.RED + "Towns may only be inside of nation claims!");
 					return true;
 				}
 				

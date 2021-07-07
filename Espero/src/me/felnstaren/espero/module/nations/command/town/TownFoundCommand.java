@@ -10,8 +10,11 @@ import me.felnstaren.espero.config.Option;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
+import me.felnstaren.espero.module.nations.claim.OwnerType;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.Town;
+import me.felnstaren.espero.module.nations.town.Town;
+import me.felnstaren.espero.module.nations.town.TownRegistry;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
@@ -34,7 +37,7 @@ public class TownFoundCommand extends SubCommand {
 					return true;
 				}
 				
-				if(!eplayer.getNationRank().isPermitted("found")) {
+				if(!nation.hasPermission(eplayer, Permission.TOWN_CREATE)) {
 					Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
 					return true;
 				}
@@ -49,8 +52,8 @@ public class TownFoundCommand extends SubCommand {
 					return true;
 				}
 				
-				if(nation.getTown(name) != null) {
-					Messenger.send(player, Color.RED + "Your nation already has a town with this name!");
+				if(TownRegistry.inst().getTown(name) != null) {
+					Messenger.send(player, Color.RED + "A town with this name already exists!");
 					return true;
 				}
 				
@@ -58,12 +61,7 @@ public class TownFoundCommand extends SubCommand {
 				int cx = loc.getX(); int cz = loc.getZ();
 				ClaimChunk claim = ClaimBoard.inst().getClaim(cx, cz);
 				
-				if(claim == null || claim.nation == null || !claim.nation.equals(nation.getID())) {
-					Messenger.send(player, Color.RED + "You must found a town inside your nation");
-					return true;
-				}
-				
-				if(claim.town != 0) {
+				if(claim.owner_type == OwnerType.TOWN) {
 					Messenger.send(player, Color.RED + "You cannot found a town inside another");
 					return true;
 				}
@@ -72,19 +70,16 @@ public class TownFoundCommand extends SubCommand {
 					Messenger.send(player, Color.RED + "Your nation cannot afford this!");
 					return true;
 				}
-				
-				//AFK
-				
-				
+
 				
 				//Found that shit
 				Messenger.broadcast(Color.GREEN + "The town of " + name + " has formed!");
-				Town town = new Town(name, nation.getTowns().size(), cx, cz);
+				Town town = new Town(nation.getID(), name, cx, cz);
 				town.addArea(1);
-				nation.getTowns().add(town);
 				nation.addTownArea(1);
 				nation.addBalance(-Option.TOWN_FOUND_COST);
-				ClaimBoard.inst().claim(cx, cz, nation.getID(), town.getID());
+				TownRegistry.inst().register(town);
+				ClaimBoard.inst().claim(cx, cz, town.getID());
 				
 				return true;
 			}

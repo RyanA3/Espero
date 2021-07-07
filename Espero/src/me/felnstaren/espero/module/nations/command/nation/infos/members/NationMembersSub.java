@@ -1,8 +1,7 @@
 package me.felnstaren.espero.module.nations.command.nation.infos.members;
 
-import java.util.UUID;
-
 import me.felnstaren.espero.Espero;
+import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.command.nation.infos.NationInfosSub;
 import me.felnstaren.espero.module.nations.nation.Nation;
@@ -28,8 +27,8 @@ public class NationMembersSub extends NationInfosSub {
 	
 	public static String constructMembersList(Nation nation) {
 		String members = "" + Color.TURQUOISE;
-		for(UUID id : nation.getMembers())
-			members += " " + Espero.OFFLINE_PLAYERS.getName(id);
+		for(EsperoPlayer player : nation.getMembers())
+			members += " " + Espero.OFFLINE_PLAYERS.getName(player.getUniqueId());
 		
 		return members;
 	}

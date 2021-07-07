@@ -5,41 +5,7 @@ area: 0
 perimeter: 0
 town_area: 0
 
+group:
 towns:
-
-ranks:
- recruit:
-  display_name: "Recruit"
-  weight: 0
-  permissions:
-   - container
-   - button
-   - lever
-   - door
- member:
-  display_name: "Member"
-  inherits: "recruit"
-  weight: 10
-  permissions:
-   - build
-   - recruit
- officer:
-  display_name: "Officer"
-  inherits: "member"
-  weight: 20
-  permissions:
-   - demote
-   - promote
-   - claim
-   - relation
- leader:
-  display_name: "Leader"
-  inherits: "officer"
-  weight: 30
-  permissions:
-   - coffers
-   - kick
-   - found
-
 members:
 invites:

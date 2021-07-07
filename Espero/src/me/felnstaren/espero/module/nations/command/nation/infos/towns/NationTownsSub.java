@@ -3,7 +3,7 @@ package me.felnstaren.espero.module.nations.command.nation.infos.towns;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.command.nation.infos.NationInfosSub;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.Town;
+import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.felib.chat.Color;
 
 public class NationTownsSub extends NationInfosSub {

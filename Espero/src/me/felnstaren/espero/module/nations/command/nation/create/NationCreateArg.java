@@ -80,7 +80,7 @@ public class NationCreateArg extends SubArgument {
 					Economy.withdraw(player, Option.NATION_FOUND_COST);
 					
 					Nation nation = new Nation(fname, eplayer);
-					NationRegistry.inst().registerNewNation(nation);
+					NationRegistry.inst().register(nation);
 					
 					Messenger.broadcast("#5F5The nation of #2F2" + nation.getDisplayName() + " #5F5has risen from the ashes!");
 					Messenger.send(player, "#5F5Successfully create a new nation called #7F7" + fname);

@@ -9,6 +9,7 @@ import me.felnstaren.espero.module.morph.MorphManager;
 import me.felnstaren.espero.module.morph.morph.EntityMorph;
 import me.felnstaren.espero.module.morph.morph.RideableMorph;
 import me.felnstaren.felib.chat.Messenger;
+import me.felnstaren.felib.packet.enums.MetadataValue;
 import me.felnstaren.felib.packet.enums.PacketEntityType;
 
 public class MorphCommand implements CommandExecutor {
@@ -36,7 +37,7 @@ public class MorphCommand implements CommandExecutor {
 		}
 		
 		PacketEntityType entity_type = PacketEntityType.WOLF;
-		try { entity_type = PacketEntityType.valueOf(args[0]); }
+		try { entity_type = PacketEntityType.valueOf(args[0].toUpperCase()); }
 		catch (Exception e) { Messenger.send(player, "#F55The fuck is this shit: " + args[0]); return true; }
 		
 		EntityMorph morph = mman.getMorphByPlayer(player.getEntityId());
@@ -45,8 +46,19 @@ public class MorphCommand implements CommandExecutor {
 			return true;
 		}
 		
-		if(entity_type == PacketEntityType.HORSE) mman.morph(new RideableMorph(player, entity_type));
-		else mman.morph(new EntityMorph(player, entity_type));
+		if(entity_type == PacketEntityType.HORSE) morph = new RideableMorph(player, entity_type);
+		else morph = new EntityMorph(player, entity_type);
+		
+		for(int i = 1; i < args.length; i++) {
+			String[] split = args[i].split(":");
+			MetadataValue type = MetadataValue.valueOf(split[0].toUpperCase());
+			if(type.getType() == int.class) morph.getProperties().put(type, Integer.parseInt(split[1]));
+			else if(type.getType() == boolean.class) morph.getProperties().put(type, Boolean.parseBoolean(split[1]));
+			else if(type.getType() == byte.class) morph.getProperties().put(type, Byte.valueOf(split[1]));
+			else morph.getProperties().put(type, type.getType().cast(split[1]));
+		}
+		
+		mman.morph(morph);
 		Messenger.send(player, "#5F5You are now a " + entity_type.name().replaceAll("HORSE", "HONSE"));
 		
 		return true;

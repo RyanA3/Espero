@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
-import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.felib.chat.Messenger;
@@ -54,8 +53,8 @@ public class NationJoinArg extends SubArgument {
 		}
 		
 		Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND E");
-		Nations.setNation(eplayer, to_join);
-
+		
+		to_join.join(eplayer);
 		to_join.broadcast("#5F5" + player.getName() + " has joined the nation!");
 		return true;
 	}

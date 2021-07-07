@@ -1,7 +1,7 @@
 package me.felnstaren.espero.module.morph.morph;
 
 import java.util.ArrayList;
-import java.util.Optional;
+import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,7 +20,6 @@ import me.felnstaren.felib.packet.wrapper.EntitySpawnPacket;
 import me.felnstaren.felib.packet.wrapper.PacketWrapper;
 import me.felnstaren.felib.packet.wrapper.data.DataWatcherWrapper;
 import me.felnstaren.felib.reflect.Packeteer;
-import me.felnstaren.felib.reflect.Reflector;
 import me.felnstaren.felib.util.ArrayUtil;
 
 public class EntityMorph {
@@ -41,6 +40,7 @@ public class EntityMorph {
 	
 	protected Player player;
 	protected FakeEntity entity;
+	protected HashMap<MetadataValue, Object> properties = new HashMap<MetadataValue, Object>();
 	
 	public EntityMorph(Player player, PacketEntityType type) {
 		this.player = player;
@@ -153,8 +153,9 @@ public class EntityMorph {
 		DataWatcherWrapper entity_watcher = new DataWatcherWrapper(null, true);
 		entity_watcher.register(MetadataValue.ENTITY_INFO_BYTE, genEntityInfoByte());
 		//entity_watcher.register(MetadataValue.ENTITY_CUSTOM_NAME, Optional.of(Reflector.newInstanceOf("ChatComponentText", player.getDisplayName())));
-		entity_watcher.register(MetadataValue.ENTITY_IS_CUSTOM_NAME_VISIBLE, true);
+		//entity_watcher.register(MetadataValue.ENTITY_IS_CUSTOM_NAME_VISIBLE, true);
 		entity_watcher.register(MetadataValue.LIVING_ENTITY_HEALTH, (float) player.getHealth());
+		for(MetadataValue value_type : properties.keySet()) entity_watcher.register(value_type, properties.get(value_type));
 		//entity_watcher.register(MetadataValue.LIVING_ENTITY_INFO_BYTE, ByteInfo.createWithSet(ByteInfo.LIVING_ENTITY_IS_RIPTIDING));
 		return entity_watcher;
 	}
@@ -172,6 +173,10 @@ public class EntityMorph {
 	}
 	
 	
+	
+	public HashMap<MetadataValue, Object> getProperties() {
+		return properties;
+	}
 	
 	public FakeEntity getFakeEntity() {
 		return entity;

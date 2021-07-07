@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
+import me.felnstaren.espero.module.nations.town.TownRegistry;
 import me.felnstaren.felib.util.data.BinarySearchable;
 
 public class ClaimRegion extends BinarySearchable<ClaimData> {
@@ -14,8 +15,8 @@ public class ClaimRegion extends BinarySearchable<ClaimData> {
 	
 	private int x;
 	private int z;
-	//private ArrayList<ClaimData> claims;
-	private ArrayList<UUID> nations;
+	private ArrayList<UUID> owners; //Towns & Nations owning a claim in this region
+	private ArrayList<OwnerType> owner_types;
 	private String path;
 	
 	public ClaimRegion(int x, int z) {
@@ -23,7 +24,8 @@ public class ClaimRegion extends BinarySearchable<ClaimData> {
 		this.z = z;
 		
 		//claims = new ArrayList<ClaimData>();
-		nations = new ArrayList<UUID>();
+		owners = new ArrayList<UUID>();
+		owner_types = new ArrayList<OwnerType>();
 		path = "/chunkdata/" + x + "x" + z + "z.txt";
 		
 		String data = Espero.LOADER.readString(path, null);
@@ -32,127 +34,84 @@ public class ClaimRegion extends BinarySearchable<ClaimData> {
 		String[] line = data.split("\\n");
 		if(line.length < 2) return;
 		
-		String[] unparsed_nations = line[0].split(",");
-		for(String unparsed_nation : unparsed_nations)
-			nations.add(UUID.fromString(unparsed_nation));
+		String[] unparsed_owners = line[0].split(",");
+		for(String unparsed_owner : unparsed_owners) {
+			if(unparsed_owner.startsWith("t")) owner_types.add(OwnerType.TOWN);
+			else 							   owner_types.add(OwnerType.NATION);
+			owners.add(UUID.fromString(unparsed_owner.substring(1, unparsed_owner.length())));
+		}
 		
 		String[] unparsed_chunks = line[1].split(",");
 		for(String unparsed_chunk : unparsed_chunks)
 			/*claims.*/add(new ClaimData(unparsed_chunk));
 		
-		//Remove Deleted Nations
-		for(int i = 0; i < nations.size(); i++) {
-			if(NationRegistry.inst().getNation(nations.get(i)) != null) continue;
-			clear(nations.get(i)); i--;
+		//Remove Deleted Nations & Towns
+		for(int i = 0; i < owners.size(); i++) {
+			if(NationRegistry.inst().getNation(owners.get(i)) != null) continue;
+			if(TownRegistry  .inst().getTown  (owners.get(i)) != null) continue;
+			clear(owners.get(i)); i--;
 		}
 	}
 	
 	
 	
-	public ClaimData getClaim(int x, int z) {
+	public  ClaimData getClaim(int x, int z) {
 		int offx = Math.abs(x) % WIDTH; int offz = Math.abs(z) % HEIGH;  //Modulo to get into relative chunk coords
-		//Espero.LOGGER.log(Level.DEBUG, "Chunk(" + x + "," + z + ") -> (" + offx + "," + offz + ") -> " + (offz * WIDTH + offx));
 		return getClaim(offz * WIDTH + offx);
 	}
-	
 	private ClaimData getClaim(int location) {
-		return get(location);
-		//for(ClaimData c : claims)
-		//	if(c.location() == location) return c;
-		//return null;
+		return get(location); 
 	}
 	
-	public void claim(int x, int z, UUID nation, int town) {
+	public  void claim    (int x, int z, UUID owner) {
 		x = Math.abs(x) % WIDTH; z = Math.abs(z) % HEIGH;  //Modulo to get into relative chunk coords
-		claim(z * WIDTH + x, nation, town);
+		claim(z * WIDTH + x, owner);
 	}
-	
-	private void claim(int location, UUID nation, int town) {
-		if(!nations.contains(nation)) nations.add(nation);
-		int native_nation_id = nations.indexOf(nation);
+	private void claim    (int location, UUID owner) {
+		if(!owners.contains(owner)) {
+			owners.add(owner);
+			if(NationRegistry.inst().getNation(owner) == null) owner_types.add(OwnerType.TOWN);
+			else											   owner_types.add(OwnerType.NATION);
+		}
+		int native_owner_id = owners.indexOf(owner);
 		
 		ClaimData chunk = getClaim(location);
 		if(chunk == null) 
-			/*claims.*/add(new ClaimData(location, native_nation_id, town));
-		else {
-			chunk.setNation(native_nation_id);
-			chunk.setTown(town);
-		}
+			add(new ClaimData(location, native_owner_id));
+		else 
+			chunk.setOwner(native_owner_id);
 	}
 	
-	public void unclaim(int x, int z) {
+	public  void unclaim  (int x, int z) {
 		x = Math.abs(x) % WIDTH; z = Math.abs(z) % HEIGH;  //Modulo to get into relative chunk coords
 		unclaim(z * WIDTH + x);
+	} 
+	private void unclaim  (int location) { 
+		remove(location); 
 	}
 	
-	private void unclaim(int location) { //TODO: Dirty, doesn't remove nation if all nation's claims are gone
-		remove(location);
-		//int nation_hits = 0;
-		//ClaimData chunk = getClaim(location);
-		
-		//for(int i = 0; i < claims.size(); i++) {
-		//	if(claims.get(i).nation() == chunk.nation()) nation_hits++;
-		//	if(claims.get(i).location() != location) continue;
-		//	claims.remove(i);
-		//	i--;
-		//}
-		
-		//if(nation_hits > 1) return;
-		//nations.remove(chunk.nation());
-		//for(ClaimData shift : claims)
-		//	if(shift.nation() > chunk.nation()) shift.setNation(shift.nation() - 1);
-	}
+	public    int   x()						 { return x; }
+	public    int   z() 					 { return z; }	
+	protected UUID  	getLocalOwner    (int owner) { return owners.get(owner); 	  }
+	protected OwnerType getLocalOwnerType(int owner) { return owner_types.get(owner); }
 	
-	
-	
-	private String data() {
-		String data = "";
-		for(int i = 0; i < nations.size(); i++) {
-			if(i > 0) data += ",";
-			data += nations.get(i).toString();
-		}
-		data += "\n";
-		
+	//Clear all claims of a specific local owner in this region
+	public  void clear    (UUID owner)   {
+		int index = owners.indexOf(owner);
 		for(int i = 0; i < values.size(); i++) {
-			if(i > 0) data += ",";
-			data += values.get(i).data();
-		}
-
-		return data;
-	}
-	
-	public void save() {
-		Espero.LOADER.save(path, data());
-	}
-	
-	
-	
-	public int x() {
-		return x;
-	}
-	
-	public int z() {
-		return z;
-	}
-	
-	protected UUID getRelativeNation(int nation) {
-		return nations.get(nation);
-	}
-	
-	public void clear(UUID nation) {
-		int index = nations.indexOf(nation);
-		for(int i = 0; i < values.size(); i++) {
-			if(values.get(i).nation() != index) { //If the claim isn't of the target nation
-				if(values.get(i).nation() > index) //and is greater than the target nation 
-					values.get(i).setNation(values.get(i).nation() - 1); //Then shift the nation if it's higher than this one's index
-				continue; //and skip this value
+			if(values.get(i).owner() != index) { //If the claim isn't of the target owner
+				if(values.get(i).owner() > index) {//and is greater than the target owner 
+					values.get(i).setOwner(values.get(i).owner() - 1); //Then shift the owner if it's higher than this one's index
+				} continue; //and skip this value
 			}
 			values.remove(i); i--; //Otherwise remove it
 		}
-		nations.remove(index);
+		owners.remove(index);
+		owner_types.remove(index);
 	}
 	
-	public String map(int px, int pz) {
+	//NOTE: FOR DEBUG PURPOSES ONLY
+	public String map(int px, int pz) { 
 		String map = "";
 		px = Math.abs(px); pz = Math.abs(pz);
 		for(int offz = 0; offz < HEIGH; offz++) {
@@ -168,6 +127,31 @@ public class ClaimRegion extends BinarySearchable<ClaimData> {
 		}
 		map += "\n region(" + x + "," + z + ")"; 
 		return map;
+	}
+	
+	
+	
+	private String data() {
+		String data = "";
+		
+		//Local Claim Holders Identifications
+		for(int i = 0; i < owners.size(); i++) {
+			if(i > 0) data += ",";
+			data += owner_types.get(i).name().substring(0, 1).toLowerCase() + owners.get(i).toString();
+		}
+		data += "\n";
+		
+		//Raw Claims Data
+		for(int i = 0; i < values.size(); i++) {
+			if(i > 0) data += ",";
+			data += values.get(i).data();
+		}
+
+		return data;
+	}
+	
+	public void save() {
+		Espero.LOADER.save(path, data());
 	}
 
 }
