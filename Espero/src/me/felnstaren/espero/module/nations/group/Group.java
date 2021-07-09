@@ -27,7 +27,7 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 		this.config = Espero.LOADER.readConfig(path, "resources/default_group.yml");
 		
 		if(model == null) model = new LinearRankModel(config.getConfigurationSection("ranks"));
-		List<String> pdata = config.getStringList("players");
+		List<String> pdata = config.getStringList("members");
 		for(int i = 0; i < pdata.size(); i++) {
 			String[] spdata = pdata.get(i).split("\\.");
 			setRank(Espero.PLAYERS.getPlayer(UUID.fromString(spdata[0])), Integer.parseInt(spdata[1]));
@@ -38,7 +38,7 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 		this.model = model; 
 		this.uuid = UUID.randomUUID();
 		this.path = "groupdata/" + uuid + ".yml";
-		this.config = Espero.LOADER.readConfig(path, "resources/default_town.yml");
+		this.config = Espero.LOADER.readConfig(path, "resources/default_group.yml");
 		this.model = new LinearRankModel(LinearRankModel.NATIONS_DEFAULT_RANK_HIERARCHY);
 	}
 	
@@ -61,7 +61,7 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 	public  boolean contains(EsperoPlayer player){ return super.indexOf(player) != -1; } 
 	public  UUID    getID() 					 { return uuid; 		}
 	public  ArrayList<EsperoPlayer> getMembers() { return super.values; }
-	public  int     relRank(EsperoPlayer player) { return player_ranks.get(indexOf(player)); 			}
+	public  int     relRank(EsperoPlayer player) { int index = indexOf(player); return index == -1 ? index : player_ranks.get(indexOf(player)); 			}
 	public  Rank    getRank(EsperoPlayer player) { return model.getRank(relRank(player));    			}
 	public  void    promote(EsperoPlayer player) { setRank(player, model.nextRank(relRank(player))); 	}
 	public  void    demote (EsperoPlayer player) { setRank(player, model.prevRank(relRank(player)));    }
@@ -69,14 +69,21 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 	public  boolean outranks(EsperoPlayer superior, EsperoPlayer inferior)    { return getRank(superior).outranks(getRank(inferior)); }
 	public  int     toprank() { return model.getRanks().length - 1; }
 	public  boolean isTopRank(EsperoPlayer player) { return relRank(player) == toprank(); }
+	public  void    disband() {
+		Espero.LOGGER.debug("GROUP[" + uuid + "].SELF.DISBAND_AND_DELETE");
+		GroupRegistry.inst().unregister(uuid);
+		Espero.LOADER.delete(path);
+	}
 	
 	public void save() {
 		ArrayList<String> pdata = new ArrayList<String>();
 		for(int i = 0; i < values.size(); i++)
 			pdata.add(values.get(i).getUniqueId().toString() + "." + player_ranks.get(i));
 		
-		config.set(path + ".players", pdata);
-		model.save(config, path);
+		config.set("members", pdata);
+		model.save(config);
+		
+		Espero.LOADER.save(path, config);
 	}
 	
 	

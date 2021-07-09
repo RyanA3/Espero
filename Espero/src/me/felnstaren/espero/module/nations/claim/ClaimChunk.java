@@ -32,6 +32,10 @@ public class ClaimChunk {
 	//UNPROTECTED: Owner could be Town OR Nation, but NOT BOTH
 	public Nation getNation() { return NationRegistry.inst().getNation(owner); }
 	public Town   getTown()   { return TownRegistry.inst().getTown(owner);     }
+	public String getOwnerName() { if(owner_type == OwnerType.NATION) 
+		return getNation().getDisplayName();
+		else return getTown().name;
+	}
 	
 	//Get a claim relative to this one, if there is one
 	public ClaimChunk getRelative(int offX, int offZ) { return ClaimBoard.inst().getClaim(x + offX, z + offZ); }

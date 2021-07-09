@@ -3,6 +3,7 @@ package me.felnstaren.espero.config;
 import java.util.ArrayList;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
@@ -35,8 +36,8 @@ public class EsperoPlayer extends DataPlayer {
 	
 	@Deprecated
 	public void setNation(Nation nation) { this.nation = (nation == null ? null : nation.getID()); }
-	public Nation getNation()            { return NationRegistry.inst().getNation(nation);         }
-	
+	public Nation getNation()            { return nation == null ? null : NationRegistry.inst().getNation(nation);         }
+	public boolean isOnline()			 { return Bukkit.getPlayer(this.uuid).isOnline(); }
 	
 	
 	public void addRift(int count) {

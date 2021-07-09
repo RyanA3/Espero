@@ -1,5 +1,6 @@
 package me.felnstaren.espero.module.nations;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -54,7 +55,7 @@ public class Nations implements IModule {
 	}
 
 	public void onDisable(JavaPlugin plugin) {
-		save_task.cancel();
+		Bukkit.getScheduler().cancelTask(save_task.getTaskId());
 		NationRegistry.inst().save();
 		ClaimBoard.inst().save();
 		TownRegistry.inst().save();

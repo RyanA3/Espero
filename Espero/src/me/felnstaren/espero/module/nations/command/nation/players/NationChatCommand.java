@@ -1,4 +1,4 @@
-package me.felnstaren.espero.module.nations.command.nation.chat;
+package me.felnstaren.espero.module.nations.command.nation.players;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,9 +10,9 @@ import me.felnstaren.espero.module.nations.chat.NationPlayerChatManager;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubCommand;
 
-public class NationChatSub extends SubCommand {
+public class NationChatCommand extends SubCommand {
 
-	public NationChatSub() {
+	public NationChatCommand() {
 		super("chat");
 	}
 

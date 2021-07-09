@@ -1,4 +1,4 @@
-package me.felnstaren.espero.module.nations.command.nation.disband;
+package me.felnstaren.espero.module.nations.command.nation.players;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -6,16 +6,14 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
-import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubCommand;
 
-public class NationDisbandSub extends SubCommand {
+public class NationLeaveCommand extends SubCommand {
 
-	public NationDisbandSub() {
-		super("disband");
+	public NationLeaveCommand() {
+		super("leave");
 	}
 	
 	
@@ -30,14 +28,22 @@ public class NationDisbandSub extends SubCommand {
 			return true;
 		}
 		
-		if(nation.hasPermission(eplayer, Permission.NATION_DISBAND)) {
-			Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
+		if(nation.isLeader(eplayer)) {
+			Messenger.send(player, "#F55You must delegate a new leader before you leave!");
 			return true;
 		}
+
+		if(nation.getMembers().size() == 0) {
+			Messenger.broadcast("#F22" + nation.getDisplayName() + " #F55has been disbanded!");
+			nation.disband();
+		}
 		
-		nation.disband();
-		Messenger.broadcast(Color.RED + nation.getDisplayName() + Color.RED + " has been disbanded!");
+		nation.broadcast("#5F5" + player.getDisplayName() + " has left the nation!");
+		Messenger.send(player, "#5F5You've left the nation of #F22" + nation.getDisplayName() + " #5F5behind, good luck on your travels");
+		
 		return true;
 	}
+
+	
 	
 }

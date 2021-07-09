@@ -9,7 +9,6 @@ import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
-import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimArg;
 import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.town.Town;
@@ -54,10 +53,8 @@ public class TownClaimCommand extends SubCommand {
 					return true;
 				}
 				
-				if(NationClaimArg.isTouching(cx, cz, town.getID())) {
-					ClaimBoard.inst().claim(cx, cz, town.getID());
-					town.addArea(1);
-					nation.addTownArea(1);
+				if(ClaimBoard.inst().isAdjacent(cx, cz, town.getID())) {
+					town.claim(cx, cz);
 					nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " claimed " + town.name + " at " + cx + "x, " + cz + "z");
 				} else {
 					Messenger.send(player, Color.RED + "Town claims cannot be disconnected from their town!");

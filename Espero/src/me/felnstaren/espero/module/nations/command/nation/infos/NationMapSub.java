@@ -1,4 +1,4 @@
-package me.felnstaren.espero.module.nations.command.nation.map;
+package me.felnstaren.espero.module.nations.command.nation.infos;
 
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;

@@ -48,7 +48,7 @@ public class NationHelpSub extends SubCommand {
 		PAGES[1] = Messenger.colorWithJson(
 				HELP_HEADER + " " + Format.LABEL_ARG.message("Page", "1") + Color.LIGHT_GRAY
 				+ "\n/nation"
-				+ "\n  create " + Format.FORCE_ARG.message("name") + Color.LIGHT_GRAY
+				+ "\n  found " + Format.FORCE_ARG.message("name") + Color.LIGHT_GRAY
 				+ "\n  disband"
 				+ "\n  invite " + Format.FORCE_ARG.message("player") + Color.LIGHT_GRAY
 				+ "\n  uninvite " + Format.FORCE_ARG.message("player") + Color.LIGHT_GRAY

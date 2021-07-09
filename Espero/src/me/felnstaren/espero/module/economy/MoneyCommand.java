@@ -17,6 +17,11 @@ public class MoneyCommand implements CommandExecutor {
 			return true;
 		}
 		
+		if(args.length < 1) {
+			Messenger.send((Player) sender, Color.RED + "Specify an amount");
+			return true;
+		}
+		
 		Economy.deposit((Player) sender, Integer.parseInt(args[0]));
 		return true;
 	}

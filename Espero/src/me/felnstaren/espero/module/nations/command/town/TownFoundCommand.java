@@ -10,7 +10,6 @@ import me.felnstaren.espero.config.Option;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
-import me.felnstaren.espero.module.nations.claim.OwnerType;
 import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.town.Town;
@@ -19,6 +18,8 @@ import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 import me.felnstaren.felib.command.SubCommand;
+import me.felnstaren.felib.ui.prompt.ChatPrompt;
+import me.felnstaren.felib.ui.prompt.PromptHandler;
 import me.felnstaren.felib.util.StringUtil;
 
 public class TownFoundCommand extends SubCommand {
@@ -30,7 +31,13 @@ public class TownFoundCommand extends SubCommand {
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
 				Nation nation = eplayer.getNation();
-				String name = args[current];
+				
+				String name = "";
+				for(int i = 1; i < args.length; i++) {
+					name += args[i];
+					if(i < args.length - 1) name += " ";
+				}
+				final String fname = name;
 				
 				if(nation == null) {
 					Messenger.send(player, Format.ERROR_NOT_IN_NATION.message());
@@ -61,8 +68,8 @@ public class TownFoundCommand extends SubCommand {
 				int cx = loc.getX(); int cz = loc.getZ();
 				ClaimChunk claim = ClaimBoard.inst().getClaim(cx, cz);
 				
-				if(claim.owner_type == OwnerType.TOWN) {
-					Messenger.send(player, Color.RED + "You cannot found a town inside another");
+				if(claim != null) {
+					Messenger.send(player, Color.RED + "You cannot found a town inside already claimed chunks!");
 					return true;
 				}
 				
@@ -72,14 +79,30 @@ public class TownFoundCommand extends SubCommand {
 				}
 
 				
-				//Found that shit
-				Messenger.broadcast(Color.GREEN + "The town of " + name + " has formed!");
-				Town town = new Town(nation.getID(), name, cx, cz);
-				town.addArea(1);
-				nation.addTownArea(1);
-				nation.addBalance(-Option.TOWN_FOUND_COST);
-				TownRegistry.inst().register(town);
-				ClaimBoard.inst().claim(cx, cz, town.getID());
+				
+				PromptHandler.inst().register(new ChatPrompt(player, 20, 
+						Color.WHEAT + "Are you sure you would like to found the town of "
+						+ Format.ARG.message(name) + Color.WHEAT + "?\n"
+						+ "It will cost you " + Option.TOWN_FOUND_COST + " Mynt"
+				) {
+					public void callback(String response) {
+						if(response.equalsIgnoreCase("no")) {
+							this.expired = true;
+							Messenger.send(player, Color.RED + "Cancelled town creation...");
+							return;
+						} else if(response.equalsIgnoreCase("yes")) {
+							//Found that shit
+							Messenger.broadcast(Color.GREEN + "The town of " + fname + " has formed!");
+							Town town = new Town(nation.getID(), fname, cx, cz, eplayer);
+							TownRegistry.inst().register(town);
+							town.claim(cx, cz);
+							nation.broadcast(Color.GREEN + player.getDisplayName() + " has founded the town of " + fname);
+							this.expired = true;
+						} else {
+							Messenger.send(player, Color.RED + "I could not understand that, please respond with yes/no");
+						}
+					}
+				});
 				
 				return true;
 			}

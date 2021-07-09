@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
-import me.felnstaren.espero.module.nations.nation.NationRegistry;
 
 public class ClaimBoard {
 
@@ -37,8 +36,8 @@ public class ClaimBoard {
 		ClaimData data = region.getClaim(x, z);
 		
 		if(data == null) return null;
-		UUID nation = region.getLocalOwner(data.owner());
-		if(NationRegistry.inst().getNation(nation) == null) return null;
+
+		Espero.LOGGER.stream("Get chunk (" + x + "," + z + ") -> " + region.getLocalOwnerType(data.owner()).name());
 		
 		return new ClaimChunk(x, z, region.getLocalOwner(data.owner()), region.getLocalOwnerType(data.owner())); 
 	}
@@ -57,6 +56,22 @@ public class ClaimBoard {
 	public boolean isNation(int x, int z) {
 		ClaimChunk claim = getClaim(x, z);
 		return claim != null && claim.owner_type == OwnerType.NATION;
+	}
+	//Checks if a specified chunk is adjacent to one owned by the specified owner
+	public boolean isAdjacent(int x, int z, UUID owner) {
+		return isOwnedBy(x+1, z, owner) 
+				|| isOwnedBy(x-1, z, owner)
+				|| isOwnedBy(x, z+1, owner)
+				|| isOwnedBy(x, z-1, owner);
+	}
+	//Returns a count of the number of adjacent chunks owned by the specified owner
+	public int countAdjacent(int x, int z, UUID owner) {
+		int i = 0;
+		if(isOwnedBy(x+1, z, owner)) i++;
+		if(isOwnedBy(x-1, z, owner)) i++;
+		if(isOwnedBy(x, z+1, owner)) i++;
+		if(isOwnedBy(x, z-1, owner)) i++;
+		return i;
 	}
 	
 	/**

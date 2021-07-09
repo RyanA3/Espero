@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -63,6 +64,7 @@ public class PlayerClaimInteractHandler implements Listener {
 		else if(event.getClickedBlock().getType().toString().contains("DOOR")) what = Permission.DOOR;
 		else if(CONTAINERS.contains(event.getClickedBlock().getType())) what = Permission.CONTAINER;
 		else if(event.getClickedBlock().getType().toString().contains("BOX")) what = Permission.CONTAINER;
+		else if(event.getAction() == Action.RIGHT_CLICK_BLOCK) what = Permission.BUILD;
 		if(what == null) return;
 		
 		if(!candoshit(event.getPlayer(), event.getClickedBlock().getLocation(), what)) event.setCancelled(true);

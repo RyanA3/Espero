@@ -12,6 +12,7 @@ import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.infoout.InfoMessageController;
 import me.felnstaren.espero.module.wind.WindModule;
 import me.felnstaren.felib.config.Loader;
+import me.felnstaren.felib.logger.Level;
 import me.felnstaren.felib.logger.Logger;
 import me.felnstaren.felib.player.PlayerNameIDTransposer;
 
@@ -31,6 +32,7 @@ public class Espero extends JavaPlugin {
 	
 	public void onEnable() {
 		LOGGER = new Logger(this.getServer().getConsoleSender(), this.getName());
+		LOGGER.setPriority(Level.STREAM);
 		LOADER = new Loader(this, LOGGER);
 		LOADER.mkDirs("/nationdata/", "/playerdata/", "/chunkdata/", "/towndata/", "/groupdata/");
 		PLAYERS = new EsperoPlayerManager(this);

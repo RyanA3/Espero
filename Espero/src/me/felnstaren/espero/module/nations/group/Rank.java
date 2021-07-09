@@ -1,6 +1,7 @@
 package me.felnstaren.espero.module.nations.group;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -14,7 +15,7 @@ public class Rank implements ConfigurationSectionObject {
 	public String gaming_name;
 	public int weight = 0;
 	
-	public Rank() { };
+	public Rank(String gaming_name) { this.gaming_name = gaming_name; };
 	
 	public Rank(String display_name, Permission... permissions) {
 		this(display_name, 0, permissions);
@@ -60,13 +61,29 @@ public class Rank implements ConfigurationSectionObject {
 		for(int i = 0; i < permissions.length; i++) strpermissions.add(permissions[i].name());
 		return strpermissions;
 	}
+	
+	public void save(ConfigurationSection data) {
+		data.set("display_name", display_name);
+		data.set("weight", weight);
+		data.set("permissions", strpermissions());
+	}
 
 
 
 	@Override
 	public ConfigurationSectionObject load(ConfigurationSection data) {
-		// TODO Auto-generated method stub
-		return null;
+		this.display_name = data.getString("display_name");
+		this.weight = data.getInt("weight");
+		
+		List<String> sperms = data.getStringList("permissions");
+		this.permissions = new Permission[sperms.size()];
+		int i = 0;
+		for(String sperm : sperms) {
+			permissions[i] = Permission.valueOf(sperm);
+			i++;
+		}
+		
+		return this;
 	}
 
 

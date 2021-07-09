@@ -34,7 +34,7 @@ public class CofferListener implements Listener {
 		
 		ClaimChunk claim = ClaimBoard.inst().getClaim(block.getChunk().getX(), block.getChunk().getZ());
 
-		if(claim == null || !nation.getID().equals(claim.getNation().getID())) {
+		if(claim == null || !nation.getID().equals(claim.owner)) {
 			Messenger.send(event.getPlayer(), Format.ERROR_COFFERS_OUT_NATION.message());
 			return;
 		}

@@ -31,8 +31,6 @@ public class NationInfoSub extends NationInfosSub {
 		message += "   " + NationMembersSub.constructMembersList(nation) + "\n";
 		message += "  " + Format.SUBHEADER_VALUE.message("Towns", nation.getTowns().size() + "") + "\n";
 		message += "   " + NationTownsSub.constructTownsList(nation) + "\n";
-		
-		
 		return message;
 	}
 

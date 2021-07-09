@@ -10,7 +10,7 @@ import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.claim.OwnerType;
-import me.felnstaren.espero.module.nations.command.nation.unclaim.NationUnclaimSub;
+import me.felnstaren.espero.module.nations.command.nation.claims.NationUnclaimCommand;
 import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.town.Town;
@@ -57,10 +57,8 @@ public class TownUnclaimCommand extends SubCommand {
 			return true;
 		}
 		
-		if(!NationUnclaimSub.isPivotal(cx, cz, claim.owner)) {
-			nation.addTownArea(-1);
-			town.addArea(-1);
-			ClaimBoard.inst().unclaim(cx, cz);
+		if(!NationUnclaimCommand.isPivotal(cx, cz, claim.owner)) {
+			town.unclaim(cx, cz);
 			nation.broadcast(player.getName() + " unclaimed " + town.name + " at " + cx + "x, " + cz + "z");
 		}
 		else {

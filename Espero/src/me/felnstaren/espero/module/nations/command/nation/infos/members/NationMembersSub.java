@@ -28,7 +28,7 @@ public class NationMembersSub extends NationInfosSub {
 	public static String constructMembersList(Nation nation) {
 		String members = "" + Color.TURQUOISE;
 		for(EsperoPlayer player : nation.getMembers())
-			members += " " + Espero.OFFLINE_PLAYERS.getName(player.getUniqueId());
+			members += " " + Espero.OFFLINE_PLAYERS.getName(player.getUniqueId()) + ":" + nation.getGroup().relRank(player);
 		
 		return members;
 	}

@@ -1,29 +1,27 @@
-package me.felnstaren.espero.module.nations.command.nation.list;
+package me.felnstaren.espero.module.nations.command.town.info;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.messaging.Format;
-import me.felnstaren.espero.module.nations.nation.NationRegistry;
+import me.felnstaren.espero.module.nations.town.TownRegistry;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubCommand;
 
-public class NationListSub extends SubCommand {
+public class TownListCommand extends SubCommand {
 
-	public NationListSub() {
+	public TownListCommand() {
 		super("list");
 	}
 
-	
-	
 	public boolean stub(CommandSender sender, String[] args, int current) {
 		Player player = (Player) sender;
-		String message =  Format.HEADER.message("Espero's Nations") + "\n" + Color.TURQUOISE;
-		for(String name : NationRegistry.inst().getNationNames()) message += "   " + name;
+		String message =  Format.HEADER.message("Espero's Towns") + "\n" + Color.TURQUOISE;
+		for(String name : TownRegistry.inst().getTownNames()) message += "   " + name;
 		Messenger.send(player, Messenger.color(message));
 		
 		return true;
 	}
-	
+
 }

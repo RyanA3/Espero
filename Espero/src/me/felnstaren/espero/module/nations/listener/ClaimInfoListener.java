@@ -9,10 +9,9 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.claim.OwnerType;
-import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
+import me.felnstaren.felib.packet.enums.PacketTitleAction;
 
 public class ClaimInfoListener implements Listener {
 
@@ -31,26 +30,22 @@ public class ClaimInfoListener implements Listener {
 		if(from == null && to == null) return;
 		if(from != null && to != null && from.owner.equals(to.owner)) return;
 
-		String message = "";
-		Nation nation = null;
-		Town town = null;
-		
+		String message = "";	
+		if(from != null) {
+			if(from.owner_type == OwnerType.TOWN) message += Color.LIGHT_BLUE;
+			else message += Color.BLUE;
+			message += from.getOwnerName();
+		}
+		else message += Color.GREEN + "Wilds";
+		message += " " + Color.WHEAT + "" + Color.ARROW_RIGHT + " ";
 		if(to != null) {
-			message = Color.GREEN + "Entering ";
-			if(to.owner_type == OwnerType.NATION) nation = to.getNation();
-			else town = to.getTown();
+			if(to.owner_type == OwnerType.TOWN) message += Color.LIGHT_BLUE;
+			else message += Color.BLUE;
+			message += to.getOwnerName();
 		}
-		else if(from != null) {
-			message = Color.RED + "Leaving ";
-			if(from.owner_type == OwnerType.NATION) nation = from.getNation();
-			else town = from.getTown();
-		}
-		
-		
-		if(town != null) message = message + Color.LIGHT_GRAY + "the town of " + town.name;
-		else if(nation != null) message = message + Color.LIGHT_GRAY + "the common lands of " + nation.getDisplayName();
+		else message += Color.GREEN + "Wilds";
 
-		if(nation != null) Messenger.send(player, message);
+		Messenger.sendTitle(player, message, PacketTitleAction.ACTIONBAR, 10, 100, 10);
 	}
 	
 }

@@ -1,4 +1,4 @@
-package me.felnstaren.espero.module.nations.command.nation.unclaim;
+package me.felnstaren.espero.module.nations.command.nation.claims;
 
 import java.util.UUID;
 
@@ -8,20 +8,18 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.config.Option;
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
-import me.felnstaren.espero.module.nations.command.nation.claim.NationClaimArg;
 import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubCommand;
 
-public class NationUnclaimSub extends SubCommand {
+public class NationUnclaimCommand extends SubCommand {
 
-	public NationUnclaimSub() {
+	public NationUnclaimCommand() {
 		super("unclaim");
 	}
 	
@@ -63,11 +61,8 @@ public class NationUnclaimSub extends SubCommand {
 			return true;
 		}
 		
-		NationClaimArg.updateNationArea(cx, cz, -1, nation);
-		ClaimBoard.inst().unclaim(cx, cz);
+		nation.unclaim(cx, cz);
 		nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " unclaimed chunk at (" + cx + "," + cz + ")");
-		nation.addBalance(Option.CLAIM_SELL_COST);
-		
 		return true;
 	}
 	
