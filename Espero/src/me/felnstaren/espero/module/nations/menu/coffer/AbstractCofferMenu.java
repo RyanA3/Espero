@@ -56,7 +56,6 @@ public abstract class AbstractCofferMenu extends Menu {
 	
 	public AbstractCofferMenu() {
 		super(SCHEMATIC);
-		update();
 	}
 	
 	
