@@ -1,10 +1,12 @@
 package me.felnstaren.espero.module.nations.command.town.info;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.fusesource.jansi.Ansi.Color;
 
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.town.Town;
+import me.felnstaren.espero.module.nations.town.TownRegistry;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 import me.felnstaren.felib.command.SubCommand;
@@ -29,7 +31,15 @@ public class TownInfoCommand extends SubCommand {
 		super("info");
 		arguments.add(new SubArgument("<town>") {
 			public boolean stub(CommandSender sender, String[] args, int current) {
-
+				String name = "";
+				for(int i = current; i < args.length; i++) {
+					name += args[i];
+					if(i < args.length - 1) name += " ";
+				}
+				
+				Town town = TownRegistry.inst().getTown(name);
+				if(town == null) Messenger.send((Player) sender, Color.RED + "Invalid town: " + name);
+				else Messenger.send((Player) sender, constructTownInfo(town));
 				return true;
 			}
 		});

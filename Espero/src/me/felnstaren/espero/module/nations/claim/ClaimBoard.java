@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import me.felnstaren.espero.Espero;
+import me.felnstaren.felib.chat.Color;
 
 public class ClaimBoard {
 
@@ -40,6 +41,11 @@ public class ClaimBoard {
 		Espero.LOGGER.stream("Get chunk (" + x + "," + z + ") -> " + region.getLocalOwnerType(data.owner()).name());
 		
 		return new ClaimChunk(x, z, region.getLocalOwner(data.owner()), region.getLocalOwnerType(data.owner())); 
+	}
+	
+	public ClaimData getRawClaim(int x, int z) {
+		ClaimRegion region = getRegion(x, z);
+		return region.getClaim(x, z);
 	}
 	
 	//Checks if a specified chunk is claimed by a specified owner (nation or town)
@@ -129,6 +135,24 @@ public class ClaimBoard {
 		ClaimRegion region = new ClaimRegion(x, z);
 		loaded_regions.add(region);
 		return region;
+	}
+	
+	
+	
+	public static String map(int cx, int cz, Color direction) {
+		String map = "/===========\\\n";
+		for(int offz = -5; offz <= 5; offz++) {
+			map += "||";
+			for(int offx = -5; offx <= 5; offx++) {
+				if(offz == 0 && offx == 0) { map += direction; continue; }
+				ClaimData claim = ClaimBoard.inst().getRawClaim(cx + offx, cz + offz);
+				if(claim == null) map += "-";
+				else map += "#";
+			}
+			map += "||\n";
+		}
+		map += "\\===========/";
+		return map;
 	}
 	
 }
