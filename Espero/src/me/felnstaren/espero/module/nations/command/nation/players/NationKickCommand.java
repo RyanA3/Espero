@@ -18,7 +18,7 @@ public class NationKickCommand extends SubCommand {
 	public NationKickCommand() {
 		super("kick");
 		
-		arguments.add(new SubArgument("<player>") {
+		arguments.add(new SubArgument("<komrade>") {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //new EsperoPlayer(player);

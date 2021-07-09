@@ -18,7 +18,7 @@ public class NationInviteCommand extends SubCommand {
 	public NationInviteCommand() {
 		super("invite");
 		
-		arguments.add(new SubArgument("<player>") {
+		arguments.add(new SubArgument("<nonkomrade>") {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);

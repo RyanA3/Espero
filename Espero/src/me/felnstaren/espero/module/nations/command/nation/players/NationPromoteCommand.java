@@ -19,7 +19,7 @@ public class NationPromoteCommand extends SubCommand {
 	public NationPromoteCommand() {
 		super("promote");
 		
-		arguments.add(new SubArgument("<player>") {
+		arguments.add(new SubArgument("<komrade>") {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);

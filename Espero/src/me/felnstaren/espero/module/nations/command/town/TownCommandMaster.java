@@ -15,6 +15,7 @@ import me.felnstaren.espero.module.nations.command.town.info.TownMembersCommand;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.espero.module.nations.town.Town;
+import me.felnstaren.espero.module.nations.town.TownRegistry;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.MasterCommand;
 import me.felnstaren.felib.command.TabSuggestor;
@@ -32,6 +33,11 @@ public class TownCommandMaster extends MasterCommand {
 		new TabSuggestor("<nation>") {
 			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
 				return NationRegistry.inst().getNationNames();
+			}
+		},
+		new TabSuggestor("<town>") {
+			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
+				return TownRegistry.inst().getTownNames();
 			}
 		},
 		new TabSuggestor("<claimtype>") {

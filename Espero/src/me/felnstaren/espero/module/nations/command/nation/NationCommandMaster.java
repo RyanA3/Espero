@@ -29,6 +29,7 @@ import me.felnstaren.espero.module.nations.command.nation.players.NationUninvite
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.espero.module.nations.town.Town;
+import me.felnstaren.espero.module.nations.town.TownRegistry;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.MasterCommand;
 import me.felnstaren.felib.command.TabSuggestor;
@@ -44,9 +45,35 @@ public class NationCommandMaster extends MasterCommand {
 				return players;
 			}
 		},
+		new TabSuggestor("<komrade>") {
+			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
+				EsperoPlayer player = Espero.PLAYERS.getPlayer((Player) sender);
+				ArrayList<Player> players = player.getNation().getOnlineMembers();
+				ArrayList<String> pnames = new ArrayList<String>();
+				for(Player p : players) pnames.add(p.getName());
+				return pnames;
+			}
+		},
+		new TabSuggestor("<nonkomrade>") {
+			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
+				EsperoPlayer player = Espero.PLAYERS.getPlayer((Player) sender);
+				ArrayList<Player> komrades = player.getNation().getOnlineMembers();
+				ArrayList<String> pnames = new ArrayList<String>();
+				int i = 0; for(Player p : Bukkit.getOnlinePlayers()) {
+					if(!p.getUniqueId().equals(komrades.get(i).getUniqueId())) 
+						pnames.add(p.getName());
+				i++;		   }
+				return pnames;
+			}
+		},
 		new TabSuggestor("<nation>") {
 			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
 				return NationRegistry.inst().getNationNames();
+			}
+		},
+		new TabSuggestor("<town>") {
+			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
+				return TownRegistry.inst().getTownNames();
 			}
 		},
 		new TabSuggestor("<claimtype>") {
