@@ -1,4 +1,4 @@
-package me.felnstaren.espero.module.nations.command.town;
+package me.felnstaren.espero.module.nations.command.town.claim;
 
 import org.bukkit.Chunk;
 import org.bukkit.command.CommandSender;

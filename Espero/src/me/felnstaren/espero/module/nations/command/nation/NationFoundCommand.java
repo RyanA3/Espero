@@ -18,9 +18,9 @@ import me.felnstaren.felib.ui.prompt.ChatPrompt;
 import me.felnstaren.felib.ui.prompt.PromptHandler;
 import me.felnstaren.felib.util.StringUtil;
 
-public class NationCreateCommand extends SubCommand {
+public class NationFoundCommand extends SubCommand {
 
-	public NationCreateCommand() {
+	public NationFoundCommand() {
 		super("found");
 		
 		arguments.add(new SubArgument("<name>") {

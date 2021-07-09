@@ -92,7 +92,7 @@ public class NationCommandMaster extends MasterCommand {
 		});
 
 		commands.add(new NationHelpSub());
-		commands.add(new NationCreateCommand());
+		commands.add(new NationFoundCommand());
 		commands.add(new NationLeaveCommand());
 		commands.add(new NationJoinCommand());
 		commands.add(new NationInviteCommand());

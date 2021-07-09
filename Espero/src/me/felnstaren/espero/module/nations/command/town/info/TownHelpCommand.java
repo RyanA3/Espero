@@ -69,11 +69,25 @@ public class TownHelpCommand extends SubCommand {
 				+ "\n  invite " + Format.FORCE_ARG.message("player") + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
 				+ "\n  uninvite " + Format.FORCE_ARG.message("player") + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
 				+ "\n  invites " + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
-				+ "\n  members "+ Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
-				+ "\n   "
-				+ "\n   "
+				+ "\n  members " + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
+				+ "\n  join" + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
+				+ "\n  leave" + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
 				)
 				.addComponent(new TextComponent("\n          <}-").setColor(Color.WHEAT + "").setBold(true).setClickComponent(new ClickComponent("/town help 0")))
+				.addComponent(new TextComponent("   |   ").setColor(Color.LIGHT_GRAY + ""))
+				.addComponent(new TextComponent("-{>\n").setColor(Color.WHEAT + "").setBold(true).setClickComponent(new ClickComponent("/town help 2")));
+		
+		PAGES[2] = Messenger.colorWithJson(
+				HELP_HEADER + " " + Format.LABEL_ARG.message("Page", "2") + Color.LIGHT_GRAY
+				+ "\n/town"
+				+ "\n  kick " + Format.FORCE_ARG.message("player") + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
+				+ "\n  disband " + Format.FORCE_ARG.message("<town>") + Color.LIGHT_GRAY
+				+ "\n  "
+				+ "\n  "
+				+ "\n  " 
+				+ "\n  " 
+				)
+				.addComponent(new TextComponent("\n          <}-").setColor(Color.WHEAT + "").setBold(true).setClickComponent(new ClickComponent("/town help 1")))
 				.addComponent(new TextComponent("   |   ").setColor(Color.LIGHT_GRAY + ""))
 				.addComponent(new TextComponent("-{>\n").setColor(Color.GRAY + "").setBold(true));
 	}

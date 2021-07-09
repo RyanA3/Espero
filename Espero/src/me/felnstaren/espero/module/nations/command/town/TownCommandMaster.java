@@ -8,12 +8,17 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.module.nations.command.town.claim.TownClaimCommand;
+import me.felnstaren.espero.module.nations.command.town.claim.TownUnclaimCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownHelpCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownInfoCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownInvitesCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownListCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownMembersCommand;
 import me.felnstaren.espero.module.nations.command.town.players.TownInviteCommand;
+import me.felnstaren.espero.module.nations.command.town.players.TownJoinCommand;
+import me.felnstaren.espero.module.nations.command.town.players.TownKickCommand;
+import me.felnstaren.espero.module.nations.command.town.players.TownLeaveCommand;
 import me.felnstaren.espero.module.nations.command.town.players.TownUninviteCommand;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
@@ -58,16 +63,25 @@ public class TownCommandMaster extends MasterCommand {
 			}
 		});
 		
-		commands.add(new TownHelpCommand());
+		
+		
 		commands.add(new TownClaimCommand());
 		commands.add(new TownUnclaimCommand());
-		commands.add(new TownFoundCommand());
+		
+		commands.add(new TownHelpCommand());
 		commands.add(new TownInfoCommand());
+		commands.add(new TownInvitesCommand());
 		commands.add(new TownListCommand());
 		commands.add(new TownMembersCommand());
-		commands.add(new TownInvitesCommand());
+
 		commands.add(new TownInviteCommand());
+		commands.add(new TownJoinCommand());
+		commands.add(new TownKickCommand());
+		commands.add(new TownLeaveCommand());
 		commands.add(new TownUninviteCommand());
+		
+		commands.add(new TownFoundCommand());
+		commands.add(new TownDisbandCommand());
 	}
 
 	public boolean stub(CommandSender sender, String[] args, int current) {
