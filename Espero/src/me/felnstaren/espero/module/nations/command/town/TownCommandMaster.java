@@ -10,8 +10,11 @@ import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.command.town.info.TownHelpCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownInfoCommand;
+import me.felnstaren.espero.module.nations.command.town.info.TownInvitesCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownListCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownMembersCommand;
+import me.felnstaren.espero.module.nations.command.town.players.TownInviteCommand;
+import me.felnstaren.espero.module.nations.command.town.players.TownUninviteCommand;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.espero.module.nations.town.Town;
@@ -62,6 +65,9 @@ public class TownCommandMaster extends MasterCommand {
 		commands.add(new TownInfoCommand());
 		commands.add(new TownListCommand());
 		commands.add(new TownMembersCommand());
+		commands.add(new TownInvitesCommand());
+		commands.add(new TownInviteCommand());
+		commands.add(new TownUninviteCommand());
 	}
 
 	public boolean stub(CommandSender sender, String[] args, int current) {

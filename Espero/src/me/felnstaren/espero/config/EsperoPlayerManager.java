@@ -56,5 +56,10 @@ public class EsperoPlayerManager extends ConfigObjectManager<EsperoPlayer> imple
 		add(ep);
 		return ep;
 	}
+	
+	public EsperoPlayer getPlayer(String name) {
+		Espero.LOGGER.log(Level.DEBUG, "Searching Players for " + name);
+		return getPlayer(Espero.OFFLINE_PLAYERS.getID(name));
+	}
 
 }

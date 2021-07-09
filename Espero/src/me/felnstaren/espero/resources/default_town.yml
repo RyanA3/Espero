@@ -1,6 +1,9 @@
 cx: 0
 cz: 0
 area: 0
+perimeter: 0
+balance: 0
 display_name: "Town"
 group:
 nation:
+invites:

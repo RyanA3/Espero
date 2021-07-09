@@ -16,8 +16,8 @@ public class TownInfoCommand extends SubCommand {
 		message += "  " + Format.SUBHEADER.message("General") + "\n";
 		message += "  " + Format.SUBHEADER_VALUE.message("Nation", town.getNation().getDisplayName()) + "\n";
 		message += "    " + Format.LABEL_ARG.message("Claims", String.valueOf(town.getArea())) + ":";
-		//message += Format.LABEL_ARG.message("Perimeter", String.valueOf(town.getPerimeter())) + "\n";
-		//message += "    " + Format.LABEL_ARG.message("Balance", String.valueOf(town.getBalance())) + "\n";
+		message += Format.LABEL_ARG.message("Perimeter", String.valueOf(town.getPerimeter())) + "\n";
+		message += "    " + Format.LABEL_ARG.message("Balance", String.valueOf(town.getBalance())) + "\n";
 		message += "  " + Format.SUBHEADER_VALUE.message("Members", town.getGroup().getMembers().size() + "") + "\n";
 		message += "   " + TownMembersCommand.constructMembersList(town) + "\n";
 		return message;

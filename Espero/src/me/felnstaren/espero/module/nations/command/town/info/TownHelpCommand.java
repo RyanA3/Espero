@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.command.nation.infos.help.NationHelpSub;
+import me.felnstaren.felib.chat.ClickComponent;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Message;
 import me.felnstaren.felib.chat.Messenger;
@@ -60,7 +61,21 @@ public class TownHelpCommand extends SubCommand {
 				)
 				.addComponent(new TextComponent("\n          <}-").setColor(Color.GRAY + "").setBold(true))
 				.addComponent(new TextComponent("   |   ").setColor(Color.LIGHT_GRAY + ""))
-				.addComponent(new TextComponent("-{>\n").setColor(Color.GRAY + "").setBold(true));//.setClickComponent(new ClickComponent("/town help 1")));
+				.addComponent(new TextComponent("-{>\n").setColor(Color.WHEAT + "").setBold(true).setClickComponent(new ClickComponent("/town help 1")));
+				
+		PAGES[1] = Messenger.colorWithJson(
+				HELP_HEADER + " " + Format.LABEL_ARG.message("Page", "1") + Color.LIGHT_GRAY
+				+ "\n/town"
+				+ "\n  invite " + Format.FORCE_ARG.message("player") + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
+				+ "\n  uninvite " + Format.FORCE_ARG.message("player") + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
+				+ "\n  invites " + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
+				+ "\n  members "+ Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
+				+ "\n   "
+				+ "\n   "
+				)
+				.addComponent(new TextComponent("\n          <}-").setColor(Color.WHEAT + "").setBold(true).setClickComponent(new ClickComponent("/town help 0")))
+				.addComponent(new TextComponent("   |   ").setColor(Color.LIGHT_GRAY + ""))
+				.addComponent(new TextComponent("-{>\n").setColor(Color.GRAY + "").setBold(true));
 	}
 
 }

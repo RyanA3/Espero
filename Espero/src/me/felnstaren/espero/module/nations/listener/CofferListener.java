@@ -32,7 +32,7 @@ public class CofferListener implements Listener {
 		EsperoPlayer player = Espero.PLAYERS.getPlayer(event.getPlayer());
 		ClaimChunk claim = ClaimBoard.inst().getClaim(block.getChunk().getX(), block.getChunk().getZ());
 
-		if(claim == null) { Messenger.send(event.getPlayer(), Color.RED + "Coffers can only be accessed within a nation or town of yours"); return; }
+		if(claim == null) return;
 
 		AbstractCofferMenu menu = null;
 		if(claim.owner_type == OwnerType.TOWN) {

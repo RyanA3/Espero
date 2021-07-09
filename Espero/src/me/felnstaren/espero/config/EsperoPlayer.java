@@ -34,6 +34,7 @@ public class EsperoPlayer extends DataPlayer {
 	
 	
 	
+	
 	@Deprecated
 	public void setNation(Nation nation) { this.nation = (nation == null ? null : nation.getID()); }
 	public Nation getNation()            { return nation == null ? null : NationRegistry.inst().getNation(nation);         }
