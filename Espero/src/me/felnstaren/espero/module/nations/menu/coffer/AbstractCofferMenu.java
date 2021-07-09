@@ -5,8 +5,9 @@ import java.util.HashMap;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.config.Option;
-import me.felnstaren.espero.module.nations.nation.Nation;
+import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.felib.item.util.ItemBuild;
 import me.felnstaren.felib.ui.menu.ItemSchematic;
 import me.felnstaren.felib.ui.menu.Menu;
@@ -15,7 +16,7 @@ import me.felnstaren.felib.ui.menu.MenuSchematic;
 import me.felnstaren.felib.ui.menu.MenuSession;
 import other.bananapuncher714.nbt.NBTEditor;
 
-public class CofferMenu extends Menu {
+public abstract class AbstractCofferMenu extends Menu {
 
 	public static final int MAX_COFFER_BAL = 5000;
 	private static final CofferMenuWithdrawButton WITHDRAW_BUTTON = new CofferMenuWithdrawButton(-1);
@@ -53,11 +54,8 @@ public class CofferMenu extends Menu {
 	
 	
 	
-	private Nation nation;
-	
-	public CofferMenu(Nation nation) {
+	public AbstractCofferMenu() {
 		super(SCHEMATIC);
-		this.nation = nation;
 		update();
 	}
 	
@@ -76,17 +74,25 @@ public class CofferMenu extends Menu {
 	}
 	
 	public void update() {
-		String balname = "&6" + nation.getBalance() + "/" + MAX_COFFER_BAL;
+		String balname = "&6" + getBalance() + "/" + MAX_COFFER_BAL;
 		inventory.setItem(1, new ItemBuild(Material.GREEN_TERRACOTTA, 1).setName(balname).construct());
 		inventory.setItem(7, new ItemBuild(Material.EMERALD_BLOCK, 1).setName(balname).construct());
 		for(int i = 2; i < 7; i++) {
-			if(nation.getBalance() >= ((MAX_COFFER_BAL / 5) * (i-1))) 
+			if(getBalance() >= ((MAX_COFFER_BAL / 5) * (i-1))) 
 				inventory.setItem(i, new ItemBuild(Material.GREEN_STAINED_GLASS_PANE).setName(balname).construct());
-			else if((nation.getBalance() - ((MAX_COFFER_BAL / 5) * (i-2))) > 0) 
+			else if((getBalance() - ((MAX_COFFER_BAL / 5) * (i-2))) > 0) 
 				inventory.setItem(i, new ItemBuild(Material.LIME_STAINED_GLASS_PANE).setName(balname).construct());
 			else 
 				inventory.setItem(i, new ItemBuild(Material.GRAY_STAINED_GLASS_PANE).setName(balname).construct());
 		}
 	}
+	
+	
+	
+	public abstract int getBalance();
+	public abstract void setBalance(int value);
+	public abstract void addBalance(int value);
+	public abstract void notifyGroup(String message);
+	public abstract boolean playerHasPermission(EsperoPlayer player, Permission permission);
 	
 }
