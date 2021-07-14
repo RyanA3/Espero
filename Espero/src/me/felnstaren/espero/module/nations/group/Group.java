@@ -8,6 +8,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
+import me.felnstaren.espero.messaging.Format;
+import me.felnstaren.felib.util.StringUtil;
 import me.felnstaren.felib.util.data.BinarySearchable;
 import me.felnstaren.felib.util.data.SearchObject;
 
@@ -20,11 +22,14 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 	
 	private LinearRankModel model;
 	private ArrayList<Integer> player_ranks = new ArrayList<Integer>();
+	private String name;
 	
 	public Group(UUID uuid) { 
 		this.uuid = uuid;
 		this.path = "groupdata/" + uuid + ".yml";
 		this.config = Espero.LOADER.readConfig(path, "resources/default_group.yml");
+		
+		this.name = config.getString("name");
 		
 		if(model == null) model = new LinearRankModel(config.getConfigurationSection("ranks"));
 		List<String> pdata = config.getStringList("members");
@@ -34,12 +39,13 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 		}
 	}
 	
-	public Group(LinearRankModel model) { 
+	public Group(LinearRankModel model, String display_name) { 
 		this.model = model; 
 		this.uuid = UUID.randomUUID();
 		this.path = "groupdata/" + uuid + ".yml";
 		this.config = Espero.LOADER.readConfig(path, "resources/default_group.yml");
 		this.model = new LinearRankModel(LinearRankModel.NATIONS_DEFAULT_RANK_HIERARCHY);
+		this.name = display_name;
 	}
 	
 	
@@ -58,9 +64,21 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 		else player_ranks.set(index, rank);
 	}
 	
+	public void kick(EsperoPlayer player) {
+		int index = indexOf(player);
+		player_ranks.remove(index);
+		super.values.remove(index);
+	}
+	
+	
+	public String 				   getName() 			{ return name; }
+	public String 				   getDisplayName() 	{ return StringUtil.title(name.replaceAll("_", " ")); }
+	public String  				   neatHeader ()        { return Format.HEADER.message(name); 			 }
 	public  boolean contains(EsperoPlayer player){ return super.indexOf(player) != -1; } 
 	public  UUID    getID() 					 { return uuid; 		}
 	public  ArrayList<EsperoPlayer> getMembers() { return super.values; }
+	public  Rank[]			getRanks()   { return model.getRanks(); }
+	public  LinearRankModel getModel()   { return model; }
 	public  int     relRank(EsperoPlayer player) { int index = indexOf(player); return index == -1 ? index : player_ranks.get(indexOf(player)); 			}
 	public  Rank    getRank(EsperoPlayer player) { return model.getRank(relRank(player));    			}
 	public  void    promote(EsperoPlayer player) { setRank(player, model.nextRank(relRank(player))); 	}
@@ -81,6 +99,7 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 			pdata.add(values.get(i).getUniqueId().toString() + "." + player_ranks.get(i));
 		
 		config.set("members", pdata);
+		config.set("name", name);
 		model.save(config);
 		
 		Espero.LOADER.save(path, config);

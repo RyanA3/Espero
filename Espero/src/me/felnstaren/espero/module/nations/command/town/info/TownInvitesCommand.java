@@ -34,16 +34,10 @@ public class TownInvitesCommand extends SubCommand {
 		super("invites");
 		arguments.add(new SubArgument("<town>") {
 			public boolean stub(CommandSender sender, String[] args, int current) {
-				String town_name = "";
-				for(int i = 1; i < args.length; i++) {
-					town_name += args[i];
-					if(i < args.length - 1) town_name += " ";
-				}
-				
-				Town town = TownRegistry.inst().getTown(town_name);
+				Town town = TownRegistry.inst().getTown(args[current]);
 				
 				if(town == null) {
-					Messenger.send(sender, Color.RED + town_name + " is not a valid town");
+					Messenger.send(sender, Color.RED + args[current] + " is not a valid town");
 					return true;
 				}
 				

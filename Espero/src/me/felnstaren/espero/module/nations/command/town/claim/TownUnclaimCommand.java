@@ -53,13 +53,13 @@ public class TownUnclaimCommand extends SubCommand {
 		Town town = claim.getTown();
 		
 		if(!town.hasPermission(eplayer, Permission.UNCLAIM)) {
-			Messenger.send(player, Color.RED + "You do not have permission to unclaim " + town.name);
+			Messenger.send(player, Color.RED + "You do not have permission to unclaim " + town.getDisplayName());
 			return true;
 		}
 		
 		if(!NationUnclaimCommand.isPivotal(cx, cz, claim.owner)) {
 			town.unclaim(cx, cz);
-			nation.broadcast(player.getName() + " unclaimed " + town.name + " at " + cx + "x, " + cz + "z");
+			town.broadcast(player.getName() + " unclaimed " + town.getDisplayName() + " at " + cx + "x, " + cz + "z");
 		}
 		else {
 			Messenger.send(player, Color.RED + "Unclaiming this would leave two sections of your town disconnected, "

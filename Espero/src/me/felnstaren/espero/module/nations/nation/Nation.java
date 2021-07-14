@@ -21,6 +21,7 @@ import me.felnstaren.espero.module.nations.town.TownRegistry;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.config.ConfigReader;
 import me.felnstaren.felib.logger.Level;
+import me.felnstaren.felib.util.StringUtil;
 import me.felnstaren.felib.util.data.SearchObject;
 
 public class Nation implements SearchObject {
@@ -32,7 +33,7 @@ public class Nation implements SearchObject {
 	public int balance, area, perimeter;
 	
 	private UUID uuid;
-	public String name;
+	private String name;
 	
 	private YamlConfiguration config;
 	private String path;
@@ -54,6 +55,28 @@ public class Nation implements SearchObject {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Espero.LOGGER.log(Level.SEVERE, "Corruption presence at unsafe levels");
+			Espero.LOGGER.log(Level.SEVERE, "SEVERE ERROR LOADING NATION " + uuid.toString() 
+			+ "\nCONTINUED PLUGIN OPERATION NOT ADVISED"
+			+ "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀\n"
+			+ "⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀\n"
+			+ "⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀\n"
+			+ "⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀\n"
+			+ "⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⠀⠀⢰⣿⣿⣯⠁⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣷⡄⠀\n"
+			+ "⠀⠀⣀⣤⣴⣶⣶⣿⡟⠀⠀⠀⢸⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⠀\n"
+			+ "⠀⢰⣿⡟⠋⠉⣹⣿⡇⠀⠀⠀⠘⣿⣿⣿⣿⣷⣦⣤⣤⣤⣶⣶⣶⣶⣿⣿⣿⠀\n"
+			+ "⠀⢸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⠀\n"
+			+ "⠀⣸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠉⠻⠿⣿⣿⣿⣿⡿⠿⠿⠛⢻⣿⡇⠀⠀\n"
+			+ "⠀⣿⣿⠁⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣧⠀⠀\n"
+			+ "⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀\n"
+			+ "⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀\n"
+			+ "⠀⢿⣿⡆⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀\n"
+			+ "⠀⠸⣿⣧⡀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀\n"
+			+ "⠀⠀⠛⢿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⣰⣿⣿⣷⣶⣶⣶⣶⠶⠀⢠⣿⣿⠀⠀⠀\n"
+			+ "⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⣽⣿⡏⠁⠀⠀⢸⣿⡇⠀⠀⠀\n"
+			+ "⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀\n"
+			+ "⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀\n"
+			+ "⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n"
+			+ "       THE DATA FILE IS SUSSY\n");
 		}
 	}
 	
@@ -62,13 +85,13 @@ public class Nation implements SearchObject {
 			this.uuid = UUID.randomUUID();
 			this.path = "nationdata/" + uuid.toString() + ".yml";
 			this.config = Espero.LOADER.readConfig(path, "resources/default_nation.yml");
-			this.name = name;
+			this.name = name.toLowerCase().replaceAll(" ", "_");
 			this.balance = Option.NATION_STARTING_BALANCE;
 
 			towns = new ArrayList<UUID>();
 			invites = new ArrayList<UUID>();
 			
-			Group tgroup = new Group(new LinearRankModel(LinearRankModel.NATIONS_DEFAULT_RANK_HIERARCHY));
+			Group tgroup = new Group(new LinearRankModel(LinearRankModel.NATIONS_DEFAULT_RANK_HIERARCHY), name);
 			GroupRegistry.inst().register(tgroup);
 			this.group = tgroup.getID();
 			tgroup.setRank(owner, tgroup.toprank());
@@ -81,33 +104,14 @@ public class Nation implements SearchObject {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Espero.LOGGER.log(Level.SEVERE, "<!> Severe error creating nation! <!>");
-			Espero.LOGGER.log(Level.SEVERE, "\n"
-					+ "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀\n"
-					+ "⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⣿⡿⠛⠉⠙⠛⠛⠛⠛⠻⢿⣿⣷⣤⡀⠀⠀⠀⠀⠀\n"
-					+ "⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠋⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⠈⢻⣿⣿⡄⠀⠀⠀⠀\n"
-					+ "⠀⠀⠀⠀⠀⠀⠀⣸⣿⡏⠀⠀⠀⣠⣶⣾⣿⣿⣿⠿⠿⠿⢿⣿⣿⣿⣄⠀⠀⠀\n"
-					+ "⠀⠀⠀⠀⠀⠀⠀⣿⣿⠁⠀⠀⢰⣿⣿⣯⠁⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⣷⡄⠀\n"
-					+ "⠀⠀⣀⣤⣴⣶⣶⣿⡟⠀⠀⠀⢸⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣷⠀\n"
-					+ "⠀⢰⣿⡟⠋⠉⣹⣿⡇⠀⠀⠀⠘⣿⣿⣿⣿⣷⣦⣤⣤⣤⣶⣶⣶⣶⣿⣿⣿⠀\n"
-					+ "⠀⢸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠃⠀\n"
-					+ "⠀⣸⣿⡇⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠉⠻⠿⣿⣿⣿⣿⡿⠿⠿⠛⢻⣿⡇⠀⠀\n"
-					+ "⠀⣿⣿⠁⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣧⠀⠀\n"
-					+ "⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀\n"
-					+ "⠀⣿⣿⠀⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀\n"
-					+ "⠀⢿⣿⡆⠀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡇⠀⠀\n"
-					+ "⠀⠸⣿⣧⡀⠀⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⠃⠀⠀\n"
-					+ "⠀⠀⠛⢿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⣰⣿⣿⣷⣶⣶⣶⣶⠶⠀⢠⣿⣿⠀⠀⠀\n"
-					+ "⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⣽⣿⡏⠁⠀⠀⢸⣿⡇⠀⠀⠀\n"
-					+ "⠀⠀⠀⠀⠀⠀⠀⣿⣿⠀⠀⠀⠀⠀⣿⣿⡇⠀⢹⣿⡆⠀⠀⠀⣸⣿⠇⠀⠀⠀\n"
-					+ "⠀⠀⠀⠀⠀⠀⠀⢿⣿⣦⣄⣀⣠⣴⣿⣿⠁⠀⠈⠻⣿⣿⣿⣿⡿⠏⠀⠀⠀⠀\n"
-					+ "⠀⠀⠀⠀⠀⠀⠀⠈⠛⠻⠿⠿⠿⠿⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n"
-					+ "     WHEN THE DATA FILE IS SUSSY\n");
 			Espero.LOADER.delete(Espero.LOADER.datafile(path));
 			disband();
 		}
 	}
 	
 	
+	public String 				   getName() 			{ return name; }
+	public String 				   getDisplayName() 	{ return StringUtil.title(name.replaceAll("_", " ")); }
 	public String                  getPath() 		    { return path; 								   } 
 	public ArrayList<EsperoPlayer> getMembers() 	    { return getGroup().getMembers();			   }
 	public Group				   getGroup()			{ return GroupRegistry.inst().getGroup(group); }
@@ -115,13 +119,18 @@ public class Nation implements SearchObject {
 	public ArrayList<String>       getTownsNames() 	    { 
 		ArrayList<String> names = new ArrayList<String>(); 
 		ArrayList<Town> towns = getTowns();
-		for(Town t : towns) names.add(t.name); 
+		for(Town t : towns) names.add(t.getName()); 
 		return names; 
+	}
+	public ArrayList<String>	   getTownsDisplayNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		ArrayList<Town> towns = getTowns();
+		for(Town t : towns) names.add(t.getDisplayName());
+		return names;
 	}
 	public ArrayList<UUID>         getInvites()		    { return invites; 							   }
 	public ArrayList<EsperoPlayer> getLoadedInvites()   { return Espero.PLAYERS.getPlayers(invites);   }
 	public UUID 				   getID() 				{ return uuid; 								   }
-	public String 				   getDisplayName() 	{ return name; 								   }
 	public ArrayList<Player>       getOnlineMembers()   {
 		ArrayList<Player> players = new ArrayList<Player>();
 		ArrayList<EsperoPlayer> members = getMembers();
@@ -133,17 +142,14 @@ public class Nation implements SearchObject {
 	public Town 				   getTown(int index)   { return TownRegistry.inst().getTown(towns.get(index)); }
 	public void					   addTown(Town town)	{ this.towns.add(town.getID());							}
 	public void					   join(EsperoPlayer player)    {
-		Espero.LOGGER.stream("PLAYER[" + Espero.OFFLINE_PLAYERS.getName(player.getUniqueId()) + "].NATION[" + name + "].JOIN");
-		if(getGroup().contains(player)) return;
-		getGroup().setRank(player, 0);
-		invites.remove(player.getUniqueId());
-		player.setNation(this);
+		join(player, 0);
 	}
 	public void					   join(EsperoPlayer player, int rank)	{
 		Espero.LOGGER.stream("PLAYER[" + Espero.OFFLINE_PLAYERS.getName(player.getUniqueId()) + "].NATION[" + name + "].JOIN.WITH_RANK[" + rank + "]");
 		getGroup().setRank(player, rank);
 		invites.remove(player.getUniqueId());
 		player.setNation(this);
+		player.addGroup(group);
 	}
 	public boolean				   hasPermission(EsperoPlayer player, Permission permission) {
 		return getGroup().hasPermission(player, permission);
@@ -156,7 +162,7 @@ public class Nation implements SearchObject {
 	public void     swapLeader(EsperoPlayer next, EsperoPlayer prev) { demote(prev); getGroup().setRank(next, getGroup().toprank()); }
 	public void		promote(EsperoPlayer player)  { getGroup().promote(player); }
 	public void		demote (EsperoPlayer player)  { getGroup().demote(player);  }
-	public void		kick   (EsperoPlayer player)  { getGroup().remove(player); player.setNation(null); }
+	public void		kick   (EsperoPlayer player)  { getGroup().remove(player); player.setNation(null); player.leaveGroup(group); }
 	public void     invite (EsperoPlayer player)  { if(!invites.contains(player.getUniqueId())) invites.add(player.getUniqueId()); }
 	public void     uninvite(EsperoPlayer player) { invites.remove(player.getUniqueId()); }
 	public void     disband() { //Yikes

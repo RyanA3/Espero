@@ -54,12 +54,12 @@ public class TownFoundCommand extends SubCommand {
 					return true;
 				}
 				
-				if(!StringUtil.isAlphaNumeric(name)) {
+				if(!StringUtil.isAlphaNumeric(fname)) {
 					Messenger.send(player, Color.RED + "Town names must be alpha/numeric");
 					return true;
 				}
 				
-				if(TownRegistry.inst().getTown(name) != null) {
+				if(TownRegistry.inst().getTown(fname.toLowerCase().replaceAll(" ", "_")) != null) {
 					Messenger.send(player, Color.RED + "A town with this name already exists!");
 					return true;
 				}
@@ -82,7 +82,7 @@ public class TownFoundCommand extends SubCommand {
 				
 				PromptHandler.inst().register(new ChatPrompt(player, 20, 
 						Color.WHEAT + "Are you sure you would like to found the town of "
-						+ Format.ARG.message(name) + Color.WHEAT + "?\n"
+						+ Format.ARG.message(fname) + Color.WHEAT + "?\n"
 						+ "It will cost you " + Option.TOWN_FOUND_COST + " Mynt"
 				) {
 					public void callback(String response) {
@@ -96,7 +96,6 @@ public class TownFoundCommand extends SubCommand {
 							Town town = new Town(nation.getID(), fname, cx, cz, eplayer);
 							TownRegistry.inst().register(town);
 							town.claim(cx, cz);
-							nation.broadcast(Color.GREEN + player.getDisplayName() + " has founded the town of " + fname);
 							this.expired = true;
 						} else {
 							Messenger.send(player, Color.RED + "I could not understand that, please respond with yes/no");

@@ -34,31 +34,25 @@ public class TownInviteCommand extends SubCommand {
 					return true;
 				}
 				
-				String town_name = "";
-				for(int i = 2; i < args.length; i++) {
-					town_name += args[i];
-					if(i < args.length - 1) town_name += " ";
-				}
-				
-				Town town = TownRegistry.inst().getTown(town_name);
+				Town town = TownRegistry.inst().getTown(args[current]);
 				
 				if(town == null) {
-					Messenger.send(sender, Color.RED + town_name + " is not a valid town");
+					Messenger.send(sender, Color.RED + args[current] + " is not a valid town");
 					return true;
 				}
 				
 				if(!town.hasPermission(inviter, Permission.INVITE)) {
-					Messenger.send(sender, Color.RED + "You do not have permission to invite players to " + town_name);
+					Messenger.send(sender, Color.RED + "You do not have permission to invite players to " + town.getDisplayName());
 					return true;
 				}
 				
 				if(town.isInvited(invitee)) {
-					Messenger.send(sender, Color.RED + args[1] + " has already been invited to " + town_name);
+					Messenger.send(sender, Color.RED + args[1] + " has already been invited to " + town.getDisplayName());
 					return true;
 				}
 				
-				town.broadcast(Color.GREEN + sender.getName() + " has invited " + args[1] + " to " + town_name);
-				if(invitee.isOnline()) Messenger.send(Bukkit.getPlayer(args[1]), Color.GREEN + sender.getName() + " has invited you to the town of " + town_name);
+				town.broadcast(Color.GREEN + sender.getName() + " has invited " + args[1] + " to " + town.getDisplayName());
+				if(invitee.isOnline()) Messenger.send(Bukkit.getPlayer(args[1]), Color.GREEN + sender.getName() + " has invited you to the town of " + town.getDisplayName());
 				town.invite(invitee);
 				return true;
 			}

@@ -18,15 +18,9 @@ public abstract class NationInfosArg extends SubArgument {
 	
 	
 	public boolean stub(CommandSender sender, String[] args, int current) {
-		String nname = "";
-		for(int i = 1; i < args.length; i++) {
-			nname += args[i];
-			if(i < args.length - 1) nname += " ";
-		}
-		
-		Nation nation = NationRegistry.inst().getNation(nname);
+		Nation nation = NationRegistry.inst().getNation(args[current]);
 		if(nation == null) {
-			Messenger.send((Player) sender, Format.ERROR_INVALID_ARGUMENT.message().replaceAll("%argument%", nname));
+			Messenger.send((Player) sender, Format.ERROR_INVALID_ARGUMENT.message().replaceAll("%argument%", args[current]));
 			return true;
 		}
 		

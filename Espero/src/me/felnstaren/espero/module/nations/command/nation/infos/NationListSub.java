@@ -20,7 +20,7 @@ public class NationListSub extends SubCommand {
 	public boolean stub(CommandSender sender, String[] args, int current) {
 		Player player = (Player) sender;
 		String message =  Format.HEADER.message("Espero's Nations") + "\n" + Color.TURQUOISE;
-		for(String name : NationRegistry.inst().getNationNames()) message += "   " + name;
+		for(String name : NationRegistry.inst().getNationsNames()) message += "   " + name;
 		Messenger.send(player, Messenger.color(message));
 		
 		return true;

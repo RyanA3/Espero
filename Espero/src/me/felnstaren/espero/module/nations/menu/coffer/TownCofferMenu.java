@@ -12,7 +12,7 @@ public class TownCofferMenu extends AbstractCofferMenu {
 	
 	public TownCofferMenu(Town town) {
 		this.town = town;
-		setTitle(ChatColor.DARK_GRAY + town.name + " " + Color.ARROW_RIGHT + " COFFERS");
+		setTitle(ChatColor.DARK_GRAY + town.getDisplayName() + " " + Color.ARROW_RIGHT + " COFFERS");
 		update();
 	}
 

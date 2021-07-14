@@ -43,6 +43,11 @@ public class GroupRegistry extends BinarySearchable<Group> {
 	public void			    unregister (Group group  )  { super.remove(group);                                 }
 	public ArrayList<Group> getGroups  (             )  { return super.values; 								   }
 	public Group            getGroup   (UUID id      )  { return super.get(SearchObject.getIndexValue(id));    }
+	public Group			getGroup   (String name  )  {
+		for(Group g : super.values)
+			if(g.getName().equals(name)) return g;
+		return null;
+	}
 	public ArrayList<Group> getGroups  (UUID... uuids)  { 
 		ArrayList<Group> gs = new ArrayList<Group>();
 		for(int i = 0; i < uuids.length; i++)
@@ -55,13 +60,46 @@ public class GroupRegistry extends BinarySearchable<Group> {
 			gs.add(getGroup(uuid));
 		return gs;
 	}
-	
+	public ArrayList<String> getGroupsNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for(Group g : super.values) names.add(g.getName());
+		return names;
+	}
+	public ArrayList<String> getGroupsDisplayNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for(Group g : super.values) names.add(g.getDisplayName());
+		return names;
+	}
+	public ArrayList<String> getGroupsNames(UUID... uuids) {
+		ArrayList<Group> groups = getGroups(uuids);
+		ArrayList<String> names = new ArrayList<String>();
+		for(Group g : groups) names.add(g.getName());
+		return names;
+	}
+	public ArrayList<String> getGroupsDisplayNames(UUID... uuids) {
+		ArrayList<Group> groups = getGroups(uuids);
+		ArrayList<String> names = new ArrayList<String>();
+		for(Group g : groups) names.add(g.getDisplayName());
+		return names;
+	}
+	public ArrayList<String> getGroupsNames(ArrayList<UUID> uuids) {
+		ArrayList<Group> groups = getGroups(uuids);
+		ArrayList<String> names = new ArrayList<String>();
+		for(Group g : groups) names.add(g.getName());
+		return names;
+	}
+	public ArrayList<String> getGroupsDisplayNames(ArrayList<UUID> uuids) {
+		ArrayList<Group> groups = getGroups(uuids);
+		ArrayList<String> names = new ArrayList<String>();
+		for(Group g : groups) names.add(g.getDisplayName());
+		return names;
+	}
 
 	
 	public void save() {
 		Espero.LOGGER.debug("Saving all groups...");
 		for(Group group : super.values) {
-			Espero.LOGGER.stream("Saving group " + group.getID() + "...");
+			Espero.LOGGER.stream("Saving group " + group.getName() + "...");
 			group.save();
 		}
 	}

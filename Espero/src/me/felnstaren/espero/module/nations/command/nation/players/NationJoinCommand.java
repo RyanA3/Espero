@@ -11,7 +11,6 @@ import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubArgument;
 import me.felnstaren.felib.command.SubCommand;
-import me.felnstaren.felib.logger.Level;
 
 public class NationJoinCommand extends SubCommand {
 
@@ -20,39 +19,24 @@ public class NationJoinCommand extends SubCommand {
 		
 		arguments.add(new SubArgument("<nation>") {
 			public boolean stub(CommandSender sender, String[] args, int current) {
-				Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND");
-				
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
 				
-				Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND A");
 				if(eplayer.getNation() != null) {
 					Messenger.send(player, Format.ERROR_IN_NATION.message());
 					return true;
 				}
 				
-				Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND B");
-				String name = "";
-				for(int i = 1; i < args.length && i < 4; i++) {
-					if(i > 1) name += " ";
-					name += args[i];
-				}
-				
-				Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND C");
-				Nation to_join = NationRegistry.inst().getNation(name);
+				Nation to_join = NationRegistry.inst().getNation(args[current]);
 				if(to_join == null) {
-					Messenger.send(player, Format.ERROR_INVALID_ARGUMENT.message().replace("%argument%", name));
+					Messenger.send(player, Format.ERROR_INVALID_ARGUMENT.message().replace("%argument%", args[current]));
 					return true;
 				}
 				
-				Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND D");
 				if(!to_join.getInvites().contains(player.getUniqueId())) {
 					Messenger.send(player, Format.ERROR_NOT_INVITED.message());
 					return true;
 				}
-				
-				Espero.LOGGER.log(Level.DEBUG, "IN JOIN COMMAND E");
-				
 				to_join.join(eplayer);
 				to_join.broadcast("#5F5" + player.getName() + " has joined the nation!");
 				return true;

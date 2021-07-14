@@ -50,7 +50,7 @@ public class NationFoundCommand extends SubCommand {
 					return true;
 				}
 				
-				if(!StringUtil.isAlphaNumeric(args[current])) {
+				if(!StringUtil.isAlphaNumeric(fname)) {
 					Messenger.send(player, Color.RED + "Nation names must be alpha/numeric");
 					return true;
 				}
@@ -59,7 +59,7 @@ public class NationFoundCommand extends SubCommand {
 				
 				PromptHandler.inst().register(new ChatPrompt(player, 20, 
 						Color.WHEAT + "Are you sure you would like to found the nation of "
-						+ Format.ARG.message(args[current]) + Color.WHEAT + "?\n"
+						+ Format.ARG.message(fname) + Color.WHEAT + "?\n"
 						+ "It will cost you " + Option.NATION_FOUND_COST + " Mynt"
 						) {
 					public void callback(String response) {

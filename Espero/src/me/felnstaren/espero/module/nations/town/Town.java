@@ -20,6 +20,7 @@ import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.config.ConfigReader;
+import me.felnstaren.felib.util.StringUtil;
 import me.felnstaren.felib.util.data.SearchObject;
 
 public class Town implements SearchObject {
@@ -30,7 +31,7 @@ public class Town implements SearchObject {
 	
 	private int x;
 	private int z;
-	public String name;
+	private String name;
 	private int area, perimeter;
 	private int balance;
 	private ArrayList<UUID> invites;
@@ -44,7 +45,7 @@ public class Town implements SearchObject {
 		this.config = Espero.LOADER.readConfig(path, "resources/default_town.yml");
 		
 		this.group = UUID.fromString(config.getString("group"));
-		this.name = config.getString("display_name");
+		this.name = config.getString("name");
 		this.x = config.getInt("cx");
 		this.z = config.getInt("cz");
 		this.area = config.getInt("area");
@@ -54,12 +55,12 @@ public class Town implements SearchObject {
 		this.invites = ConfigReader.readUUIDList(config, "invites");
 	}
 	
-	public Town(UUID nation, String name, int x, int z, EsperoPlayer founder) {
+	public Town(UUID nation, String display_name, int x, int z, EsperoPlayer founder) {
 		this.uuid = UUID.randomUUID();
 		this.path = "towndata/" + uuid + ".yml";
 		this.config = Espero.LOADER.readConfig(path, "resources/default_town.yml");
 		
-		this.name = name;
+		this.name = display_name.toLowerCase().replaceAll(" ", "_");
 		this.x = x;
 		this.z = z;
 		this.area = 0;
@@ -68,7 +69,7 @@ public class Town implements SearchObject {
 		this.nation = nation;
 		this.invites = new ArrayList<UUID>();
 		
-		Group tgroup = new Group(new LinearRankModel(LinearRankModel.TOWNS_DEFAULT_RANK_HIERARCHY));
+		Group tgroup = new Group(new LinearRankModel(LinearRankModel.TOWNS_DEFAULT_RANK_HIERARCHY), name);
 		GroupRegistry.inst().register(tgroup);
 		NationRegistry.inst().getNation(nation).addTown(this);
 		this.group = tgroup.getID();
@@ -87,6 +88,8 @@ public class Town implements SearchObject {
 	public int	   getPerimeter()	       { return perimeter; 		  }
 	public void	   setPerimeter(int value) { this.perimeter = value;  }
 	public void	   addPerimeter(int value) { this.perimeter += value; }
+	public String  getName() { return name; }
+	public String  getDisplayName() { return StringUtil.title(name.replaceAll("_", " ")); }
 	public boolean  outranks (EsperoPlayer superior, EsperoPlayer inferior) { return getGroup().outranks(superior, inferior); }
 	public boolean  isInvited(EsperoPlayer player) { return isInvited(player.getUniqueId()); }
 	public boolean  isInvited(UUID player)         { return invites.contains(player); }
@@ -97,7 +100,7 @@ public class Town implements SearchObject {
 	public void     swapLeader(EsperoPlayer next, EsperoPlayer prev) { demote(prev); getGroup().setRank(next, getGroup().toprank()); }
 	public void		promote(EsperoPlayer player)  { getGroup().promote(player); }
 	public void		demote (EsperoPlayer player)  { getGroup().demote(player);  }
-	public void		kick   (EsperoPlayer player)  { getGroup().remove(player);  }
+	public void		kick   (EsperoPlayer player)  { getGroup().remove(player); player.leaveGroup(group); }
 	public Nation  getNation()         { return NationRegistry.inst().getNation(nation); }
 	public Group   getGroup()          { return GroupRegistry.inst().getGroup(group);    }
 	public String  neatHeader ()       { return Format.HEADER.message(name); 			 }
@@ -125,13 +128,12 @@ public class Town implements SearchObject {
 		Espero.LOADER.delete(path);
 	}
 	public void					   join(EsperoPlayer player)    {
-		Espero.LOGGER.stream("PLAYER[" + Espero.OFFLINE_PLAYERS.getName(player.getUniqueId()) + "].TOWN[" + name + "].JOIN");
-		if(getGroup().contains(player)) return;
-		getGroup().setRank(player, 0);
+		join(player, 0);
 	}
 	public void					   join(EsperoPlayer player, int rank)	{
 		Espero.LOGGER.stream("PLAYER[" + Espero.OFFLINE_PLAYERS.getName(player.getUniqueId()) + "].TOWN[" + name + "].JOIN");
 		getGroup().setRank(player, rank);
+		player.addGroup(group);
 	}
 	public boolean hasPermission(EsperoPlayer player, Permission permission)			 {
 		return getGroup().hasPermission(player, permission);
@@ -152,7 +154,7 @@ public class Town implements SearchObject {
 	public void save() {
 		config.set("cx", x);
 		config.set("cz", z);
-		config.set("display_name", name);
+		config.set("name", name);
 		config.set("area", area);
 		config.set("perimeter", perimeter);
 		config.set("nation", nation.toString());

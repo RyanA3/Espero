@@ -20,27 +20,20 @@ public class TownDisbandCommand extends SubCommand {
 		arguments.add(new SubArgument("<town>") {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				EsperoPlayer player = Espero.PLAYERS.getPlayer((Player) sender);
-				
-				String town_name = "";
-				for(int i = 2; i < args.length; i++) {
-					town_name += args[i];
-					if(i < args.length - 1) town_name += " ";
-				}
-				
-				Town town = TownRegistry.inst().getTown(town_name);
+				Town town = TownRegistry.inst().getTown(args[current]);
 				
 				if(town == null) {
-					Messenger.send(sender, Color.RED + town_name + " is not a valid town");
+					Messenger.send(sender, Color.RED + args[current] + " is not a valid town");
 					return true;
 				}
 				
 				if(!town.hasPermission(player, Permission.TOWN_DISBAND)) {
-					Messenger.send(sender, Color.RED + "You do not have permission to disband " + town_name);
+					Messenger.send(sender, Color.RED + "You do not have permission to disband " + town.getDisplayName());
 					return true;
 				}
 				
 				town.disband();
-				Messenger.broadcast(Color.RED + town.name + " has been disbanded!");
+				Messenger.broadcast(Color.RED + town.getDisplayName() + " has been disbanded!");
 				return true;
 			}
 		});

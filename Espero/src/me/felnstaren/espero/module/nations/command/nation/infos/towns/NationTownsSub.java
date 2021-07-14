@@ -26,7 +26,7 @@ public class NationTownsSub extends NationInfosSub {
 	public static String constructTownsList(Nation nation) {
 		String towns = "" + Color.TURQUOISE;
 		for(Town t : nation.getTowns())
-			towns += " " + t.name;
+			towns += " " + t.getDisplayName();
 		
 		return towns;
 	}

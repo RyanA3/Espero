@@ -1,5 +1,7 @@
 package me.felnstaren.espero.module.nations.command.town.info;
 
+import java.util.ArrayList;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -18,7 +20,8 @@ public class TownListCommand extends SubCommand {
 	public boolean stub(CommandSender sender, String[] args, int current) {
 		Player player = (Player) sender;
 		String message =  Format.HEADER.message("Espero's Towns") + "\n" + Color.TURQUOISE;
-		for(String name : TownRegistry.inst().getTownNames()) message += "   " + name;
+		ArrayList<String> names = TownRegistry.inst().getTownsDisplayNames();
+		for(String name : names) message += "   " + name;
 		Messenger.send(player, Messenger.color(message));
 		
 		return true;

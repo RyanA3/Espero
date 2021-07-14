@@ -34,31 +34,25 @@ public class TownKickCommand extends SubCommand {
 					return true;
 				}
 				
-				String town_name = "";
-				for(int i = 2; i < args.length; i++) {
-					town_name += args[i];
-					if(i < args.length - 1) town_name += " ";
-				}
-				
-				Town town = TownRegistry.inst().getTown(town_name);
+				Town town = TownRegistry.inst().getTown(args[current]);
 				
 				if(town == null) {
-					Messenger.send(sender, Color.RED + town_name + " is not a valid town");
+					Messenger.send(sender, Color.RED + args[current] + " is not a valid town");
 					return true;
 				}
 				
 				if(!town.hasPermission(player, Permission.KICK)) {
-					Messenger.send(sender, Color.RED + "You do not have permission to kick players in " + town_name);
+					Messenger.send(sender, Color.RED + "You do not have permission to kick players in " + town.getDisplayName());
 					return true;
 				}
 				
 				if(!town.isMember(other)) {
-					Messenger.send(sender, Color.RED + args[1] + " is not a member of " + town_name);
+					Messenger.send(sender, Color.RED + args[1] + " is not a member of " + town.getDisplayName());
 					return true;
 				}
 				
-				town.broadcast(Color.GREEN + sender.getName() + " has kicked " + args[1] + " out of " + town_name);
-				if(other.isOnline()) Messenger.send(Bukkit.getPlayer(args[1]), Color.GREEN + sender.getName() + " has kicked you out of " + town_name);
+				town.broadcast(Color.GREEN + sender.getName() + " has kicked " + args[1] + " out of " + town.getDisplayName());
+				if(other.isOnline()) Messenger.send(Bukkit.getPlayer(args[1]), Color.GREEN + sender.getName() + " has kicked you out of " + town.getDisplayName());
 				town.kick(other);
 				return true;
 			}

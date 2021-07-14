@@ -55,7 +55,7 @@ public class TownClaimCommand extends SubCommand {
 				
 				if(ClaimBoard.inst().isAdjacent(cx, cz, town.getID())) {
 					town.claim(cx, cz);
-					nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " claimed " + town.name + " at " + cx + "x, " + cz + "z");
+					nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " claimed " + town.getDisplayName() + " at " + cx + "x, " + cz + "z");
 				} else {
 					Messenger.send(player, Color.RED + "Town claims cannot be disconnected from their town!");
 					return true;

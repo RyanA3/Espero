@@ -57,14 +57,23 @@ public class TownRegistry extends BinarySearchable<Town> {
 	}
 	public Town 		     getTown    (String name)      	{		//Linear Search, finds a town by its name
 		for(Town t : super.values) 
-			if(t.name.equals(name)) 
+			if(t.getName().equals(name)) 
 				return t;
 		return null;
 	}	
-	public ArrayList<String> getTownNames() 		    {			//Compiles a List of Town Names from the main town list
+	public Town		getTownByDisplay    (String name)		{
+		return getTown(name.toLowerCase().replace(" ", "_"));
+	}
+	public ArrayList<String> getTownsNames() 		    {			//Compiles a List of Town Names from the main town list
 		ArrayList<String> town_names = new ArrayList<String>();
 		for(Town t : super.values)
-			town_names.add(t.name);
+			town_names.add(t.getName());
+		return town_names;
+	}
+	public ArrayList<String> getTownsDisplayNames() {
+		ArrayList<String> town_names = new ArrayList<String>();
+		for(Town t : super.values)
+			town_names.add(t.getDisplayName());
 		return town_names;
 	}
 	
@@ -73,7 +82,7 @@ public class TownRegistry extends BinarySearchable<Town> {
 	public void save() {
 		Espero.LOGGER.debug("Saving all towns...");
 		for(Town town : super.values) {
-			Espero.LOGGER.stream("Saving town " + town.name + "...");
+			Espero.LOGGER.stream("Saving town " + town.getName() + "...");
 			town.save();
 		}
 	}

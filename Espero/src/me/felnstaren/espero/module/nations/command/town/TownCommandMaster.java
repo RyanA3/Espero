@@ -6,8 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import me.felnstaren.espero.Espero;
-import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.module.nations.command.town.claim.TownClaimCommand;
 import me.felnstaren.espero.module.nations.command.town.claim.TownUnclaimCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownHelpCommand;
@@ -20,9 +18,7 @@ import me.felnstaren.espero.module.nations.command.town.players.TownJoinCommand;
 import me.felnstaren.espero.module.nations.command.town.players.TownKickCommand;
 import me.felnstaren.espero.module.nations.command.town.players.TownLeaveCommand;
 import me.felnstaren.espero.module.nations.command.town.players.TownUninviteCommand;
-import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
-import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.espero.module.nations.town.TownRegistry;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.MasterCommand;
@@ -40,26 +36,12 @@ public class TownCommandMaster extends MasterCommand {
 		},
 		new TabSuggestor("<nation>") {
 			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
-				return NationRegistry.inst().getNationNames();
+				return NationRegistry.inst().getNationsNames();
 			}
 		},
 		new TabSuggestor("<town>") {
 			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
-				return TownRegistry.inst().getTownNames();
-			}
-		},
-		new TabSuggestor("<claimtype>") {
-			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
-				ArrayList<String> claim_types = new ArrayList<String>();
-				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer((Player) sender); //new EsperoPlayer((Player) sender);
-				Nation nation = eplayer.getNation();
-				
-				if(nation == null) return claim_types;
-				claim_types.add("nation");
-				for(Town town : nation.getTowns()) 
-					claim_types.add(town.name);
-				
-				return claim_types;
+				return TownRegistry.inst().getTownsNames();
 			}
 		});
 		

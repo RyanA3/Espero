@@ -46,11 +46,17 @@ public class NationRegistry extends BinarySearchable<Nation> {
 	public Nation 			 getNation  (UUID id)          { return super.get(SearchObject.getIndexValue(id)); }
 	public Nation 			 getNation  (String name)      {	//Linear Search, finds a nation by its name
 		for(Nation n : super.values) 
-			if(n.getDisplayName().equals(name)) 
+			if(n.getName().equals(name)) 
 				return n;
 		return null;
 	}	
-	public ArrayList<String> getNationNames() 			   {	//Compiles a List of Nation Names from the main nation list
+	public ArrayList<String> getNationsNames() 			   {	//Compiles a List of Nation Names from the main nation list
+		ArrayList<String> nation_names = new ArrayList<String>();
+		for(Nation n : super.values)
+			nation_names.add(n.getName());
+		return nation_names;
+	}
+	public ArrayList<String> getNationsDisplayNames() 			   {	//Compiles a List of Nation Names from the main nation list
 		ArrayList<String> nation_names = new ArrayList<String>();
 		for(Nation n : super.values)
 			nation_names.add(n.getDisplayName());
@@ -62,7 +68,7 @@ public class NationRegistry extends BinarySearchable<Nation> {
 	public void save() {
 		Espero.LOGGER.debug("Saving all nations...");
 		for(Nation nation : super.values) {
-			Espero.LOGGER.stream("Saving nation " + nation.name + "...");
+			Espero.LOGGER.stream("Saving nation " + nation.getName() + "...");
 			nation.save();
 		}
 	}
