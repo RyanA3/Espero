@@ -39,13 +39,13 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 		}
 	}
 	
-	public Group(LinearRankModel model, String display_name) { 
+	public Group(LinearRankModel model, String name) { 
 		this.model = model; 
 		this.uuid = UUID.randomUUID();
 		this.path = "groupdata/" + uuid + ".yml";
 		this.config = Espero.LOADER.readConfig(path, "resources/default_group.yml");
 		this.model = new LinearRankModel(LinearRankModel.NATIONS_DEFAULT_RANK_HIERARCHY);
-		this.name = display_name;
+		this.name = name.toLowerCase().replaceAll(" ", "_");
 	}
 	
 	
@@ -54,18 +54,23 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 		if(index == -1) {
 			index = add(player);
 			player_ranks.add(index, rank);
+			player.addGroup(uuid);
 			return;
 		}
 		
 		if(rank == -1)  {
 			player_ranks.remove(index);
 			values.remove(index);
+			player.leaveGroup(uuid);
+			return;
 		}
-		else player_ranks.set(index, rank);
+		
+		player_ranks.set(index, rank);
 	}
 	
 	public void kick(EsperoPlayer player) {
 		int index = indexOf(player);
+		player.leaveGroup(uuid);
 		player_ranks.remove(index);
 		super.values.remove(index);
 	}
@@ -89,6 +94,7 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 	public  boolean isTopRank(EsperoPlayer player) { return relRank(player) == toprank(); }
 	public  void    disband() {
 		Espero.LOGGER.debug("GROUP[" + uuid + "].SELF.DISBAND_AND_DELETE");
+		for(EsperoPlayer player : super.values) player.leaveGroup(uuid);
 		GroupRegistry.inst().unregister(uuid);
 		Espero.LOADER.delete(path);
 	}

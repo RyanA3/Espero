@@ -49,9 +49,9 @@ public class EsperoPlayer extends DataPlayer {
 	public void setNation(Nation nation) { this.nation = (nation == null ? null : nation.getID()); }
 	public Nation getNation()            { return nation == null ? null : NationRegistry.inst().getNation(nation);         }
 	public boolean isOnline()			 { return Bukkit.getPlayer(this.uuid).isOnline(); }
-	public void addGroup(UUID group)	 { this.groups.add(group);    }
+	public void addGroup(UUID group)	 { if(!this.groups.contains(group)) this.groups.add(group);    }
 	public void leaveGroup(UUID group)	 { this.groups.remove(group); }
-	public ArrayList<Group> getGroups()  { return GroupRegistry.inst().getGroups(groups); }
+	public ArrayList<Group> getGroups()  { return GroupRegistry.inst().getExistingGroups(groups); }
 	public ArrayList<String> getGroupsNames() { return GroupRegistry.inst().getGroupsNames(groups); }
 	public String getName() { 
 		if(player != null) return player.getName();

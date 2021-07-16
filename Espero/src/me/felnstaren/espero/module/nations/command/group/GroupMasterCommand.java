@@ -17,7 +17,7 @@ import me.felnstaren.felib.command.TabSuggestor;
 
 public class GroupMasterCommand extends MasterCommand {
 
-	protected GroupMasterCommand(String label, String permission, TabSuggestor[] tab_suggestors) {
+	public GroupMasterCommand() {
 		super("group", "espero.group",
 				new TabSuggestor("<player>") {
 					public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {

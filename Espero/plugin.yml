@@ -28,3 +28,6 @@ commands:
  money:
   aliases: []
   description: Free money
+ group:
+  aliases: [grp]
+  description: Espero groups command

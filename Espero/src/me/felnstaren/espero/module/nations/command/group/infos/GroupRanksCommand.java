@@ -40,7 +40,7 @@ public class GroupRanksCommand extends SubCommand {
 	
 	public static String message(Group group) {
 		return group.neatHeader() 
-				+ Format.LABEL_ARG.message("Ranks", group.getMembers().size() + "") + "\n"
+				+ Format.LABEL_ARG.message("Ranks", group.getRanks().length + "") + "\n"
 				+ constructRanksList(group) + "\n";
 	}
 	
@@ -49,8 +49,14 @@ public class GroupRanksCommand extends SubCommand {
 		String message = Color.TURQUOISE.toString();
 		
 		for(Rank r : ranks) {
-			message += r.display_name + ":" + r.weight + "\n";
-			for(Permission p : r.permissions()) message += "-" + p.name() + "\n";
+			message += Color.AQUA + r.display_name + ":" + r.weight + "\n ";
+			message += Color.TURQUOISE;
+			int i = 0; for(Permission p : r.permissions()) {
+				if(i > 30) { message += "\n "; i = 0; }
+				else if(i != 0) message += ", ";
+				message += p.name();
+			i += p.name().length(); }
+			if(!message.endsWith("\n")) message += "\n";
 		}
 		
 		return message;

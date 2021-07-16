@@ -123,7 +123,6 @@ public class Town implements SearchObject {
 	public void disband() {
 		Espero.LOGGER.debug("TOWN[" + name + "].SELF.DISBAND_AND_DELETE");
 		getGroup().disband();
-		broadcast(name + " has disbanded");
 		TownRegistry.inst().unregister(uuid);
 		Espero.LOADER.delete(path);
 	}

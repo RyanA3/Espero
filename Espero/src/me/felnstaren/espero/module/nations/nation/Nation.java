@@ -54,7 +54,6 @@ public class Nation implements SearchObject {
 			this.invites = ConfigReader.readUUIDList(config, "invites");
 		} catch (Exception e) {
 			e.printStackTrace();
-			Espero.LOGGER.log(Level.SEVERE, "Corruption presence at unsafe levels");
 			Espero.LOGGER.log(Level.SEVERE, "SEVERE ERROR LOADING NATION " + uuid.toString() 
 			+ "\nCONTINUED PLUGIN OPERATION NOT ADVISED"
 			+ "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣤⣤⣤⣤⣤⣶⣦⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀\n"
@@ -168,7 +167,6 @@ public class Nation implements SearchObject {
 	public void     disband() { //Yikes
 		Espero.LOGGER.debug("NATION[" + name + "].SELF.DISBAND_AND_DELETE");
 		getGroup().disband();
-		broadcast("Your nation has disbanded");
 		NationRegistry.inst().unregister(uuid);
 		Espero.LOADER.delete(path);
 	}

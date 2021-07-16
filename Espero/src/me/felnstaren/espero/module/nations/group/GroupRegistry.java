@@ -60,6 +60,22 @@ public class GroupRegistry extends BinarySearchable<Group> {
 			gs.add(getGroup(uuid));
 		return gs;
 	}
+	public ArrayList<Group> getExistingGroups  (UUID... uuids)  { 
+		ArrayList<Group> gs = new ArrayList<Group>();
+		for(UUID uuid : uuids) {
+			Group g = getGroup(uuid);
+			if(g != null) gs.add(g);
+		}
+		return gs;
+	}
+	public ArrayList<Group> getExistingGroups  (ArrayList<UUID> uuids) {
+		ArrayList<Group> gs = new ArrayList<Group>();
+		for(UUID uuid : uuids) {
+			Group g = getGroup(uuid);
+			if(g != null) gs.add(g);
+		}
+		return gs;
+	}
 	public ArrayList<String> getGroupsNames() {
 		ArrayList<String> names = new ArrayList<String>();
 		for(Group g : super.values) names.add(g.getName());

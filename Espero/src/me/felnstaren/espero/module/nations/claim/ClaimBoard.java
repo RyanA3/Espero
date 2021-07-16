@@ -36,7 +36,7 @@ public class ClaimBoard {
 		ClaimRegion region = getRegion(x, z);
 		ClaimData data = region.getClaim(x, z);
 		
-		if(data == null) return null;
+		if(data == null || region.getLocalOwner(data.owner()) == null) return null;
 
 		Espero.LOGGER.stream("Get chunk (" + x + "," + z + ") -> " + region.getLocalOwnerType(data.owner()).name());
 		

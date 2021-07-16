@@ -4,6 +4,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import me.felnstaren.espero.command.standalone.TestCommand;
 import me.felnstaren.espero.config.EsperoPlayerManager;
+import me.felnstaren.espero.module.acoustic.Acoustic;
 import me.felnstaren.espero.module.clogger.CombatLoggerModule;
 import me.felnstaren.espero.module.economy.EconomyModule;
 import me.felnstaren.espero.module.magic.MagicModule;
@@ -23,6 +24,7 @@ public class Espero extends JavaPlugin {
 	private MorphModule morph_module;
 	private CombatLoggerModule combat_logger_module;
 	private EconomyModule economy_module;
+	private Acoustic acoustic_module;
 	@SuppressWarnings("unused") private WindModule wind_module;
 	public static Logger LOGGER;
 	public static Loader LOADER;
@@ -56,6 +58,9 @@ public class Espero extends JavaPlugin {
 		//wind_module = new WindModule();
 		//wind_module.onEnable(this);
 		
+		acoustic_module = new Acoustic();
+		acoustic_module.onEnable(this);
+		
 		this.getCommand("test").setExecutor(new TestCommand());
 	}
 	
@@ -64,6 +69,7 @@ public class Espero extends JavaPlugin {
 		nations_module.onDisable(this);
 		morph_module.onDisable(this);
 		combat_logger_module.onDisable(this);
+		acoustic_module.onDisable(this);
 		PLAYERS.saveAll();
 		OFFLINE_PLAYERS.save();
 	}

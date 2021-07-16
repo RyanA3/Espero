@@ -55,6 +55,22 @@ public class TownRegistry extends BinarySearchable<Town> {
 			ts.add(getTown(uuid));
 		return ts;
 	}
+	public ArrayList<Town>   getExistingTowns   (UUID... uuids) {			//Gets a list of towns from a list of town ids
+		ArrayList<Town> ts = new ArrayList<Town>();
+		for(UUID uuid : uuids) {
+			Town t = getTown(uuid);
+			if(t != null) ts.add(t);
+		}
+		return ts;
+	}
+	public ArrayList<Town>   getExistingTowns   (ArrayList<UUID> uuids) {	//Gets a list of towns from a list of town ids
+		ArrayList<Town> ts = new ArrayList<Town>();
+		for(UUID uuid : uuids) {
+			Town t = getTown(uuid);
+			if(t != null) ts.add(t);
+		}
+		return ts;
+	}
 	public Town 		     getTown    (String name)      	{		//Linear Search, finds a town by its name
 		for(Town t : super.values) 
 			if(t.getName().equals(name)) 
