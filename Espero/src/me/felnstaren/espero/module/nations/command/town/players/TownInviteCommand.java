@@ -18,13 +18,13 @@ public class TownInviteCommand extends SubCommand {
 
 	public TownInviteCommand() {
 		super("invite");
-		arguments.add(new SubArgument("<nonkomrade>") {
+		arguments.add(new SubArgument("<player>") {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				Messenger.send(sender, Color.RED + "Usage: /town invite <player> <town>");
 				return true;
 			}
 		});
-		arguments.get(0).addArgument(new SubArgument("<komradetown>") {
+		arguments.get(0).addArgument(new SubArgument("<town>") {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				EsperoPlayer inviter = Espero.PLAYERS.getPlayer((Player) sender);
 				EsperoPlayer invitee = Espero.PLAYERS.getPlayer(args[1]);
@@ -48,6 +48,11 @@ public class TownInviteCommand extends SubCommand {
 				
 				if(town.isInvited(invitee)) {
 					Messenger.send(sender, Color.RED + args[1] + " has already been invited to " + town.getDisplayName());
+					return true;
+				}
+				
+				if(town.isMember(invitee)) {
+					Messenger.send(sender, Color.RED + args[1] + " is already a member of " + town.getDisplayName());
 					return true;
 				}
 				

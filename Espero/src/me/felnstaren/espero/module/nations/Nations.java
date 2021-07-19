@@ -7,7 +7,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.module.IModule;
-import me.felnstaren.espero.module.nations.chat.NationPlayerChatManager;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.command.group.GroupMasterCommand;
 import me.felnstaren.espero.module.nations.command.nation.NationCommandMaster;
@@ -15,6 +14,7 @@ import me.felnstaren.espero.module.nations.command.town.TownCommandMaster;
 import me.felnstaren.espero.module.nations.group.GroupRegistry;
 import me.felnstaren.espero.module.nations.listener.ClaimInfoListener;
 import me.felnstaren.espero.module.nations.listener.CofferListener;
+import me.felnstaren.espero.module.nations.listener.GroupChatListener;
 import me.felnstaren.espero.module.nations.listener.NationRelationCombatListener;
 import me.felnstaren.espero.module.nations.listener.PlayerClaimInteractHandler;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
@@ -36,7 +36,6 @@ public class Nations implements IModule {
 		NationRegistry.init();
 		TownRegistry.init();
 		ClaimBoard.init();
-		NationPlayerChatManager.init(plugin);
 
 		save_task.runTaskTimer(plugin, 100, 10000);
 		
@@ -49,6 +48,7 @@ public class Nations implements IModule {
 		pm.registerEvents(new PlayerClaimInteractHandler(), plugin);
 		pm.registerEvents(new CofferListener(), plugin);
 		pm.registerEvents(new NationRelationCombatListener(), plugin);
+		pm.registerEvents(new GroupChatListener(), plugin);
 	}
 
 	public void onDisable(JavaPlugin plugin) {

@@ -13,6 +13,7 @@ import me.felnstaren.espero.module.nations.command.town.info.TownInfoCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownInvitesCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownListCommand;
 import me.felnstaren.espero.module.nations.command.town.info.TownMembersCommand;
+import me.felnstaren.espero.module.nations.command.town.players.TownChatCommand;
 import me.felnstaren.espero.module.nations.command.town.players.TownInviteCommand;
 import me.felnstaren.espero.module.nations.command.town.players.TownJoinCommand;
 import me.felnstaren.espero.module.nations.command.town.players.TownKickCommand;
@@ -56,6 +57,7 @@ public class TownCommandMaster extends MasterCommand {
 		commands.add(new TownListCommand());
 		commands.add(new TownMembersCommand());
 
+		commands.add(new TownChatCommand());
 		commands.add(new TownInviteCommand());
 		commands.add(new TownJoinCommand());
 		commands.add(new TownKickCommand());

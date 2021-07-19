@@ -47,7 +47,7 @@ public class GroupRemoveCommand extends SubCommand {
 				
 				group.kick(player);
 				Messenger.send(sender, Color.GREEN + "Removed " + args[1] + " from " + args[current]);
-				if(args.length <= current) player.message(Color.RED + "Force removed from " + args[current]);  
+				if(args.length <= current) player.message(Color.RED + "Force removed from " + args[current], true);  
 				return true;
 			}
 		});

@@ -46,6 +46,7 @@ public class NationCommandMaster extends MasterCommand {
 		new TabSuggestor("<komrade>") {
 			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
 				EsperoPlayer player = Espero.PLAYERS.getPlayer((Player) sender);
+				if(player.getNation() == null) return new ArrayList<String>();
 				ArrayList<Player> players = player.getNation().getOnlineMembers();
 				ArrayList<String> pnames = new ArrayList<String>();
 				for(Player p : players) pnames.add(p.getName());
@@ -55,12 +56,18 @@ public class NationCommandMaster extends MasterCommand {
 		new TabSuggestor("<nonkomrade>") {
 			public ArrayList<String> getSuggestions(CommandSender sender, String[] args, int current) {
 				EsperoPlayer player = Espero.PLAYERS.getPlayer((Player) sender);
-				ArrayList<Player> komrades = player.getNation().getOnlineMembers();
+
+				ArrayList<Player> komrades = null; 
+				if(player.getNation() != null) komrades = player.getNation().getOnlineMembers();
+				else komrades = new ArrayList<Player>();
+				
 				ArrayList<String> pnames = new ArrayList<String>();
-				int i = 0; for(Player p : Bukkit.getOnlinePlayers()) {
-					if(!p.getUniqueId().equals(komrades.get(i).getUniqueId())) 
-						pnames.add(p.getName());
-				i++;		   }
+				for(Player p : Bukkit.getOnlinePlayers()) {
+					for(Player k : komrades) {
+						if(!p.getUniqueId().equals(k.getUniqueId())) 
+							pnames.add(p.getName());
+					}
+				}
 				return pnames;
 			}
 		},

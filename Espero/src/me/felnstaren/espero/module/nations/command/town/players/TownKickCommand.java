@@ -18,13 +18,13 @@ public class TownKickCommand extends SubCommand {
 
 	public TownKickCommand() {
 		super("kick");
-		arguments.add(new SubArgument("<komrade>") {
+		arguments.add(new SubArgument("<player>") {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				Messenger.send(sender, Color.RED + "Usage: /town kick <player> <town>");
 				return true;
 			}
 		});
-		arguments.get(0).addArgument(new SubArgument("<komradetown>") {
+		arguments.get(0).addArgument(new SubArgument("<town>") {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				EsperoPlayer player = Espero.PLAYERS.getPlayer((Player) sender);
 				EsperoPlayer other = Espero.PLAYERS.getPlayer(args[1]);

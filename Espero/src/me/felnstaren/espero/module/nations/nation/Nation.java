@@ -85,7 +85,7 @@ public class Nation implements SearchObject {
 			this.path = "nationdata/" + uuid.toString() + ".yml";
 			this.config = Espero.LOADER.readConfig(path, "resources/default_nation.yml");
 			this.name = name.toLowerCase().replaceAll(" ", "_");
-			this.balance = Option.NATION_STARTING_BALANCE;
+			this.balance = Option.NATION_FOUND_COST / 2;
 
 			towns = new ArrayList<UUID>();
 			invites = new ArrayList<UUID>();
@@ -231,7 +231,7 @@ public class Nation implements SearchObject {
 	
 
 	public int     searchValue() 		 { return SearchObject.getIndexValue(uuid); }
-	public String  neatHeader ()         { return Format.HEADER.message(name); 		}
+	public String  neatHeader ()         { return Format.HEADER.message(getDisplayName()); 		}
 	@Override 
 	public boolean equals     (Object o) {
 		if(!(o instanceof Nation)) return false;

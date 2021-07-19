@@ -25,6 +25,7 @@ public class EsperoPlayer extends DataPlayer {
 	private UUID nation;
 	private ArrayList<UUID> groups;
 	private ArrayList<String> missed_messages;
+	private UUID group_chat;
 	
 	private int rifts;
 	private int sanity;
@@ -48,19 +49,21 @@ public class EsperoPlayer extends DataPlayer {
 	
 	public void setNation(Nation nation) { this.nation = (nation == null ? null : nation.getID()); }
 	public Nation getNation()            { return nation == null ? null : NationRegistry.inst().getNation(nation);         }
-	public boolean isOnline()			 { return Bukkit.getPlayer(this.uuid).isOnline(); }
+	public boolean isOnline()			 { player = Bukkit.getPlayer(this.uuid); return (player != null && player.isOnline()); }
 	public void addGroup(UUID group)	 { if(!this.groups.contains(group)) this.groups.add(group);    }
 	public void leaveGroup(UUID group)	 { this.groups.remove(group); }
 	public ArrayList<Group> getGroups()  { return GroupRegistry.inst().getExistingGroups(groups); }
 	public ArrayList<String> getGroupsNames() { return GroupRegistry.inst().getGroupsNames(groups); }
+	public void setActiveGroupChat(UUID group) { this.group_chat = group; }
+	public UUID getActiveGroupChat() { return group_chat; }
 	public String getName() { 
 		if(player != null) return player.getName();
 		else return Espero.OFFLINE_PLAYERS.getName(uuid);
 	}
 	
-	public void message(String message) {
+	public void message(String message, boolean save) {
 		if(player != null) Messenger.send(player, message);
-		else missed_messages.add(message);
+		else if(save) missed_messages.add(message);
 	}
 	
 	public void brief() {

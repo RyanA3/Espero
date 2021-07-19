@@ -3,9 +3,7 @@ package me.felnstaren.espero.module.nations.menu.relation;
 import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.messaging.Format;
-import me.felnstaren.espero.module.nations.Nations;
 import me.felnstaren.espero.module.nations.nation.Nation;
-import me.felnstaren.espero.module.nations.nation.NationRelation;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.ui.prompt.ChatOptionPrompt;
 

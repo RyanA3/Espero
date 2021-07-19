@@ -76,6 +76,10 @@ public class Town implements SearchObject {
 		join(founder, tgroup.toprank());
 	}
 	
+	public Town(String display_name, int x, int z, EsperoPlayer founder) {
+		this(null, display_name, x, z, founder);
+	}
+	
 	
 	
 	public UUID    getID()             { return uuid; 		  }
@@ -102,8 +106,10 @@ public class Town implements SearchObject {
 	public void		demote (EsperoPlayer player)  { getGroup().demote(player);  }
 	public void		kick   (EsperoPlayer player)  { getGroup().remove(player); player.leaveGroup(group); }
 	public Nation  getNation()         { return NationRegistry.inst().getNation(nation); }
+	public void    setNation(Nation nation) { this.nation = nation.getID(); }
+	public void    setNation(UUID nation)   { this.nation = nation; }
 	public Group   getGroup()          { return GroupRegistry.inst().getGroup(group);    }
-	public String  neatHeader ()       { return Format.HEADER.message(name); 			 }
+	public String  neatHeader ()       { return Format.HEADER.message(getDisplayName()); 			 }
 	public ArrayList<UUID>         getInvites()		    { return invites; 							   }
 	public ArrayList<EsperoPlayer> getLoadedInvites()   { return Espero.PLAYERS.getPlayers(invites);   }
 	public ArrayList<EsperoPlayer> getMembers() { return getGroup().getMembers(); }

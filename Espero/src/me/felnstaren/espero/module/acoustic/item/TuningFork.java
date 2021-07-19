@@ -36,13 +36,18 @@ public class TuningFork extends CustomMaterialData implements MaterialInteractFu
 		int octave = 0;
 		try { tone = NBTEditor.getInt(item, "tone"); octave = NBTEditor.getInt(item, "octave"); }
 		catch (Exception e) { e.printStackTrace(); }
+		if(tone > 6) tone = 6;
+		else if(tone < 0) tone = 0;
+		if(octave > 1) octave = 1;
+		else if(octave < 0) octave = 0;
 		
 		if(event.getAction() == Action.RIGHT_CLICK_AIR) {
 			tone++;
 			if(tone >= Tone.values().length) {
-				octave++;
-				if(octave > 1) octave = 1;
-				tone = 0;
+				if(octave < 1) {
+					octave++;
+					tone = 0;
+				} else tone = Tone.values().length-1;
 			}
 			Messenger.sendTitle(player, Color.AQUA.toString() + octave + ":" + Tone.values()[tone].name(), PacketTitleAction.ACTIONBAR, 20, 100, 20);
 			item = NBTEditor.set(item, tone, "tone");
@@ -52,9 +57,10 @@ public class TuningFork extends CustomMaterialData implements MaterialInteractFu
 		else if(event.getAction() == Action.LEFT_CLICK_AIR) {
 			tone--;
 			if(tone < 0) {
-				octave--;
-				if(octave < 0) octave = 0;
-				tone = Tone.values().length-1;
+				if(octave > 0) {
+					octave--;
+					tone = Tone.values().length-1;
+				} else tone = 0;
 			}
 			Messenger.sendTitle(player, Color.AQUA.toString() + octave + ":" + Tone.values()[tone].name(), PacketTitleAction.ACTIONBAR, 20, 100, 20);
 			item = NBTEditor.set(item, tone, "tone");

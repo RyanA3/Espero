@@ -98,6 +98,15 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 		GroupRegistry.inst().unregister(uuid);
 		Espero.LOADER.delete(path);
 	}
+	public ArrayList<EsperoPlayer> getOnlineMembers() {
+		ArrayList<EsperoPlayer> online = new ArrayList<EsperoPlayer>();
+		for(EsperoPlayer p : super.values) if(p.isOnline()) online.add(p);
+		return online;
+	}
+	public void		broadcast(String message) {
+		ArrayList<EsperoPlayer> players = getOnlineMembers();
+		for(EsperoPlayer p : players) p.message(message, false);
+	}
 	
 	public void save() {
 		ArrayList<String> pdata = new ArrayList<String>();

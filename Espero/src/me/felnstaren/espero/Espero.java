@@ -7,6 +7,7 @@ import me.felnstaren.espero.config.EsperoPlayerManager;
 import me.felnstaren.espero.module.acoustic.Acoustic;
 import me.felnstaren.espero.module.clogger.CombatLoggerModule;
 import me.felnstaren.espero.module.economy.EconomyModule;
+import me.felnstaren.espero.module.horsia.Horsia;
 import me.felnstaren.espero.module.magic.MagicModule;
 import me.felnstaren.espero.module.morph.MorphModule;
 import me.felnstaren.espero.module.nations.Nations;
@@ -25,6 +26,7 @@ public class Espero extends JavaPlugin {
 	private CombatLoggerModule combat_logger_module;
 	private EconomyModule economy_module;
 	private Acoustic acoustic_module;
+	private Horsia horses_module;
 	@SuppressWarnings("unused") private WindModule wind_module;
 	public static Logger LOGGER;
 	public static Loader LOADER;
@@ -61,6 +63,9 @@ public class Espero extends JavaPlugin {
 		acoustic_module = new Acoustic();
 		acoustic_module.onEnable(this);
 		
+		horses_module = new Horsia();
+		horses_module.onEnable(this);
+		
 		this.getCommand("test").setExecutor(new TestCommand());
 	}
 	
@@ -70,6 +75,7 @@ public class Espero extends JavaPlugin {
 		morph_module.onDisable(this);
 		combat_logger_module.onDisable(this);
 		acoustic_module.onDisable(this);
+		horses_module.onDisable(this);
 		PLAYERS.saveAll();
 		OFFLINE_PLAYERS.save();
 	}

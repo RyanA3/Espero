@@ -57,7 +57,7 @@ public class GroupSetCommand extends SubCommand {
 				
 				group.setRank(player, rank);
 				Messenger.send(sender, Color.GREEN + "Set " + args[1] + " to " + args[current] + " in " + args[2]);
-				if(args.length <= current) player.message(Color.RED + "Force set rank in " + args[2] + " to " + args[current]);  
+				if(args.length <= current) player.message(Color.RED + "Force set rank in " + args[2] + " to " + args[current], true);  
 				return true;
 			}
 		});
