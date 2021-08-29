@@ -68,8 +68,8 @@ public class TownHelpCommand extends SubCommand {
 				+ "\n  uninvite " + Format.FORCE_ARG.message("player") + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
 				+ "\n  invites " + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
 				+ "\n  members " + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
-				+ "\n  join" + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
-				+ "\n  leave" + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
+				+ "\n  join " + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
+				+ "\n  leave " + Format.FORCE_ARG.message("town") + Color.LIGHT_GRAY
 				)
 				.addComponent(new TextComponent("\n          <}-").setColor(Color.WHEAT + "").setBold(true).setClickComponent(new ClickComponent("/town help 0")))
 				.addComponent(new TextComponent("   |   ").setColor(Color.LIGHT_GRAY + ""))

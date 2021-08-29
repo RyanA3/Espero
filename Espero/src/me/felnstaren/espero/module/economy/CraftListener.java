@@ -4,7 +4,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,14 +12,6 @@ import me.felnstaren.felib.logger.Level;
 
 public class CraftListener implements Listener {
 	
-	
-	@EventHandler
-	public void onClick(InventoryClickEvent event) {
-		Espero.LOGGER.log(Level.DEBUG, "CLICK " + event.getSlot() + " " + event.getClickedInventory().getType().name());
-	}
-	
-	
-
 	@EventHandler
 	public void onCraft(CraftItemEvent event) {
 		int slotcount = 0;
@@ -30,12 +21,12 @@ public class CraftListener implements Listener {
 		Espero.LOGGER.log(Level.DEBUG, "Craft Event");
 		
 		int eco_items = 0;
-		int non_items = 0;
+		//int non_items = 0;
 		int norm_items = 0;
 		ItemStack[] cslots = new ItemStack[slotcount];
 		for(int i = 0; i < slotcount; i++) {
 			cslots[i] = event.getClickedInventory().getItem(i+1);
-			if(cslots[i] == null) non_items++;
+			if(cslots[i] == null); //non_items++;
 			else if(Economy.isEconomyItem(cslots[i])) eco_items++;
 			else norm_items++;
 			//Espero.LOGGER.log(Level.DEBUG, i + cslots[i].getType().name());

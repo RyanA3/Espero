@@ -10,7 +10,6 @@ import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.group.Permission;
-import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.espero.module.nations.town.TownRegistry;
 import me.felnstaren.felib.chat.Color;
@@ -26,13 +25,7 @@ public class TownClaimCommand extends SubCommand {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
-				Nation nation = eplayer.getNation();
 				Town town = TownRegistry.inst().getTown(args[current]);
-				
-				if(nation == null) {
-					Messenger.send(player, Format.ERROR_NOT_IN_NATION.message());
-					return true;
-				}
 				
 				if(town == null) {
 					Messenger.send(player, Color.RED + "Town not found: " + args[current]);
@@ -55,7 +48,7 @@ public class TownClaimCommand extends SubCommand {
 				
 				if(ClaimBoard.inst().isAdjacent(cx, cz, town.getID())) {
 					town.claim(cx, cz);
-					nation.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " claimed " + town.getDisplayName() + " at " + cx + "x, " + cz + "z");
+					town.broadcast(Color.GREEN + player.getDisplayName() + Color.GREEN + " claimed " + town.getDisplayName() + " at " + cx + "x, " + cz + "z");
 				} else {
 					Messenger.send(player, Color.RED + "Town claims cannot be disconnected from their town!");
 					return true;

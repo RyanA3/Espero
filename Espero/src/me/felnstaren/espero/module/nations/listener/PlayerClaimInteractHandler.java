@@ -3,9 +3,7 @@ package me.felnstaren.espero.module.nations.listener;
 import java.util.ArrayList;
 
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -19,6 +17,8 @@ import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.claim.OwnerType;
 import me.felnstaren.espero.module.nations.group.Permission;
+import me.felnstaren.espero.module.nations.town.Town;
+import me.felnstaren.espero.module.nations.town.siege.Siege;
 
 public class PlayerClaimInteractHandler implements Listener {
 	
@@ -30,28 +30,49 @@ public class PlayerClaimInteractHandler implements Listener {
 	
 	
 	
-	private boolean candoshit(Player player, Location location, Permission permission) {
-		Chunk c = location.getChunk();
-		ClaimChunk claim = ClaimBoard.inst().getClaim(c.getX(), c.getZ());
-		if(claim == null) return true;
-		
-		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player); //wow thats old
-		if(claim.owner_type == OwnerType.TOWN)
-			return claim.getTown().hasPermission(eplayer, permission);
-		else 
-			return claim.getNation().hasPermission(eplayer, permission);
-	}
-	
-	
-	
 	@EventHandler
 	public void onBreak(BlockBreakEvent event) {
-		if(!candoshit(event.getPlayer(), event.getBlock().getLocation(), Permission.BUILD)) event.setCancelled(true);
+		Chunk c = event.getBlock().getChunk();
+		ClaimChunk claim = ClaimBoard.inst().getClaim(c.getX(), c.getZ());
+		if(claim == null) return;
+		
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(event.getPlayer()); //wow thats old
+		if(claim.owner_type == OwnerType.TOWN) {
+			Town town = claim.getTown();
+			if(!town.hasPermission(eplayer, Permission.BUILD)) {
+				event.setCancelled(true);
+				return;
+			}
+			
+			Siege siege = town.getSiege();
+			if(siege == null) return;
+			event.setDropItems(false);
+			siege.getRestorer().put(event.getBlock());
+		} else if(!claim.getGroup().hasPermission(eplayer, Permission.BUILD)) {
+			event.setCancelled(true);
+		}
 	}
 	
 	@EventHandler
 	public void onPlace(BlockPlaceEvent event) {
-		if(!candoshit(event.getPlayer(), event.getBlock().getLocation(), Permission.BUILD)) event.setCancelled(true);
+		Chunk c = event.getBlock().getChunk();
+		ClaimChunk claim = ClaimBoard.inst().getClaim(c.getX(), c.getZ());
+		if(claim == null) return;
+		
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(event.getPlayer()); //wow thats old
+		if(claim.owner_type == OwnerType.TOWN) {
+			Town town = claim.getTown();
+			if(!town.hasPermission(eplayer, Permission.BUILD)) {
+				event.setCancelled(true);
+				return;
+			}
+			
+			Siege siege = town.getSiege();
+			if(siege == null) return;
+			siege.getRestorer().put(event.getBlock());
+		} else if(!claim.getGroup().hasPermission(eplayer, Permission.BUILD)) {
+			event.setCancelled(true);
+		}
 	}
 	
 	@EventHandler
@@ -66,8 +87,30 @@ public class PlayerClaimInteractHandler implements Listener {
 		else if(event.getClickedBlock().getType().toString().contains("BOX")) what = Permission.CONTAINER;
 		else if(event.getAction() == Action.RIGHT_CLICK_BLOCK) what = Permission.BUILD;
 		if(what == null) return;
+
 		
-		if(!candoshit(event.getPlayer(), event.getClickedBlock().getLocation(), what)) event.setCancelled(true);
+		Chunk c = event.getClickedBlock().getChunk();
+		ClaimChunk claim = ClaimBoard.inst().getClaim(c.getX(), c.getZ());
+		if(claim == null) return;
+		
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(event.getPlayer()); //wow thats old
+		if(claim.owner_type == OwnerType.TOWN) {
+			Town town = claim.getTown();
+			if(!town.hasPermission(eplayer, Permission.BUILD)) {
+				event.setCancelled(true);
+				return;
+			}
+			
+			Siege siege = town.getSiege();
+			if(siege == null) return;
+			if(what == Permission.CONTAINER) {
+				event.setCancelled(true);
+				return;
+			}
+		} else if(!claim.getGroup().hasPermission(eplayer, Permission.BUILD)) {
+			event.setCancelled(true);
+		}
+	
 	}
 	
 }

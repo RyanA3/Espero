@@ -10,15 +10,18 @@ import me.felnstaren.espero.module.IModule;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.command.group.GroupMasterCommand;
 import me.felnstaren.espero.module.nations.command.nation.NationCommandMaster;
+import me.felnstaren.espero.module.nations.command.siege.SiegeMasterCommand;
 import me.felnstaren.espero.module.nations.command.town.TownCommandMaster;
 import me.felnstaren.espero.module.nations.group.GroupRegistry;
-import me.felnstaren.espero.module.nations.listener.ClaimInfoListener;
+import me.felnstaren.espero.module.nations.listener.ClaimChangeListener;
 import me.felnstaren.espero.module.nations.listener.CofferListener;
 import me.felnstaren.espero.module.nations.listener.GroupChatListener;
 import me.felnstaren.espero.module.nations.listener.NationRelationCombatListener;
 import me.felnstaren.espero.module.nations.listener.PlayerClaimInteractHandler;
+import me.felnstaren.espero.module.nations.listener.RelicInteractListener;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
 import me.felnstaren.espero.module.nations.town.TownRegistry;
+import me.felnstaren.espero.module.nations.town.siege.SiegeRegistry;
 import me.felnstaren.felib.logger.Level;
 
 public class Nations implements IModule {
@@ -36,19 +39,22 @@ public class Nations implements IModule {
 		NationRegistry.init();
 		TownRegistry.init();
 		ClaimBoard.init();
+		SiegeRegistry.init(plugin);
 
 		save_task.runTaskTimer(plugin, 100, 10000);
 		
 		plugin.getCommand("nation").setExecutor(new NationCommandMaster());
 		plugin.getCommand("town").setExecutor(new TownCommandMaster());
 		plugin.getCommand("group").setExecutor(new GroupMasterCommand());
+		plugin.getCommand("siege").setExecutor(new SiegeMasterCommand());
 		
 		PluginManager pm = plugin.getServer().getPluginManager();
-		pm.registerEvents(new ClaimInfoListener(), plugin);
+		pm.registerEvents(new ClaimChangeListener(), plugin);
 		pm.registerEvents(new PlayerClaimInteractHandler(), plugin);
 		pm.registerEvents(new CofferListener(), plugin);
 		pm.registerEvents(new NationRelationCombatListener(), plugin);
 		pm.registerEvents(new GroupChatListener(), plugin);
+		pm.registerEvents(new RelicInteractListener(), plugin);
 	}
 
 	public void onDisable(JavaPlugin plugin) {
@@ -57,6 +63,7 @@ public class Nations implements IModule {
 		ClaimBoard.inst().save();
 		TownRegistry.inst().save();
 		GroupRegistry.inst().save();
+		SiegeRegistry.inst().save();
 		Espero.LOGGER.info("NATIONS.SAVE_ALL.DONE");
 	}
 	

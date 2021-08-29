@@ -31,3 +31,6 @@ commands:
  group:
   aliases: [grp]
   description: Espero groups command
+ siege:
+  aliases: []
+  description: Espero sieges command

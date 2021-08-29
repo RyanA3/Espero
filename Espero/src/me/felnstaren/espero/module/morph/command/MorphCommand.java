@@ -1,5 +1,7 @@
 package me.felnstaren.espero.module.morph.command;
 
+import java.util.Optional;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -8,9 +10,12 @@ import org.bukkit.entity.Player;
 import me.felnstaren.espero.module.morph.MorphManager;
 import me.felnstaren.espero.module.morph.morph.EntityMorph;
 import me.felnstaren.espero.module.morph.morph.RideableMorph;
+import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.packet.enums.MetadataValue;
+import me.felnstaren.felib.packet.enums.PacketEntityPose;
 import me.felnstaren.felib.packet.enums.PacketEntityType;
+import me.felnstaren.felib.reflect.Reflector;
 
 public class MorphCommand implements CommandExecutor {
 
@@ -55,6 +60,13 @@ public class MorphCommand implements CommandExecutor {
 			if(type.getType() == int.class) morph.getProperties().put(type, Integer.parseInt(split[1]));
 			else if(type.getType() == boolean.class) morph.getProperties().put(type, Boolean.parseBoolean(split[1]));
 			else if(type.getType() == byte.class) morph.getProperties().put(type, Byte.valueOf(split[1]));
+			else if(type.getType() == String.class) morph.getProperties().put(type, split[1]);
+			else if(type.getType() == Optional.class) {
+				if(type == MetadataValue.ENTITY_CUSTOM_NAME) morph.getProperties().put(type, Optional.of(Reflector.newInstanceOf("ChatComponentText", split[1])));
+				else { Messenger.send(player, Color.RED + "unsupported option"); return true; }
+			}
+			else if(type.getType() == Reflector.getNMSClass("EntityPose")) 
+				morph.getProperties().put(type, PacketEntityPose.valueOf(split[1]).getNMSPose());
 			else morph.getProperties().put(type, type.getType().cast(split[1]));
 		}
 		

@@ -86,6 +86,7 @@ public class Group extends BinarySearchable<EsperoPlayer> implements SearchObjec
 	public  LinearRankModel getModel()   { return model; }
 	public  int     relRank(EsperoPlayer player) { int index = indexOf(player); return index == -1 ? index : player_ranks.get(indexOf(player)); 			}
 	public  Rank    getRank(EsperoPlayer player) { return model.getRank(relRank(player));    			}
+	public  Rank	getRank(String rank_name)    { return model.getRank(rank_name); 					}
 	public  void    promote(EsperoPlayer player) { setRank(player, model.nextRank(relRank(player))); 	}
 	public  void    demote (EsperoPlayer player) { setRank(player, model.prevRank(relRank(player)));    }
 	public  boolean hasPermission(EsperoPlayer player, Permission permission) { return model.hasPermission(permission, relRank(player)); }

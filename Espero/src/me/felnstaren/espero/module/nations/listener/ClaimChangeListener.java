@@ -9,11 +9,12 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.claim.OwnerType;
+import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.packet.enums.PacketTitleAction;
 
-public class ClaimInfoListener implements Listener {
+public class ClaimChangeListener implements Listener {
 
 	@EventHandler
 	public void onChangeChunk(PlayerMoveEvent event) {
@@ -46,6 +47,15 @@ public class ClaimInfoListener implements Listener {
 		else message += Color.GREEN + "Wilds";
 
 		Messenger.sendTitle(player, message, PacketTitleAction.ACTIONBAR, 10, 100, 10);
+		
+		//Siege relic check
+		if(from == null) return;
+		if(from.owner_type != OwnerType.TOWN) return;
+		Town town = from.getTown();
+		if(town == null) return;
+		if(!town.isInSiege()) return;
+		if(!town.getRelic().isHolding(player)) return;
+		town.getSiege().captureRelic();
 	}
 	
 }

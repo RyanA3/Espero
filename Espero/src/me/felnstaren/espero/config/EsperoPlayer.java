@@ -1,10 +1,12 @@
 package me.felnstaren.espero.config;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.messaging.Format;
@@ -25,6 +27,7 @@ public class EsperoPlayer extends DataPlayer {
 	private UUID nation;
 	private ArrayList<UUID> groups;
 	private ArrayList<String> missed_messages;
+	private ArrayList<ItemStack> respawn_inventory;
 	private UUID group_chat;
 	
 	private int rifts;
@@ -60,6 +63,11 @@ public class EsperoPlayer extends DataPlayer {
 		if(player != null) return player.getName();
 		else return Espero.OFFLINE_PLAYERS.getName(uuid);
 	}
+	public ArrayList<ItemStack> getRespawnInventory() { return respawn_inventory; }
+	public void clearRespawnInventory() { respawn_inventory.clear(); }
+	public void addToRespawnInventory(ItemStack item) { respawn_inventory.add(item); }
+	public void addToRespawnInventory(Collection<? extends ItemStack> items) { respawn_inventory.addAll(respawn_inventory); }
+	public void setRespawnInventory(ArrayList<ItemStack> items) { this.respawn_inventory = items; }
 	
 	public void message(String message, boolean save) {
 		if(player != null) Messenger.send(player, message);
@@ -90,6 +98,15 @@ public class EsperoPlayer extends DataPlayer {
 		this.config.set("sanity.cur-sanity", sanity);
 		this.config.set("sanity.max-sanity", max_sanity);
 		
+		
+		int prev_size = config.getInt("respawn_inventory.size");
+		for(int i = 0; i < prev_size; i++)
+			this.config.set("respawn_inventory." + i, null);
+		this.config.set("respawn_inventory.size", respawn_inventory.size());
+		int i = 0; for(ItemStack item : respawn_inventory) {
+			this.config.set("respawn_inventory." + i, item);
+		i++;	   }		
+		
 		ArrayList<String> sgroups = new ArrayList<String>();
 		for(UUID group : groups) sgroups.add(group.toString());
 		this.config.set("groups", sgroups);
@@ -106,6 +123,11 @@ public class EsperoPlayer extends DataPlayer {
 		//TODO: Check if config#getString() can return empty string for null strings
 		if(config.getString("nation") != null && config.getString("nation").length() > 0) nation = UUID.fromString(config.getString("nation"));
 
+		respawn_inventory = new ArrayList<ItemStack>();
+		int respawn_inventory_size = config.getInt("respawn_inventory.size");
+		for(int i = 0; i < respawn_inventory_size; i++)
+			respawn_inventory.add(config.getItemStack("respawn_inventory." + i));
+		
 		rifts = config.getInt("rift-count");
 		sanity = config.getInt("sanity.cur-sanity");
 		max_sanity = config.getInt("sanity.max-sanity");

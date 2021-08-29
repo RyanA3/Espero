@@ -8,6 +8,7 @@ import me.felnstaren.espero.module.acoustic.Acoustic;
 import me.felnstaren.espero.module.clogger.CombatLoggerModule;
 import me.felnstaren.espero.module.economy.EconomyModule;
 import me.felnstaren.espero.module.horsia.Horsia;
+import me.felnstaren.espero.module.itemmodifiers.ItemModifiers;
 import me.felnstaren.espero.module.magic.MagicModule;
 import me.felnstaren.espero.module.morph.MorphModule;
 import me.felnstaren.espero.module.nations.Nations;
@@ -27,7 +28,8 @@ public class Espero extends JavaPlugin {
 	private EconomyModule economy_module;
 	private Acoustic acoustic_module;
 	private Horsia horses_module;
-	@SuppressWarnings("unused") private WindModule wind_module;
+	private ItemModifiers modifiers_module;
+	private WindModule wind_module;
 	public static Logger LOGGER;
 	public static Loader LOADER;
 	public static EsperoPlayerManager PLAYERS;
@@ -38,7 +40,7 @@ public class Espero extends JavaPlugin {
 		LOGGER = new Logger(this.getServer().getConsoleSender(), this.getName());
 		LOGGER.setPriority(Level.STREAM);
 		LOADER = new Loader(this, LOGGER);
-		LOADER.mkDirs("/nationdata/", "/playerdata/", "/chunkdata/", "/towndata/", "/groupdata/");
+		LOADER.mkDirs("/nationdata/", "/playerdata/", "/chunkdata/", "/towndata/", "/groupdata/", "/siegedata/");
 		PLAYERS = new EsperoPlayerManager(this);
 		OFFLINE_PLAYERS = new PlayerNameIDTransposer(this, LOADER, "nameids.txt");
 		IMC = new InfoMessageController(this);
@@ -57,14 +59,17 @@ public class Espero extends JavaPlugin {
 		economy_module = new EconomyModule();
 		economy_module.onEnable(this);
 		
-		//wind_module = new WindModule();
-		//wind_module.onEnable(this);
+		wind_module = new WindModule();
+		wind_module.onEnable(this);
 		
 		acoustic_module = new Acoustic();
 		acoustic_module.onEnable(this);
 		
 		horses_module = new Horsia();
 		horses_module.onEnable(this);
+		
+		modifiers_module = new ItemModifiers();
+		modifiers_module.onEnable(this);
 		
 		this.getCommand("test").setExecutor(new TestCommand());
 	}
@@ -76,6 +81,7 @@ public class Espero extends JavaPlugin {
 		combat_logger_module.onDisable(this);
 		acoustic_module.onDisable(this);
 		horses_module.onDisable(this);
+		modifiers_module.onDisable(this);
 		PLAYERS.saveAll();
 		OFFLINE_PLAYERS.save();
 	}

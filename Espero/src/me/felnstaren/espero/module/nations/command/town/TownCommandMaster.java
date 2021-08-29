@@ -70,7 +70,7 @@ public class TownCommandMaster extends MasterCommand {
 
 	public boolean stub(CommandSender sender, String[] args, int current) {
 		Messenger.send((Player) sender, TownHelpCommand.PAGES[0]);
-		return false;
+		return true;
 	}
 
 }

@@ -9,6 +9,7 @@ import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.Option;
 import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.nation.NationRegistry;
+import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.felib.util.time.Time;
 
 public class TaxChecker {
@@ -40,6 +41,7 @@ public class TaxChecker {
 	// ((4root(area) - perimeter)^2 * very_small_deviation_penalty) + (area * chunk_cost)
 	// Balanced for a median 25-50 Mynt / day, 25 Mynt / hour
 	// 2-3 days/week 
+	// Tax Penalty for no placed town relic: 100 mynt
 	
 		// 20% Deviation from optimal perimeter, 1000 claims
 		// ( 152 - 4root(1000) )^2 * 1/32 + (1000 * 1/32)
@@ -50,14 +52,24 @@ public class TaxChecker {
 		// 50.75
 	
 	public int getDailyTax(Nation nation) {
-		int optimal_perimeter = (int) (4 * Math.sqrt(nation.getArea()));
-		int perimeter_deviation = nation.getPerimeter() - optimal_perimeter;
-		int perimeter_penalty = (int) (Math.pow(perimeter_deviation, 2) * Option.NATION_PERIMETER_DEVIATION_TAX);
+		//int optimal_perimeter = (int) (4 * Math.sqrt(nation.getArea()));
+		//int perimeter_deviation = nation.getPerimeter() - optimal_perimeter;
+		//int perimeter_penalty = (int) (Math.pow(perimeter_deviation, 2) * Option.NATION_PERIMETER_DEVIATION_TAX);
 		int area_penalty = (int) (nation.getArea() * Option.NATION_CLAIM_BASE_TAX);
-		int town_area_penalty = (int) (nation.getTownArea() * Option.TOWN_CLAIM_BASE_TAX);
+		//int town_area_penalty = (int) (nation.getTownArea() * Option.TOWN_CLAIM_BASE_TAX);
 		
 		return
-				perimeter_penalty + area_penalty + town_area_penalty;
+				/*perimeter_penalty +*/ area_penalty; //+ town_area_penalty;
+	}
+	
+	public int getDailyTax(Town town) {
+		int optimal_perimeter = (int) (4 * Math.sqrt(town.getArea()));
+		int perimeter_deviation = town.getPerimeter() - optimal_perimeter;
+		int perimeter_penalty = (int) (Math.pow(perimeter_deviation, 2) * Option.TOWN_PERIMETER_DEVIATION_TAX);
+		int area_penalty = (int) (town.getArea() * Option.TOWN_CLAIM_BASE_TAX);
+		int relic_penalty = town.getRelic().exists() ? 0 : Option.RELIC_NOT_PLACED_PENALTY;
+		return
+				perimeter_penalty + area_penalty + relic_penalty;
 	}
 	
 	public void taxAll() {

@@ -7,6 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import me.felnstaren.felib.config.ConfigurationSectionObject;
 import me.felnstaren.felib.util.ArrayUtil;
+import me.felnstaren.felib.util.StringUtil;
 
 public class Rank implements ConfigurationSectionObject {
 
@@ -15,7 +16,10 @@ public class Rank implements ConfigurationSectionObject {
 	public String gaming_name;
 	public int weight = 0;
 	
-	public Rank(String gaming_name) { this.gaming_name = gaming_name; };
+	public Rank(String gaming_name) { 
+		this.gaming_name = gaming_name;
+		this.display_name = StringUtil.title(gaming_name.replaceAll("_", " "));
+	};
 	
 	public Rank(String display_name, Permission... permissions) {
 		this(display_name, 0, permissions);
@@ -63,6 +67,7 @@ public class Rank implements ConfigurationSectionObject {
 	}
 	
 	public void save(ConfigurationSection data) {
+		data.set("name", gaming_name);
 		data.set("display_name", display_name);
 		data.set("weight", weight);
 		data.set("permissions", strpermissions());
@@ -75,11 +80,11 @@ public class Rank implements ConfigurationSectionObject {
 		this.display_name = data.getString("display_name");
 		this.weight = data.getInt("weight");
 		
-		List<String> sperms = data.getStringList("permissions");
-		this.permissions = new Permission[sperms.size()];
+		List<String> perms = data.getStringList("permissions");
+		this.permissions = new Permission[perms.size()];
 		int i = 0;
-		for(String sperm : sperms) {
-			permissions[i] = Permission.valueOf(sperm);
+		for(String perm : perms) {
+			permissions[i] = Permission.valueOf(perm);
 			i++;
 		}
 		
@@ -90,8 +95,7 @@ public class Rank implements ConfigurationSectionObject {
 
 	@Override
 	public ConfigurationSectionObject template() {
-		// TODO Auto-generated method stub
-		return null;
+		return new Rank("rank");
 	}
 	
 }

@@ -6,14 +6,13 @@ import org.bukkit.entity.Player;
 
 import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
-import me.felnstaren.espero.messaging.Format;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.claim.OwnerType;
 import me.felnstaren.espero.module.nations.command.nation.claims.NationUnclaimCommand;
 import me.felnstaren.espero.module.nations.group.Permission;
-import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.town.Town;
+import me.felnstaren.espero.module.nations.town.TownRelic;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.command.SubCommand;
@@ -29,12 +28,6 @@ public class TownUnclaimCommand extends SubCommand {
 	public boolean stub(CommandSender sender, String[] args, int current) {
 		Player player = (Player) sender;
 		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
-		Nation nation = eplayer.getNation();
-		
-		if(nation == null) {
-			Messenger.send(player, Format.ERROR_NOT_IN_NATION.message());
-			return true;
-		}
 		
 		Chunk loc = player.getLocation().getChunk();
 		int cx = loc.getX(); int cz = loc.getZ();
@@ -55,6 +48,14 @@ public class TownUnclaimCommand extends SubCommand {
 		if(!town.hasPermission(eplayer, Permission.UNCLAIM)) {
 			Messenger.send(player, Color.RED + "You do not have permission to unclaim " + town.getDisplayName());
 			return true;
+		}
+		
+		if(town.getRelic().exists()) {
+			TownRelic relic = town.getRelic();
+			if(relic.getChunkX() == cx && relic.getChunkZ() == cz) {
+				Messenger.send(player, Color.RED + "You cannot unclaim the chunk your relic is in!");
+				return true;
+			}
 		}
 		
 		if(!NationUnclaimCommand.isPivotal(cx, cz, claim.owner)) {

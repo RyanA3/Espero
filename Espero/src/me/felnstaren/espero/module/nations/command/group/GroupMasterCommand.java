@@ -37,6 +37,7 @@ public class GroupMasterCommand extends MasterCommand {
 		commands.add(new GroupRanksCommand());
 		commands.add(new GroupRemoveCommand());
 		commands.add(new GroupSetCommand());
+		commands.add(new GroupPermissionCommand());
 	}
 
 	public boolean stub(CommandSender sender, String[] args, int current) {

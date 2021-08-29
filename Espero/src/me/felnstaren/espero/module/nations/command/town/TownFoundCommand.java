@@ -8,10 +8,9 @@ import me.felnstaren.espero.Espero;
 import me.felnstaren.espero.config.EsperoPlayer;
 import me.felnstaren.espero.config.Option;
 import me.felnstaren.espero.messaging.Format;
+import me.felnstaren.espero.module.economy.Economy;
 import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
-import me.felnstaren.espero.module.nations.group.Permission;
-import me.felnstaren.espero.module.nations.nation.Nation;
 import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.espero.module.nations.town.TownRegistry;
 import me.felnstaren.felib.chat.Color;
@@ -30,24 +29,13 @@ public class TownFoundCommand extends SubCommand {
 			public boolean stub(CommandSender sender, String[] args, int current) {
 				Player player = (Player) sender;
 				EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
-				Nation nation = eplayer.getNation();
-				
+
 				String name = "";
 				for(int i = 1; i < args.length; i++) {
 					name += args[i];
 					if(i < args.length - 1) name += " ";
 				}
 				final String fname = name;
-				
-				if(nation == null) {
-					Messenger.send(player, Format.ERROR_NOT_IN_NATION.message());
-					return true;
-				}
-				
-				if(!nation.hasPermission(eplayer, Permission.TOWN_CREATE)) {
-					Messenger.send(player, Format.ERROR_NATION_PERMISSION.message());
-					return true;
-				}
 				
 				if(name.length() > 16) {
 					Messenger.send(player, Format.ERROR_TOO_LONG.message().replaceAll("%length%", "16"));
@@ -72,11 +60,6 @@ public class TownFoundCommand extends SubCommand {
 					Messenger.send(player, Color.RED + "You cannot found a town inside already claimed chunks!");
 					return true;
 				}
-				
-				if(nation.getBalance() < Option.TOWN_FOUND_COST + Option.MIN_COFFERS_BALANCE) {
-					Messenger.send(player, Color.RED + "Your nation cannot afford this!");
-					return true;
-				}
 
 				
 				
@@ -91,11 +74,22 @@ public class TownFoundCommand extends SubCommand {
 							Messenger.send(player, Color.RED + "Cancelled town creation...");
 							return;
 						} else if(response.equalsIgnoreCase("yes")) {
+							if(Economy.balance(player) < Option.TOWN_FOUND_COST) {
+								Messenger.send(player, Color.RED + "You do not have enough money to found a nation!");
+								this.expired = true;
+								return;
+							}
+							
+							Economy.withdraw(player, Option.TOWN_FOUND_COST);
+							
 							//Found that shit
-							Messenger.broadcast(Color.GREEN + "The town of " + fname + " has formed!");
-							Town town = new Town(nation.getID(), fname, cx, cz, eplayer);
+							Town town = new Town(fname, cx, cz, eplayer);
 							TownRegistry.inst().register(town);
+							
+							Messenger.broadcast(Color.GREEN + "The town of " + town.getDisplayName() + " has formed!");
+				
 							town.claim(cx, cz);
+							
 							this.expired = true;
 						} else {
 							Messenger.send(player, Color.RED + "I could not understand that, please respond with yes/no");

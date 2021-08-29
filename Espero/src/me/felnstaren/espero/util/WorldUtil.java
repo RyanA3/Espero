@@ -16,7 +16,7 @@ public class WorldUtil {
 	
 	private static boolean isIgnore(Material material) {
 		if(material == Material.AIR) return true;
-		if(material.name().contains("GLASS")) return true;
+		//if(material.name().contains("GLASS")) return true;
 		return false;
 	}
 	
