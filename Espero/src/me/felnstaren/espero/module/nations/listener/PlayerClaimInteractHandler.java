@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.felnstaren.espero.Espero;
@@ -19,6 +21,7 @@ import me.felnstaren.espero.module.nations.claim.OwnerType;
 import me.felnstaren.espero.module.nations.group.Permission;
 import me.felnstaren.espero.module.nations.town.Town;
 import me.felnstaren.espero.module.nations.town.siege.Siege;
+import me.felnstaren.espero.module.nations.town.siege.SiegeStage;
 
 public class PlayerClaimInteractHandler implements Listener {
 	
@@ -29,6 +32,23 @@ public class PlayerClaimInteractHandler implements Listener {
 	CONTAINERS.add(Material.SHULKER_BOX); }
 	
 	
+	@EventHandler
+	public void onBoom(EntityExplodeEvent event) {
+		Chunk c = event.getEntity().getLocation().getChunk();
+		ClaimChunk claim = ClaimBoard.inst().getClaim(c.getX(), c.getZ());
+		if(claim == null) return;
+		
+		if(claim.owner_type == OwnerType.TOWN) {
+			Town town = claim.getTown();
+			Siege siege = town.getSiege();
+			
+			if(siege != null && siege.getStage() == SiegeStage.ACTIVE) {
+				event.setYield(0);
+				for(Block b : event.blockList()) siege.getRestorer().put(b, false);
+			} else event.blockList().clear();
+		} else event.blockList().clear();
+	}
+	
 	
 	@EventHandler
 	public void onBreak(BlockBreakEvent event) {
@@ -36,18 +56,18 @@ public class PlayerClaimInteractHandler implements Listener {
 		ClaimChunk claim = ClaimBoard.inst().getClaim(c.getX(), c.getZ());
 		if(claim == null) return;
 		
-		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(event.getPlayer()); //wow thats old
+		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(event.getPlayer());
 		if(claim.owner_type == OwnerType.TOWN) {
 			Town town = claim.getTown();
-			if(!town.hasPermission(eplayer, Permission.BUILD)) {
+			Siege siege = town.getSiege();
+			
+			if(siege != null && siege.getStage() == SiegeStage.ACTIVE) {
+				event.setDropItems(false);
+				siege.getRestorer().put(event.getBlock(), false);
+			} else if(!town.hasPermission(eplayer, Permission.BUILD)) {
 				event.setCancelled(true);
 				return;
 			}
-			
-			Siege siege = town.getSiege();
-			if(siege == null) return;
-			event.setDropItems(false);
-			siege.getRestorer().put(event.getBlock());
 		} else if(!claim.getGroup().hasPermission(eplayer, Permission.BUILD)) {
 			event.setCancelled(true);
 		}
@@ -62,14 +82,14 @@ public class PlayerClaimInteractHandler implements Listener {
 		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(event.getPlayer()); //wow thats old
 		if(claim.owner_type == OwnerType.TOWN) {
 			Town town = claim.getTown();
-			if(!town.hasPermission(eplayer, Permission.BUILD)) {
+			Siege siege = town.getSiege();
+			
+			if(siege != null && siege.getStage() == SiegeStage.ACTIVE) {
+				siege.getRestorer().put(event.getBlock(), true);
+			} else if(!town.hasPermission(eplayer, Permission.BUILD)) {
 				event.setCancelled(true);
 				return;
 			}
-			
-			Siege siege = town.getSiege();
-			if(siege == null) return;
-			siege.getRestorer().put(event.getBlock());
 		} else if(!claim.getGroup().hasPermission(eplayer, Permission.BUILD)) {
 			event.setCancelled(true);
 		}
@@ -85,6 +105,7 @@ public class PlayerClaimInteractHandler implements Listener {
 		else if(event.getClickedBlock().getType().toString().contains("DOOR")) what = Permission.DOOR;
 		else if(CONTAINERS.contains(event.getClickedBlock().getType())) what = Permission.CONTAINER;
 		else if(event.getClickedBlock().getType().toString().contains("BOX")) what = Permission.CONTAINER;
+		else if(event.getClickedBlock().getType() == Material.TNT) what = Permission.BUILD;
 		else if(event.getAction() == Action.RIGHT_CLICK_BLOCK) what = Permission.BUILD;
 		if(what == null) return;
 

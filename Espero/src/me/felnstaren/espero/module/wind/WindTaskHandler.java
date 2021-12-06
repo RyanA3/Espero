@@ -5,7 +5,6 @@ import java.util.Random;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -29,7 +28,7 @@ public class WindTaskHandler {
 				rotational_speed = RANDOM.nextFloat() / 150;
 				wind_acceleration = (RANDOM.nextFloat() - 0.4f) / 100;
 			}
-			if(GlobalWind.PRIMARY.speed > 0.75 && GlobalWind.PRIMARY.speed < 1.5) GlobalWind.PRIMARY.accelerate(wind_acceleration);
+			if(GlobalWind.PRIMARY.speed > 0.75 && GlobalWind.PRIMARY.speed < 1.5f) GlobalWind.PRIMARY.accelerate(wind_acceleration);
 			GlobalWind.PRIMARY.rotate(rotational_speed);
 			
 			PacketParticle particle = new PacketParticle(PacketParticleType.SPIT, 1, GlobalWind.PRIMARY.x * GlobalWind.PRIMARY.speed, 0f, GlobalWind.PRIMARY.y * GlobalWind.PRIMARY.speed);
@@ -45,7 +44,7 @@ public class WindTaskHandler {
 				}
 			}
 			
-			for(Projectile a : Bukkit.getWorlds().get(0).getEntitiesByClass(Projectile.class)) {
+			for(Arrow a : Bukkit.getWorlds().get(0).getEntitiesByClass(Arrow.class)) {
 				Vector av = a.getVelocity();
 				av.setX((av.getX() * 0.95) + (0.01f * GlobalWind.PRIMARY.x * GlobalWind.PRIMARY.speed));
 				av.setZ((av.getZ() * 0.95) + (0.01f * GlobalWind.PRIMARY.y * GlobalWind.PRIMARY.speed));

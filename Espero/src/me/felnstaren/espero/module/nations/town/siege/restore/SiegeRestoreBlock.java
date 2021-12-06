@@ -26,11 +26,13 @@ public class SiegeRestoreBlock {
 	}
 	
 	//Load from real block
-	public SiegeRestoreBlock(Block block, SiegeRestoreData datas) {
+	public SiegeRestoreBlock(Block block, SiegeRestoreData datas, boolean should_remove) {
 		this.x = block.getX();
 		this.y = block.getY();
 		this.z = block.getZ();
-		this.material = block.getType().ordinal();
+		if(should_remove) this.material = Material.AIR.ordinal();
+		else this.material = block.getType().ordinal();
+		
 		if(block.getBlockData() != null) this.bdata = datas.put(block.getBlockData());
 	}
 	

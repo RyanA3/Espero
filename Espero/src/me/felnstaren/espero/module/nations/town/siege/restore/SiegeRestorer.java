@@ -28,8 +28,9 @@ public class SiegeRestorer {
 	
 	
 	
-	public void put(Block block) {
-		siege_blocks.put(block, siege_block_data);
+	
+	public void put(Block block, boolean should_remove) {
+		siege_blocks.put(block, siege_block_data, should_remove);
 	}
 	
 	public void restore(World world) {

@@ -2,6 +2,7 @@ package me.felnstaren.espero.module.nations.town.siege.restore;
 
 import java.util.ArrayList;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
@@ -24,8 +25,9 @@ public class SiegeRestoreBlocks {
 	
 	
 	
-	public void put(Block block, SiegeRestoreData datas) {
-		blocks.add(new SiegeRestoreBlock(block, datas));
+	public void put(Block block, SiegeRestoreData datas, boolean should_remove) {
+		if(should_remove) blocks.add(new SiegeRestoreBlock(block.getX(), block.getY(), block.getZ(), Material.AIR.ordinal()));
+		else blocks.add(new SiegeRestoreBlock(block, datas, should_remove));
 	}
 	
 	public void restore(World world, SiegeRestoreData datas) {

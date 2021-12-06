@@ -64,10 +64,10 @@ public class GroupPermissionCommand extends SubCommand {
 				
 				if(r.isPermitted(p)) {
 					r.remPermissions(p);
-					Messenger.send(sender, Color.WHEAT + "Toggled " + Color.LIGHT_GRAY + p.name() + Color.WHEAT + " in group " + Color.LIGHT_GRAY + group.getName() + Color.WHEAT + " to " + Color.RED + "DENY");
+					Messenger.send(sender, Color.WHEAT + "Toggled " + Color.LIGHT_GRAY + p.name() + Color.WHEAT + " in group " + Color.LIGHT_GRAY + group.getName() + Color.WHEAT + " for subgroup " + Color.LIGHT_GRAY + r.gaming_name + Color.WHEAT + " to " + Color.RED + "DENY");
 				} else {
 					r.addPermissions(p);
-					Messenger.send(sender, Color.WHEAT + "Toggled " + Color.LIGHT_GRAY + p.name() + Color.WHEAT + " in group " + Color.LIGHT_GRAY + group.getName() + Color.WHEAT + " to " + Color.LIME + "ALLOW");
+					Messenger.send(sender, Color.WHEAT + "Toggled " + Color.LIGHT_GRAY + p.name() + Color.WHEAT + " in group " + Color.LIGHT_GRAY + group.getName() + Color.WHEAT + " for subgroup " + Color.LIGHT_GRAY + r.gaming_name + Color.WHEAT + " to " + Color.LIME + "ALLOW");
 				}
 				
 				return true;

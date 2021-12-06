@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import me.felnstaren.espero.config.Option;
 import me.felnstaren.felib.item.util.ItemBuild;
@@ -39,7 +40,13 @@ public class TownRelic {
 		this.y = Double.parseDouble(values[1]);
 		this.z = Double.parseDouble(values[2]);
 		this.world = Bukkit.getWorld(values[3]);
-		if(values.length > 4) ender_crystal = Bukkit.getEntity(UUID.fromString(values[4]));
+		if(values.length > 4) {
+			new BukkitRunnable() {
+				public void run() {
+					ender_crystal = Bukkit.getEntity(UUID.fromString(values[4]));
+				}
+			}.runTaskLater(Bukkit.getPluginManager().getPlugin("Espero"), 100);
+		}
 		
 		this.town = town;
 	}
@@ -110,6 +117,14 @@ public class TownRelic {
 		String data = x + "," + y + "," + z + "," + world.getName();
 		if(exists() && !ender_crystal.isDead()) data += "," + ender_crystal.getUniqueId().toString(); 
 		return data;
+	}
+	
+	public UUID getId() {
+		return ender_crystal == null ? null : ender_crystal.getUniqueId();
+	}
+	
+	public Entity getEntity() {
+		return ender_crystal;
 	}
 
 }

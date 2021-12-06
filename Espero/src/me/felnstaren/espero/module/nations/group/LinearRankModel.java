@@ -22,7 +22,7 @@ public class LinearRankModel extends IRankModel {
 			new Rank("Citizen", 5, Permission.CONTAINER, Permission.BUTTON, Permission.DOOR, Permission.BUILD, Permission.LEVER, Permission.STONE_BUTTON),
 			new Rank("Squire", 10, Permission.INVITE, Permission.CLAIM, Permission.UNCLAIM),
 			new Rank("Magistrate", 12, Permission.PROMOTE, Permission.DEMOTE, Permission.INVITE, Permission.KICK),
-			new Rank("Mayor", 14, Permission.COFFERS_WITHDRAW, Permission.TOWN_DISBAND, Permission.TOWN_SELL, Permission.START_SIEGE)
+			new Rank("Mayor", 14, Permission.COFFERS_WITHDRAW, Permission.TOWN_DISBAND, Permission.TOWN_SELL, Permission.START_SIEGE, Permission.RELIC)
 	};
 	
 	

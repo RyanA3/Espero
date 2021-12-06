@@ -64,6 +64,7 @@ public class Town implements SearchObject {
 		this.invites = ConfigReader.readUUIDList(config, "invites");
 		
 		this.relic = new TownRelic(this, config.getString("relic"));
+		relic.spawn();
 		
 		
 		String nation = config.getString("nation");
@@ -136,7 +137,7 @@ public class Town implements SearchObject {
 	public boolean isInNation() 			{ return nation != null; }
 	public Group   getGroup()          { return GroupRegistry.inst().getGroup(group);    }
 	public Siege   getSiege() { return siege != null ? SiegeRegistry.inst().getSiege(siege) : null; }
-	public boolean isInSiege() { return siege != null && getSiege().getStage() != SiegeStage.COMPLETE; }
+	public boolean isInSiege() { return getSiege() != null && getSiege().getStage() != SiegeStage.COMPLETE; }
 	public void    setSiege(UUID siege) { this.siege = siege; }
 	public String  neatHeader ()       { return Format.HEADER.message(getDisplayName()); 			 }
 	public ArrayList<UUID>         getInvites()		    { return invites; 							   }
@@ -207,7 +208,8 @@ public class Town implements SearchObject {
 		if(siege != null) config.set("siege", siege.toString());
 		config.set("group", group.toString());
 		config.set("balance", balance);
-		
+
+		if(relic.exists()) relic.destroy();
 		config.set("relic", relic.data());
 		
 		String[] sinvites = new String[invites.size()];

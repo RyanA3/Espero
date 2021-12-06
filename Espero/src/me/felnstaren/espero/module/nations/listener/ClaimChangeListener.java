@@ -10,9 +10,11 @@ import me.felnstaren.espero.module.nations.claim.ClaimBoard;
 import me.felnstaren.espero.module.nations.claim.ClaimChunk;
 import me.felnstaren.espero.module.nations.claim.OwnerType;
 import me.felnstaren.espero.module.nations.town.Town;
+import me.felnstaren.espero.module.nations.town.siege.Siege;
 import me.felnstaren.felib.chat.Color;
 import me.felnstaren.felib.chat.Messenger;
 import me.felnstaren.felib.packet.enums.PacketTitleAction;
+import me.felnstaren.felib.ui.progress.TopProgressBar;
 
 public class ClaimChangeListener implements Listener {
 
@@ -23,24 +25,43 @@ public class ClaimChangeListener implements Listener {
 		Chunk f = event.getFrom().getChunk();
 		Chunk t = event.getTo().getChunk();
 		if(f.equals(t)) return;
-		//player.sendMessage("\n" + ClaimBoard.getInstance().getRegion(t.getX(), t.getZ()).map(t.getX(), t.getZ()));
-		
+
 		ClaimChunk from = ClaimBoard.inst().getClaim(f.getX(), f.getZ());
 		ClaimChunk to = ClaimBoard.inst().getClaim(t.getX(), t.getZ());
 		
 		if(from == null && to == null) return;
 		if(from != null && to != null && from.owner.equals(to.owner)) return;
 
+		
+		
 		String message = "";	
 		if(from != null) {
-			if(from.owner_type == OwnerType.TOWN) message += Color.LIGHT_BLUE;
+			if(from.owner_type == OwnerType.TOWN) {
+				message += Color.LIGHT_BLUE;
+				
+				//Remove player from siege bar display upon leaving sieged town
+				if(from.getTown().isInSiege()) {
+					Siege siege = from.getTown().getSiege();
+					TopProgressBar bar = siege.getProgressBar();
+					bar.remPlayer(player);
+				}
+			}
 			else message += Color.BLUE;
 			message += from.getOwnerName();
 		}
 		else message += Color.GREEN + "Wilds";
 		message += " " + Color.WHEAT + "" + Color.ARROW_RIGHT + " ";
 		if(to != null) {
-			if(to.owner_type == OwnerType.TOWN) message += Color.LIGHT_BLUE;
+			if(to.owner_type == OwnerType.TOWN) {
+				message += Color.LIGHT_BLUE;
+				
+				//Add player to siege bar display upon entering sieged town
+				if(to.getTown().isInSiege()) {
+					Siege siege = to.getTown().getSiege();
+					TopProgressBar bar = siege.getProgressBar();
+					bar.addPlayer(player);
+				}
+			}
 			else message += Color.BLUE;
 			message += to.getOwnerName();
 		}
@@ -48,7 +69,9 @@ public class ClaimChangeListener implements Listener {
 
 		Messenger.sendTitle(player, message, PacketTitleAction.ACTIONBAR, 10, 100, 10);
 		
-		//Siege relic check
+		
+		
+		//Siege relic check - check if player entering/leaving town hold's relic during a siege
 		if(from == null) return;
 		if(from.owner_type != OwnerType.TOWN) return;
 		Town town = from.getTown();

@@ -12,6 +12,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import me.felnstaren.espero.Espero;
@@ -29,11 +30,19 @@ public class RelicInteractListener implements Listener {
 
 	@EventHandler
 	public void onInteract(PlayerInteractEntityEvent event) {
+		if(event.getHand() != EquipmentSlot.HAND) return;
+		
 		Entity entity = event.getRightClicked();
 		if(entity.getType() != EntityType.ENDER_CRYSTAL) return;
 		
 		Town town = TownRegistry.inst().getTown(entity.getCustomName());
 		if(town == null) return;
+		
+		//Ensure entity's id matches town's relic entity id, and it isn't a glitched relic
+		if(town.getRelic().getId() == null || !town.getRelic().getId().equals(entity.getUniqueId())) {
+			entity.remove();
+			return;
+		}
 		
 		Messenger.send(event.getPlayer(), Color.AQUA + "This relic belongs to " + Color.BLUE + town.getDisplayName());
 	}
@@ -45,6 +54,12 @@ public class RelicInteractListener implements Listener {
 		
 		Town town = TownRegistry.inst().getTown(crystal.getCustomName());
 		if(town == null) return;
+		
+		//Ensure entity's id matches town's relic entity id, and it isn't a glitched relic
+		if(town.getRelic().getId() == null || !town.getRelic().getId().equals(crystal.getUniqueId())) {
+			crystal.remove();
+			return;
+		}
 		
 		event.setCancelled(true);
 		
@@ -79,6 +94,7 @@ public class RelicInteractListener implements Listener {
 		
 		Town town = TownRegistry.inst().getTown(tag);
 		if(town == null) return;
+		if(town.isInSiege()) return;
 		
 		EsperoPlayer eplayer = Espero.PLAYERS.getPlayer(player);
 		if(!town.isMember(eplayer)) return;

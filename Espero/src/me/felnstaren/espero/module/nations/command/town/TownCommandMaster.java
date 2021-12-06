@@ -66,6 +66,10 @@ public class TownCommandMaster extends MasterCommand {
 		
 		commands.add(new TownFoundCommand());
 		commands.add(new TownDisbandCommand());
+		
+		commands.add(new TownRelicCommand());
+		
+		commands.add(new TownMenuCommand());	
 	}
 
 	public boolean stub(CommandSender sender, String[] args, int current) {

@@ -30,3 +30,5 @@ ranks:
    - TOWN_CREATE
    - TOWN_DISBAND
    - TOWN_SELL
+   - RELIC
+   - START_SIEGE
